@@ -1,0 +1,11 @@
+Model Information:
+* title:	DNA Lab Machine
+* source:	https://sketchfab.com/3d-models/dna-lab-machine-07b274281e3c4c6f8c02308b0fc809ad
+* author:	guillemvilah (https://sketchfab.com/guillemvilah)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "DNA Lab Machine" (https://sketchfab.com/3d-models/dna-lab-machine-07b274281e3c4c6f8c02308b0fc809ad) by guillemvilah (https://sketchfab.com/guillemvilah) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)

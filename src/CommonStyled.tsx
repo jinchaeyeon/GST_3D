@@ -667,7 +667,6 @@ type ContentType = {
 };
 export const Content = styled.div<ContentType>`
   width: calc(${(props) => props.CLIENT_WIDTH}px - ${GNV_WIDTH}px);
-
   /*=========================================================================
   미디어 쿼리
   ##Device = 모바일
@@ -680,6 +679,7 @@ export const Content = styled.div<ContentType>`
 `;
 
 export const PageWrap = styled.div`
+  height: 100vh;
   padding: 0 15px;
 `;
 

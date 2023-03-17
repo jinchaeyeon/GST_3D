@@ -407,7 +407,7 @@ const PanelBarNavContainer = (props: any) => {
             expandMode={"single"}
             onSelect={onSelect}
           >
-            {panelBars.map((path: TPath, idx: number) => {
+            {/* {panelBars.map((path: TPath, idx: number) => {
               return singleMenus.includes(path.path) ? (
                 <PanelBarItem
                   key={idx}
@@ -438,7 +438,7 @@ const PanelBarNavContainer = (props: any) => {
                     ))}
                 </PanelBarItem>
               );
-            })}
+            })} */}
           </PanelBar>
         )}
 
