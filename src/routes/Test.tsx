@@ -103,6 +103,8 @@ const Model = (props: any) => {
   const gltf = useLoader(GLTFLoader, "./dna_lab_machine/scene.gltf");
   const { animations } = useGLTF("./dna_lab_machine/scene.gltf");
   const { ref, actions } = useAnimations(animations);
+  const boxRef = useRef<any>();
+  const [active, setActive] = useState(false);
 
   React.useEffect(() => {
     if (actions["Scene"]) {
@@ -112,28 +114,39 @@ const Model = (props: any) => {
 
   return (
     <>
-      <primitive
-        ref={ref}
-        object={gltf.scene}
-        scale={1}
-        physicallyCorrectLights
-      />
-      <group position={[-0.2, 3, 1.5]} rotation={[5, 0, -7.85]}>
-        <Marker rotation={[0, Math.PI / 2, Math.PI / 2]}>
-          <div
-            style={{
-              position: "absolute",
-              fontSize: 10,
-              letterSpacing: -0.5,
-              left: 17.5,
-            }}
-          >
-            {mainDataResult.data.length != 0
-              ? mainDataResult.data[0].reckey
-              : ""}
-          </div>
-          <FaMapMarkerAlt style={{ color: "indianred" }} />
-        </Marker>
+      <group ref={boxRef}>
+        <primitive
+          ref={ref}
+          object={gltf.scene}
+          scale={1}
+          physicallyCorrectLights
+          onClick={() => {
+            setActive(!active);
+          }}
+        />
+        {active == true ? (
+          <>
+            <group position={[-0.2, 3, 1.5]} rotation={[5, 0, -7.85]}>
+              <Marker rotation={[0, Math.PI / 2, Math.PI / 2]}>
+                <div
+                  style={{
+                    position: "absolute",
+                    fontSize: 10,
+                    letterSpacing: -0.5,
+                    left: 17.5,
+                  }}
+                >
+                  {mainDataResult.data.length != 0
+                    ? mainDataResult.data[0].reckey
+                    : ""}
+                </div>
+                <FaMapMarkerAlt style={{ color: "indianred" }} />
+              </Marker>
+            </group>
+          </>
+        ) : (
+          ""
+        )}
       </group>
     </>
   );
