@@ -2,6 +2,53 @@ import styled from "styled-components";
 import { GNV_WIDTH } from "./components/CommonString";
 import logoSrc from "./img/logo.png";
 
+export const DataContainer = styled.div`
+  position: absolute;
+  letter-spacing: -0.5px;
+  right: -90px;
+  background-color: #0000006b;
+  width: 140px;
+  height: 80px;
+  color: #fff;
+  border-radius: 5px;
+  padding: 5px;
+
+  table {
+    width: 100%;
+    height: 100%;
+  }
+
+  td,
+  th {
+    font-size: 8px;
+    vertical-align: middle;
+    text-align: right;
+  }
+  td {
+    font-size: 10px;
+    padding-right: 20px;
+    font-weight: 900;
+  }
+  th {
+    font-weight: 100;
+    color: #ebebeb;
+  }
+  .light {
+    width: 10px;
+    height: 10px;
+    background-color: #51ca00;
+    border-radius: 10px;
+    display: inline-block;
+    margin-right: 5px;
+  }
+  .run {
+    color: #51ca00;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+  }
+`;
+
 export const TitleContainer = styled.div`
   display: flex;
   align-items: center;
