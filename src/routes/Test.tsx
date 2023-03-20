@@ -12,19 +12,22 @@ import { useApi } from "../hooks/api";
 import { convertDateToStr, UsePermissions } from "../components/CommonFunction";
 const Test: React.FC = () => {
   return (
-    <Canvas shadows camera={{ position: [5, 0, 0] }}>
+    <Canvas shadows camera={{ position: [3, 2, -3] }}>
       <Suspense fallback={null}>
-        <ambientLight intensity={0.5} />
+        <ambientLight intensity={0.7} />
         <spotLight intensity={0.7} position={[1000, 1000, 1000]} />
         <directionalLight intensity={0.7} position={[0, 0, 5]} />
         <OrbitControls />
-        <Model />
+        <Model position={[0, 0, 0]} />
+        <Model position={[2, 0, 0]} />
       </Suspense>
     </Canvas>
   );
 };
 
-const Model = (props: any) => {
+useGLTF.preload("./dna_lab_machine/scene.gltf");
+
+const Model = ({ Models, ...props }: any) => {
   const { nodes, materials }: any = useGLTF("/dna_lab_machine/scene.gltf");
   const processApi = useApi();
 
@@ -100,10 +103,8 @@ const Model = (props: any) => {
     fetchMainGrid();
   }, [filters]);
 
-  const gltf = useLoader(GLTFLoader, "./dna_lab_machine/scene.gltf");
   const { animations } = useGLTF("./dna_lab_machine/scene.gltf");
   const { ref, actions } = useAnimations(animations);
-  const boxRef = useRef<any>();
   const [active, setActive] = useState(false);
 
   React.useEffect(() => {
@@ -114,24 +115,71 @@ const Model = (props: any) => {
 
   return (
     <>
-      <group ref={boxRef}>
-        <primitive
-          ref={ref}
-          object={gltf.scene}
-          scale={1}
-          physicallyCorrectLights
-          onClick={() => {
-            setActive(!active);
-          }}
+      <group
+        {...props}
+        dispose={null}
+        onClick={() => {
+          setActive(!active);
+        }}
+        rotation={[1.7, -3, -0.5]}
+      >
+        <mesh geometry={nodes.Main_Main_0.geometry} material={materials.Main} />
+        <mesh
+          geometry={nodes.Main_Plastic_0.geometry}
+          material={materials.Plastic}
         />
+        <mesh
+          geometry={nodes.Main_Metal_0.geometry}
+          material={materials.Metal}
+        />
+        <mesh
+          geometry={nodes.Main_ScreenKeyboard_0.geometry}
+          material={materials.ScreenKeyboard}
+        />
+        <mesh
+          geometry={nodes.Main_Emisive_0.geometry}
+          material={materials.Emisive}
+        />
+        <mesh
+          geometry={nodes.Main_Fuses_0.geometry}
+          material={materials.Fuses}
+        />
+        <mesh
+          geometry={nodes.Main001_Metal_0.geometry}
+          material={materials.Metal}
+          position={[0.58,-0.68,0.58]}
+        />
+        <mesh
+          geometry={nodes.Main001_Main_0.geometry}
+          material={materials.Main}
+          position={[0.58,-0.68,0.58]}
+        />
+        <mesh
+          geometry={nodes.Main002_Metal_0.geometry}
+          material={materials.Metal}
+          position={[0.58,-0.68,0.58]}
+        />
+        <mesh
+          geometry={nodes.Main002_Main_0.geometry}
+          material={materials.Main}
+          position={[0.58,-0.68,0.58]}
+        />
+        <mesh
+          geometry={nodes.Main003_Main_0.geometry}
+          material={materials.Main}
+        />
+        {/* <mesh
+          geometry={nodes.Main003_ScreenKeyboard_0}
+          material={materials.Main}
+        /> */}
         {active == true ? (
           <>
-            <group position={[-0.2, 3, 1.5]} rotation={[5, 0, -7.85]}>
-              <Marker rotation={[0, Math.PI / 2, Math.PI / 2]}>
+            <group position={[-0.4, -0.5, 1.5]}>
+              <Marker rotation={[1.6, 0, 0]}>
                 <div
                   style={{
                     position: "absolute",
-                    fontSize: 10,
+                    fontSize: 8,
                     letterSpacing: -0.5,
                     left: 17.5,
                   }}
