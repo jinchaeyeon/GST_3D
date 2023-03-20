@@ -1,6 +1,6 @@
 import React, { Suspense, useRef, useState } from "react";
 import { Canvas, useLoader, useFrame, GroupProps } from "@react-three/fiber";
-import { useGLTF, Stats } from "@react-three/drei";
+import { useGLTF, Stats, useAnimations } from "@react-three/drei";
 import { Environment, OrbitControls, Html } from "@react-three/drei";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 import { Group, TextureLoader } from "three";
@@ -9,10 +9,7 @@ import { FaMapMarkerAlt } from "react-icons/fa";
 import { DataResult, process, State } from "@progress/kendo-data-query";
 import { Iparameters, TPermissions } from "../store/types";
 import { useApi } from "../hooks/api";
-import {
-  convertDateToStr,
-  UsePermissions
-} from "../components/CommonFunction";
+import { convertDateToStr, UsePermissions } from "../components/CommonFunction";
 const Test: React.FC = () => {
   return (
     <Canvas shadows camera={{ position: [5, 0, 0] }}>
@@ -42,7 +39,7 @@ const Model = (props: any) => {
     pgSize: 20,
     orgdiv: "01",
     cboLocation: "01",
-    frdt: new Date('2019-05-17 10:20:30'),
+    frdt: new Date("2019-05-17 10:20:30"),
     todt: new Date(),
     cboPerson: "",
     itemcd: "",
@@ -81,8 +78,7 @@ const Model = (props: any) => {
     } catch (error) {
       data = null;
     }
-    console.log(parameters)
-    console.log(data);
+
     if (data.isSuccess === true) {
       const totalRowCnt = data.tables[0].RowCount;
       const rows = data.tables[0].Rows;
@@ -101,58 +97,43 @@ const Model = (props: any) => {
   };
 
   React.useEffect(() => {
-      fetchMainGrid();
+    fetchMainGrid();
   }, [filters]);
-  
+
+  const gltf = useLoader(GLTFLoader, "./dna_lab_machine/scene.gltf");
+  const { animations } = useGLTF("./dna_lab_machine/scene.gltf");
+  const { ref, actions } = useAnimations(animations);
+
+  React.useEffect(() => {
+    if (actions["Scene"]) {
+      actions["Scene"].play();
+    }
+  }, [actions]);
+
   return (
     <>
-      <group rotation={[-Math.PI / 2, 0, Math.PI]} {...props} dispose={null}>
-        <mesh
-          geometry={nodes["Main_Main_0"].geometry}
-          material={materials.Main}
-        >
-          <group position={[-0.2, -0.3, 1.5]} rotation={[0, 0, -7.85]}>
-            <Marker rotation={[0, Math.PI / 2, Math.PI / 2]}>
-              <div
-                style={{
-                  position: "absolute",
-                  fontSize: 10,
-                  letterSpacing: -0.5,
-                  left: 17.5,
-                }}
-              >
-                {mainDataResult.data[0].reckey}
-              </div>
-              <FaMapMarkerAlt style={{ color: "indianred" }} />
-            </Marker>
-          </group>
-        </mesh>
-        <mesh
-          geometry={nodes["Main_Plastic_0"].geometry}
-          material={materials.Plastic}
-        />
-        <mesh
-          geometry={nodes["Main_Metal_0"].geometry}
-          material={materials.Metal}
-        />
-        <mesh
-          geometry={nodes["Main_ScreenKeyboard_0"].geometry}
-          material={materials.ScreenKeyboard}
-        />
-        <mesh
-          geometry={nodes["Main_Emisive_0"].geometry}
-          material={materials.Emisive}
-        />
-        <mesh
-          geometry={nodes["Main_Fuses_0"].geometry}
-          material={materials.Fuses}
-        />
-        {/* <mesh geometry={nodes['Main.001_Metal_0'].geometry} material={materials.Metal} />
-    <mesh geometry={nodes['Main.001_Main_0'].geometry} material={materials.Main} />
-    <mesh geometry={nodes['Main.002_Metal_0'].geometry} material={materials.Metal} />
-    <mesh geometry={nodes['Main.002_Main_'].geometry} material={materials.Main} />
-    <mesh geometry={nodes['Main.003_Main_0'].geometry} material={materials.Main} />
-    <mesh geometry={nodes['Main.003_ScreenKeyboard_0'].geometry} material={materials.ScreenKeyboard} /> */}
+      <primitive
+        ref={ref}
+        object={gltf.scene}
+        scale={1}
+        physicallyCorrectLights
+      />
+      <group position={[-0.2, 3, 1.5]} rotation={[5, 0, -7.85]}>
+        <Marker rotation={[0, Math.PI / 2, Math.PI / 2]}>
+          <div
+            style={{
+              position: "absolute",
+              fontSize: 10,
+              letterSpacing: -0.5,
+              left: 17.5,
+            }}
+          >
+            {mainDataResult.data.length != 0
+              ? mainDataResult.data[0].reckey
+              : ""}
+          </div>
+          <FaMapMarkerAlt style={{ color: "indianred" }} />
+        </Marker>
       </group>
     </>
   );
