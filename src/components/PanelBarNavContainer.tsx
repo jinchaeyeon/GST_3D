@@ -468,7 +468,7 @@ const PanelBarNavContainer = (props: any) => {
             onClick={onClickChatbot}
             icon={"hyperlink-open-sm"}
             fillMode={"solid"}
-            shape={"rectangle"}
+            // shape={"rectangle"}
             themeColor={"secondary"}
             rounded={"full"}
             size="small"

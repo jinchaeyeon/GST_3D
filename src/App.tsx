@@ -8,6 +8,7 @@ import AuthRoute from "./components/AuthRoute";
 import Login from "./routes/Login";
 import Main from "./routes/Main";
 import { isMenuOpendState } from "./store/atoms";
+import Test from "./routes/Test";
 
 type TGlobalStyle = {
   isMenuOpend: boolean;
@@ -140,6 +141,7 @@ const AppInner: React.FC = () => {
           <PanelBarNavContainer>
             {/* 메인 홈 */}
             <AuthRoute path="/Home" component={Main} exact />
+            <AuthRoute path="/Test" component={Test} exact />
           </PanelBarNavContainer>
         </Switch>
       </Router>

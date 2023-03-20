@@ -13,8 +13,8 @@ const Main: React.FC = () => {
       <directionalLight intensity={0.7} position={[0, 0, 5]} />
       <OrbitControls autoRotate />
       <Suspense fallback={null}>
-        <Model />
-        {/* <Model2 /> */}
+        {/* <Model /> */}
+        <Model2 />
         {/* <Model3 /> */}
       </Suspense>
     </Canvas>
