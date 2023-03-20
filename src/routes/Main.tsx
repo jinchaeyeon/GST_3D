@@ -1,9 +1,10 @@
-import React, { Suspense, useEffect, useRef } from "react";
-import { Canvas, useLoader } from "@react-three/fiber";
-import { useGLTF, Stats, useAnimations } from "@react-three/drei";
-import { Environment, OrbitControls } from "@react-three/drei";
+import React, { Suspense, useEffect, useRef, useState } from "react";
+import { Canvas, useFrame, useLoader } from "@react-three/fiber";
+import { useGLTF, useAnimations, Html } from "@react-three/drei";
+import { OrbitControls } from "@react-three/drei";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
-import { TextureLoader } from "three";
+import { FaMapMarkerAlt } from "react-icons/fa";
+import * as THREE from "three";
 
 const Main: React.FC = () => {
   return (
@@ -14,9 +15,7 @@ const Main: React.FC = () => {
       <OrbitControls />
       {/* autoRotate */}
       <Suspense fallback={null}>
-        {/* <Model /> */}
-        <Model2 />
-        {/* <Model3 /> */}
+        <Model />
       </Suspense>
     </Canvas>
   );
@@ -36,23 +35,62 @@ const Model = () => {
   }, [actions]);
 
   return (
-    <primitive
-      ref={ref}
-      object={gltf.scene}
-      scale={1}
-      physicallyCorrectLights
-    />
+    <>
+      <group position={[0, 3, 0]} rotation={[0, 0, 0]}>
+        <Marker rotation={[0, 0, 0]}>
+          <div
+            style={{
+              position: "absolute",
+              fontSize: 10,
+              letterSpacing: -0.5,
+              left: 17.5,
+            }}
+          >
+            test
+          </div>
+          <FaMapMarkerAlt style={{ color: "indianred" }} />
+        </Marker>
+      </group>
+      <primitive
+        ref={ref}
+        object={gltf.scene}
+        scale={1}
+        physicallyCorrectLights
+      />
+    </>
   );
 };
-const Model2 = () => {
-  const gltf = useLoader(GLTFLoader, "./shiba/scene.gltf");
 
-  return <primitive object={gltf.scene} scale={1} physicallyCorrectLights />;
-};
-const Model3 = () => {
-  const gltf = useLoader(GLTFLoader, "./wooden_bridge_pack/scene.gltf");
-
-  return <primitive object={gltf.scene} scale={1} physicallyCorrectLights />;
-};
-
+function Marker({ children, ...props }: any) {
+  const ref = useRef<any>();
+  // This holds the local occluded state
+  const [isOccluded, setOccluded] = useState();
+  const [isInRange, setInRange] = useState<any>();
+  const isVisible = isInRange && !isOccluded;
+  // Test distance
+  const vec = new THREE.Vector3();
+  useFrame((state) => {
+    if (ref.current != undefined) {
+      const range =
+        state.camera.position.distanceTo(ref.current.getWorldPosition(vec)) <=
+        10;
+      if (range !== isInRange) setInRange(range);
+    }
+  });
+  return (
+    <group>
+      <Html
+        transform
+        occlude
+        onOcclude={setOccluded}
+        style={{
+          transition: "all 0.2s",
+        }}
+        {...props}
+      >
+        {children}
+      </Html>
+    </group>
+  );
+}
 export default Main;
