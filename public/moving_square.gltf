@@ -1,0 +1,142 @@
+{
+  "asset": {
+    "version": "2.0",
+    "generator": "Created using the official Cinema 4D glTF Exporter 1.000x284978"
+  },
+  "scenes": [
+    {
+      "nodes": [0]
+    }
+  ],
+  "nodes": [
+    {
+      "name": "Cube",
+      "translation": [0.0, 0.0, 0.0],
+      "rotation": [0.0, 0.0, 0.0, -1.0],
+      "scale": [1.0, 1.0, 1.0],
+      "mesh": 0
+    }
+  ],
+  "meshes": [
+    {
+      "name": "Cube",
+      "primitives": [
+        {
+          "attributes": {
+            "POSITION": 1,
+            "TEXCOORD_0": 3,
+            "NORMAL": 2
+          },
+          "indices": 0
+        }
+      ]
+    }
+  ],
+  "accessors": [
+    {
+      "bufferView": 0,
+      "type": "SCALAR",
+      "componentType": 5123,
+      "count": 36,
+      "byteOffset": 0,
+      "min": [0],
+      "max": [23]
+    },
+    {
+      "bufferView": 1,
+      "type": "VEC3",
+      "componentType": 5126,
+      "count": 24,
+      "byteOffset": 0,
+      "min": [-100.0, -100.0, -100.0],
+      "max": [100.0, 100.0, 100.0]
+    },
+    {
+      "bufferView": 1,
+      "type": "VEC3",
+      "componentType": 5126,
+      "count": 24,
+      "byteOffset": 12,
+      "min": [-1.0, -1.0, -1.0],
+      "max": [1.0, 1.0, 1.0]
+    },
+    {
+      "bufferView": 1,
+      "type": "VEC2",
+      "componentType": 5126,
+      "count": 24,
+      "byteOffset": 24,
+      "min": [0.0, 0.0],
+      "max": [1.0, 1.0]
+    },
+    {
+      "bufferView": 2,
+      "type": "SCALAR",
+      "componentType": 5126,
+      "count": 3,
+      "byteOffset": 0,
+      "min": [0.0],
+      "max": [1.0]
+    },
+    {
+      "bufferView": 2,
+      "type": "VEC3",
+      "componentType": 5126,
+      "count": 3,
+      "byteOffset": 12,
+      "min": [0.0, 0.0, 0.0],
+      "max": [200.0, 0.0, 0.0]
+    }
+  ],
+  "bufferViews": [
+    {
+      "buffer": 0,
+      "byteOffset": 0,
+      "byteLength": 72,
+      "target": 34963
+    },
+    {
+      "buffer": 0,
+      "byteOffset": 72,
+      "byteLength": 768,
+      "target": 34962,
+      "byteStride": 32
+    },
+    {
+      "buffer": 1,
+      "byteOffset": 0,
+      "byteLength": 48
+    }
+  ],
+  "animations": [
+    {
+      "name": "Scene",
+      "samplers": [
+        {
+          "input": 4,
+          "interpolation": "LINEAR",
+          "output": 5
+        }
+      ],
+      "channels": [
+        {
+          "sampler": 0,
+          "target": {
+            "node": 0,
+            "path": "translation"
+          }
+        }
+      ]
+    }
+  ],
+  "buffers": [
+    {
+      "uri": "data:application/octet-stream;base64,FwARAA8AFgAOAAwAFQALAAYAFAAHAAQAEwAFAAIAEgADAAAAEQAQAA8ADgANAAwACwAKAAYABwAJAAQABQAIAAIAAwABAAAAAADIwgAAyMIAAMhCAAAAAAAAAAAAAIA/AAAAAAAAgD8AAMjCAADIQgAAyEIAAAAAAAAAAAAAgD8AAAAAAAAAAAAAyEIAAMjCAADIQgAAgD8AAAAAAAAAAAAAAAAAAIA/AADIQgAAyEIAAMhCAAAAAAAAAAAAAIA/AACAPwAAAAAAAMhCAADIwgAAyMIAAAAAAAAAAAAAgL8AAAAAAACAPwAAyEIAAMhCAADIwgAAgD8AAAAAAAAAAAAAgD8AAAAAAADIwgAAyMIAAMjCAACAvwAAAAAAAAAAAAAAAAAAgD8AAMjCAADIQgAAyMIAAAAAAAAAAAAAgL8AAIA/AAAAAAAAyEIAAMhCAADIQgAAgD8AAAAAAAAAAAAAAAAAAAAAAADIQgAAyEIAAMjCAAAAAAAAAAAAAIC/AAAAAAAAAAAAAMjCAADIQgAAyMIAAIC/AAAAAAAAAAAAAAAAAAAAAAAAyMIAAMhCAADIQgAAgL8AAAAAAAAAAAAAgD8AAAAAAADIwgAAyEIAAMhCAAAAAAAAgD8AAAAAAAAAAAAAgD8AAMjCAADIQgAAyMIAAAAAAACAPwAAAAAAAAAAAAAAAAAAyEIAAMhCAADIwgAAAAAAAIA/AAAAAAAAgD8AAAAAAADIwgAAyMIAAMjCAAAAAAAAgL8AAAAAAAAAAAAAgD8AAMjCAADIwgAAyEIAAAAAAACAvwAAAAAAAAAAAAAAAAAAyEIAAMjCAADIQgAAAAAAAIC/AAAAAAAAgD8AAAAAAADIQgAAyMIAAMhCAAAAAAAAAAAAAIA/AACAPwAAgD8AAMhCAADIwgAAyMIAAIA/AAAAAAAAAAAAAIA/AACAPwAAyMIAAMjCAADIwgAAAAAAAAAAAACAvwAAgD8AAIA/AADIwgAAyMIAAMhCAACAvwAAAAAAAAAAAACAPwAAgD8AAMhCAADIQgAAyEIAAAAAAACAPwAAAAAAAIA/AACAPwAAyEIAAMjCAADIwgAAAAAAAIC/AAAAAAAAgD8AAIA/",
+      "byteLength": 840
+    },
+    {
+      "uri": "data:application/octet-stream;base64,AAAAADMzMz8AAIA/AAAAAAAAAAAAAACAAABIQwAAAAAAAACAAABIQwAAAAAAAACA",
+      "byteLength": 48
+    }
+  ]
+}
