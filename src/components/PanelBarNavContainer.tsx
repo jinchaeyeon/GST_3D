@@ -6,14 +6,13 @@ import {
 } from "@progress/kendo-react-layout";
 import { useLocation, withRouter } from "react-router-dom";
 import { Button } from "@progress/kendo-react-buttons";
-import { useRecoilState, useSetRecoilState } from "recoil";
+import { useRecoilState } from "recoil";
 import {
-  isLoading,
-  isMenuOpendState,
   menusState,
   passwordExpirationInfoState,
-  sessionItemState,
   loginResultState,
+  isMobileMenuOpendState,
+  isMenuOpendState,
 } from "../store/atoms";
 import UserOptionsWindow from "./Windows/CommonWindows/UserOptionsWindow";
 import ChangePasswordWindow from "./Windows/CommonWindows/ChangePasswordWindow";
@@ -51,7 +50,9 @@ const PanelBarNavContainer = (props: any) => {
   const loginKey = loginResult ? loginResult.loginKey : "";
   const role = loginResult ? loginResult.role : "";
   const isAdmin = role === "ADMIN" || role === "DEVELOPER" ? true : false;
-
+  const [isMobileMenuOpend, setIsMobileMenuOpend] = useRecoilState(
+    isMobileMenuOpendState
+  );
   const [previousRoute, setPreviousRoute] = useState("");
   const [formKey, setFormKey] = useState("");
 
@@ -196,7 +197,7 @@ const PanelBarNavContainer = (props: any) => {
     props.history.push(route);
 
     if (route) {
-      setIsMenuOpend(false);
+      setIsMobileMenuOpend(false);
       setUserOptionsWindowVisible(false);
       setChangePasswordWindowVisible(false);
       setSystemOptionWindowVisible(false);
@@ -326,7 +327,7 @@ const PanelBarNavContainer = (props: any) => {
   };
 
   const onMenuBtnClick = () => {
-    setIsMenuOpend((prev) => !prev);
+    setIsMobileMenuOpend((prev) => !prev);
   };
 
   const onClickChatbot = () => {
@@ -394,20 +395,21 @@ const PanelBarNavContainer = (props: any) => {
   const singleMenus = ["/Home", "/GANTT", "/WORD_EDITOR"];
 
   return (
-    <Wrapper isMenuOpend={isMenuOpend}>
-      <Modal isMenuOpend={isMenuOpend} onClick={onMenuBtnClick} />
-      <Gnv isMenuOpend={isMenuOpend}>
-        <AppName>
-          <Logo size="32px" />
-          MONITORING
-        </AppName>
-        {paths.length > 0 && (
-          <PanelBar
-            selected={selected}
-            expandMode={"single"}
-            onSelect={onSelect}
-          >
-            {/* {panelBars.map((path: TPath, idx: number) => {
+    <Wrapper isMobileMenuOpend={isMobileMenuOpend}>
+      <Modal isMobileMenuOpend={isMobileMenuOpend} onClick={onMenuBtnClick} />
+      {isMenuOpend ? (
+        <Gnv isMobileMenuOpend={isMobileMenuOpend}>
+          <AppName onClick={() => setIsMenuOpend(false)}>
+            <Logo size="32px" />
+            MONITORING
+          </AppName>
+          {paths.length > 0 && (
+            <PanelBar
+              selected={selected}
+              expandMode={"single"}
+              onSelect={onSelect}
+            >
+              {/* {panelBars.map((path: TPath, idx: number) => {
               return singleMenus.includes(path.path) ? (
                 <PanelBarItem
                   key={idx}
@@ -439,11 +441,11 @@ const PanelBarNavContainer = (props: any) => {
                 </PanelBarItem>
               );
             })} */}
-          </PanelBar>
-        )}
+            </PanelBar>
+          )}
 
-        {/* GST */}
-        {/* {companyCode === "2207C612" && (
+          {/* GST */}
+          {/* {companyCode === "2207C612" && (
           <PanelBar
             selected={selected}
             expandMode={"single"}
@@ -459,41 +461,56 @@ const PanelBarNavContainer = (props: any) => {
             </PanelBarItem>
           </PanelBar>
         )} */}
-
-        <ButtonContainer
-          flexDirection={"column"}
-          style={{ marginTop: "10px", gap: "5px" }}
-        >
-          <Button
-            onClick={onClickChatbot}
-            icon={"hyperlink-open-sm"}
-            fillMode={"solid"}
-            // shape={"rectangle"}
-            themeColor={"secondary"}
-            rounded={"full"}
-            size="small"
+          <ButtonContainer
+            flexDirection={"column"}
+            style={{ marginTop: "10px", gap: "5px" }}
           >
-            Chatbot
-          </Button>
-          {isAdmin && (
             <Button
-              onClick={() => setUserOptionsWindowVisible(true)}
+              onClick={onClickChatbot}
+              icon={"hyperlink-open-sm"}
+              fillMode={"solid"}
+              // shape={"rectangle"}
+              themeColor={"secondary"}
+              rounded={"full"}
+              size="small"
+            >
+              Chatbot
+            </Button>
+            {isAdmin && (
+              <Button
+                onClick={() => setUserOptionsWindowVisible(true)}
+                fillMode={"flat"}
+                themeColor={"secondary"}
+              >
+                사용자 옵션
+              </Button>
+            )}
+            <Button
+              onClick={logout}
+              icon={"logout"}
               fillMode={"flat"}
               themeColor={"secondary"}
             >
-              사용자 옵션
+              로그아웃
             </Button>
-          )}
+          </ButtonContainer>
+        </Gnv>
+      ) : (
+        <div
+          style={{
+            paddingTop: "10px",
+            borderRight: "solid 1px #ebebeb",
+            height: "100vh",
+          }}
+        >
           <Button
-            onClick={logout}
-            icon={"logout"}
+            icon="menu"
             fillMode={"flat"}
-            themeColor={"secondary"}
-          >
-            로그아웃
-          </Button>
-        </ButtonContainer>
-      </Gnv>
+            themeColor={"primary"}
+            onClick={() => setIsMenuOpend(true)}
+          />
+        </div>
+      )}
       <Content CLIENT_WIDTH={clientWidth}>
         <TopTitle>
           <div style={{ width: "30px" }}></div>

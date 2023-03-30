@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { GNV_WIDTH } from "./components/CommonString";
+import { CLOSED_GNV_WIDTH, GNV_WIDTH } from "./components/CommonString";
 import logoSrc from "./img/logo.png";
 
 export const TitleContainer = styled.div`
@@ -618,13 +618,13 @@ export const NumberKeypadCell = styled.div`
 =========================================================================*/
 
 type TWrapper = {
-  isMenuOpend: boolean;
+  isMobileMenuOpend: boolean;
 };
 
 export const Wrapper = styled.div<TWrapper>`
   display: flex;
   width: 100%;
-  //overflow: ${(props) => (props.isMenuOpend ? "hidden" : "auto")};
+  //overflow: ${(props) => (props.isMobileMenuOpend ? "hidden" : "auto")};
 `;
 
 type TGnv = TWrapper;
@@ -652,7 +652,7 @@ export const Gnv = styled.div<TGnv>`
 	##Screen = 768px 이하 해상도 모바일
   =========================================================================*/
   @media (max-width: 768px) {
-    display: ${(props) => (props.isMenuOpend ? "block" : "none")};
+    display: ${(props) => (props.isMobileMenuOpend ? "block" : "none")};
     z-index: 10;
     position: absolute;
 
@@ -695,6 +695,7 @@ export const AppName = styled.h1`
   gap: 3px;
   background-color: #fff;
   border-right: 1px solid #ebebeb;
+  cursor: pointer;
 `;
 
 export const LoginAppName = styled(AppName)`
@@ -734,7 +735,7 @@ export const Modal = styled.div<TModal>`
   left: 0;
   width: 100%;
   height: 100%;
-  display: ${(props) => (props.isMenuOpend ? "block" : "none")};
+  display: ${(props) => (props.isMobileMenuOpend ? "block" : "none")};
   background-color: rgba(0, 0, 0, 0.4);
 `;
 /*=========================================================================

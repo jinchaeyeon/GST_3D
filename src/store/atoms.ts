@@ -28,6 +28,12 @@ const localStorageEffect: <T>(key: string) => AtomEffect<T> =
       }
     });
   };
+
+export const isMobileMenuOpendState = atom<boolean>({
+  key: "isMobileMenuOpendState",
+  default: false,
+});
+
 export const loginResultState = atom<TLoginResult>({
   key: "loginResultState",
   default: null as any,

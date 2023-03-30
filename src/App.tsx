@@ -7,11 +7,11 @@ import PanelBarNavContainer from "./components/PanelBarNavContainer";
 import AuthRoute from "./components/AuthRoute";
 import Login from "./routes/Login";
 import Main from "./routes/Main";
-import { isMenuOpendState } from "./store/atoms";
+import { isMobileMenuOpendState } from "./store/atoms";
 import Test from "./routes/Test";
 
 type TGlobalStyle = {
-  isMenuOpend: boolean;
+  isMobileMenuOpend: boolean;
 };
 const GlobalStyle = createGlobalStyle<TGlobalStyle>`
 @import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300;400&display=swap');
@@ -46,7 +46,7 @@ footer, header, hgroup, main, menu, nav, section {
 }
 body {
   line-height: 1;  
-  overflow: ${(props) => (props.isMenuOpend ? "hidden" : "auto")};
+  overflow: ${(props) => (props.isMobileMenuOpend ? "hidden" : "auto")};
 }
 menu, ol, ul {
   list-style: none;
@@ -130,11 +130,11 @@ const App: React.FC = () => {
   //}
 };
 const AppInner: React.FC = () => {
-  const isMenuOpend = useRecoilValue(isMenuOpendState);
+  const isMobileMenuOpend = useRecoilValue(isMobileMenuOpendState);
 
   return (
     <>
-      <GlobalStyle isMenuOpend={isMenuOpend} />
+      <GlobalStyle isMobileMenuOpend={isMobileMenuOpend} />
       <Router>
         <Switch>
           <Route path="/" component={Login} exact />
