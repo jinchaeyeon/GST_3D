@@ -128,11 +128,11 @@ const Login: React.FC = () => {
               GST Monitoring
             </LoginAppName>
             <fieldset className={"k-form-fieldset"}>
-              <Field
+              {/* <Field
                 name={"langCode"}
                 label={"언어설정"}
-                component={FormInput}
-              />
+                component={FormInput}                
+              /> */}
               {ifShowCompanyList ? (
                 <Field
                   name={"companyCode"}

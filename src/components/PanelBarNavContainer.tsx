@@ -151,7 +151,7 @@ const PanelBarNavContainer = (props: any) => {
       .filter(
         (menu: any) =>
           menu.menuCategory === "GROUP" &&
-          menu.menuName !== "Home" &&
+          menu.menuName.toUpperCase() !== "HOME" &&
           menu.menuName !== "PlusWin6"
       )
       .forEach((menu: any, idx: number) => {
@@ -338,61 +338,46 @@ const PanelBarNavContainer = (props: any) => {
     ...paths.filter((path) => path.path === "/Home"),
     ...paths.filter((path) => path.menuCategory === "GROUP"),
   ];
-  if (companyCode !== "2207C612") {
-    panelBars.push({
-      path: "/WORD_EDITOR",
-      menuName: "EDITOR",
-      index: "",
-      menuId: "",
-      parentMenuId: "",
-      menuCategory: "",
-    });
-    panelBars.push({
-      path: "/GANTT",
-      menuName: "GANTT",
-      index: "",
-      menuId: "",
-      parentMenuId: "",
-      menuCategory: "",
-    });
-    panelBars.push({
-      path: "/",
-      menuName: "설정",
-      index: "",
-      menuId: "setting",
-      parentMenuId: "",
-      menuCategory: "WEB",
-    });
+
+  panelBars.push({
+    path: "/",
+    menuName: "설정",
+    index: "",
+    menuId: "setting",
+    parentMenuId: "",
+    menuCategory: "WEB",
+  });
+  paths.push({
+    path: "/",
+    menuName: "비밀번호 변경",
+    index: "",
+    menuId: "change-password",
+    parentMenuId: "setting",
+    menuCategory: "WEB",
+  });
+  paths.push({
+    path: "/",
+    menuName: "사용자 옵션",
+    index: "",
+    menuId: "custom-option",
+    parentMenuId: "setting",
+    menuCategory: "WEB",
+  });
+  if (isAdmin) {
     paths.push({
       path: "/",
-      menuName: "비밀번호 변경",
+      menuName: "시스템 옵션",
       index: "",
-      menuId: "change-password",
+      menuId: "system-option",
       parentMenuId: "setting",
       menuCategory: "WEB",
     });
-    paths.push({
-      path: "/",
-      menuName: "사용자 옵션",
-      index: "",
-      menuId: "custom-option",
-      parentMenuId: "setting",
-      menuCategory: "WEB",
-    });
-    if (isAdmin) {
-      paths.push({
-        path: "/",
-        menuName: "시스템 옵션",
-        index: "",
-        menuId: "system-option",
-        parentMenuId: "setting",
-        menuCategory: "WEB",
-      });
-    }
   }
 
   // Parent 그룹 없는 메뉴 Array
-  const singleMenus = ["/Home", "/GANTT", "/WORD_EDITOR"];
+  const singleMenus = ["/Home", "/PR_M1000W_290"];
+  console.log("panelBars");
+  console.log(panelBars);
 
   return (
     <Wrapper isMobileMenuOpend={isMobileMenuOpend}>
@@ -409,73 +394,57 @@ const PanelBarNavContainer = (props: any) => {
               expandMode={"single"}
               onSelect={onSelect}
             >
-              {/* {panelBars.map((path: TPath, idx: number) => {
-              return singleMenus.includes(path.path) ? (
-                <PanelBarItem
-                  key={idx}
-                  title={path.menuName}
-                  route={path.path}
-                />
-              ) : (
-                <PanelBarItem
-                  key={idx}
-                  title={path.menuName}
-                  icon={path.menuId === "setting" ? "gear" : undefined}
-                >
-                  {paths
-                    .filter(
-                      (childPath: TPath) =>
-                        childPath.menuCategory === "WEB" &&
-                        childPath.parentMenuId === path.menuId
-                    )
-                    .map((childPath: TPath, childIdx: number) => (
-                      <PanelBarItem
-                        key={childIdx}
-                        title={childPath.menuName}
-                        route={
-                          path.menuId === "setting" ? undefined : childPath.path
-                        }
-                        className={childPath.menuId}
-                      />
-                    ))}
-                </PanelBarItem>
-              );
-            })} */}
+              {panelBars.map((path: TPath, idx: number) => {
+                return singleMenus.includes(path.path) ? (
+                  <PanelBarItem
+                    key={idx}
+                    title={path.menuName}
+                    route={path.path}
+                  />
+                ) : (
+                  <PanelBarItem
+                    key={idx}
+                    title={path.menuName}
+                    icon={path.menuId === "setting" ? "gear" : undefined}
+                  >
+                    {paths
+                      .filter(
+                        (childPath: TPath) =>
+                          childPath.menuCategory === "WEB" &&
+                          childPath.parentMenuId === path.menuId
+                      )
+                      .map((childPath: TPath, childIdx: number) => (
+                        <PanelBarItem
+                          key={childIdx}
+                          title={childPath.menuName}
+                          route={
+                            path.menuId === "setting"
+                              ? undefined
+                              : childPath.path
+                          }
+                          className={childPath.menuId}
+                        />
+                      ))}
+                  </PanelBarItem>
+                );
+              })}
             </PanelBar>
           )}
 
-          {/* GST */}
-          {/* {companyCode === "2207C612" && (
-          <PanelBar
-            selected={selected}
-            expandMode={"single"}
-            onSelect={onSelect}
-          >
-            <PanelBarItem title={"Home"} route="/Home"></PanelBarItem>
-
-            <PanelBarItem title={"전사관리"}>
-              <PanelBarItem title={"Scheduler"} route="/CM_A1600W" />
-            </PanelBarItem>
-            <PanelBarItem title={"전자결재"}>
-              <PanelBarItem title={"결재관리"} route="/EA_A2000W" />
-            </PanelBarItem>
-          </PanelBar>
-        )} */}
           <ButtonContainer
             flexDirection={"column"}
             style={{ marginTop: "10px", gap: "5px" }}
           >
-            <Button
+            {/* <Button
               onClick={onClickChatbot}
               icon={"hyperlink-open-sm"}
               fillMode={"solid"}
-              // shape={"rectangle"}
               themeColor={"secondary"}
               rounded={"full"}
               size="small"
             >
               Chatbot
-            </Button>
+            </Button> */}
             {isAdmin && (
               <Button
                 onClick={() => setUserOptionsWindowVisible(true)}
@@ -511,7 +480,7 @@ const PanelBarNavContainer = (props: any) => {
           />
         </div>
       )}
-      <Content CLIENT_WIDTH={clientWidth}>
+      <Content isMenuOpen={isMenuOpend}>
         <TopTitle>
           <div style={{ width: "30px" }}></div>
           <AppName>
