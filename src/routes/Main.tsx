@@ -13,6 +13,17 @@ import { FaMapMarkerAlt } from "react-icons/fa";
 import * as THREE from "three";
 import { EffectComposer, Bloom } from "@react-three/postprocessing";
 import { DataContainer } from "../CommonStyled";
+import {
+  Chart,
+  ChartCategoryAxis,
+  ChartCategoryAxisItem,
+  ChartLegend,
+  ChartSeries,
+  ChartSeriesItem,
+  ChartSeriesLabels,
+  ChartTooltip,
+  TooltipContext,
+} from "@progress/kendo-react-charts";
 
 const Main: React.FC = () => {
   return (
@@ -111,6 +122,8 @@ const Main: React.FC = () => {
 
 const Car = () => {
   const { scene, nodes, materials }: any = useGLTF("/lambo.glb");
+  const [active, setActive] = useState(false);
+  const categories = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul"];
 
   useMemo(() => {
     applyProps(materials.emitbrake, {
@@ -124,11 +137,15 @@ const Car = () => {
   }, [nodes, materials]);
 
   return (
-    <>
+    <group dispose={null}>
       <group position={[0, 3.5, 0]} rotation={[0, 0, 0]}>
         <Marker rotation={[0, 0, 0]}>
           <DataContainer>
-            <table>
+            <table
+              onClick={() => {
+                setActive(!active);
+              }}
+            >
               <tr>
                 <th>품명</th>
                 <td>TEST1234</td>
@@ -148,13 +165,47 @@ const Car = () => {
             </table>
           </DataContainer>
         </Marker>
+        {active == true ? (
+          <>
+            <group position={[5, 1.5, 0]} rotation={[0, 0, 0]}>
+              <Marker rotation={[0, 0, 0]}>
+                <DataContainer style={{width: "180px", height: "auto"}}>
+                  <Chart style={{height: "130px"}}>
+                    <ChartCategoryAxis>
+                      <ChartCategoryAxisItem
+                        categories={categories}
+                      />
+                    </ChartCategoryAxis>
+                    <ChartSeries>
+                      <ChartSeriesItem
+                        type="area"
+                        data={[123, 276, 310, 212, 240, 156, 98]}
+                      />
+                      <ChartSeriesItem
+                        type="area"
+                        data={[165, 210, 287, 144, 190, 167, 212]}
+                      />
+                      <ChartSeriesItem
+                        type="area"
+                        data={[56, 140, 195, 46, 123, 78, 95]}
+                      />
+                    </ChartSeries>
+                  </Chart>
+                </DataContainer>
+              </Marker>
+            </group>
+          </>
+        ) : (
+          ""
+        )}
       </group>
       <group>
         <primitive object={scene} scale={0.015} physicallyCorrectLights />
       </group>
-    </>
+    </group>
   );
 };
+
 const Lantern = () => {
   const { scene, nodes, materials }: any = useGLTF(
     "/beacon_lantern/scene.gltf"
