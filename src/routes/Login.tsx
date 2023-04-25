@@ -136,7 +136,7 @@ const Login: React.FC = () => {
               {ifShowCompanyList ? (
                 <Field
                   name={"companyCode"}
-                  label={"업체코드"}
+                  label={"회사코드"}
                   component={FormComboBox}
                   ifGetCompanyCode={true}
                   valueField="company_code"

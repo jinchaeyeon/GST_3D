@@ -13,6 +13,8 @@ import { FaMapMarkerAlt } from "react-icons/fa";
 import * as THREE from "three";
 import { EffectComposer, Bloom } from "@react-three/postprocessing";
 import { DataContainer } from "../CommonStyled";
+import { Button } from "@progress/kendo-react-buttons";
+import { useSetRecoilState } from "recoil";
 
 const PR_M1000W_290: React.FC = () => {
   return (
@@ -23,7 +25,7 @@ const PR_M1000W_290: React.FC = () => {
     >
       <color attach="background" args={["#15151a"]} />
 
-      <FacilityProcess position={[-5, -1.5, 0]} />
+      <FacilityProcess position={[-5, -1.5, 0]} scale={[0.01, 0.01, 0.01]} />
       <hemisphereLight intensity={0.5} />
       <ContactShadows
         resolution={1024}
@@ -111,20 +113,34 @@ const PR_M1000W_290: React.FC = () => {
 
 const FacilityProcess = (props: any) => {
   const { animations, scene, nodes, materials }: any = useGLTF(
-    "./전체공정도작업/전체공정작업_재질정리-애니작업-2(Bake).gltf"
+    "./facility_process/scene.gltf"
   );
-
   // Extract animation actions
   const { ref, actions } = useAnimations(animations);
+  const [isAnimated, setIsAnimated] = useState(true);
 
   useEffect(() => {
     if (actions["Animation"]) {
-      actions["Animation"].play();
+      if (isAnimated) {
+        actions["Animation"].play();
+      } else {
+        actions["Animation"].stop();
+      }
     }
-  }, [actions]);
+  }, [actions, isAnimated]);
 
   return (
-    <primitive object={scene} scale={[0.01, 0.01, 0.01]} ref={ref} {...props} />
+    <primitive
+      object={scene}
+      ref={ref}
+      onClick={(e: any) => {
+        console.log(e);
+        console.log(e.eventObject);
+
+        setIsAnimated((prev) => !prev);
+      }}
+      {...props}
+    />
   );
 };
 
