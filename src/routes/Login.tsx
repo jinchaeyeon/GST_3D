@@ -1,13 +1,13 @@
 import { Button } from "@progress/kendo-react-buttons";
 import { Form, Field, FormElement } from "@progress/kendo-react-form";
-import { KeyboardEvent, useCallback, useState } from "react";
+import { KeyboardEvent, useCallback, useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import { passwordExpirationInfoState, loginResultState } from "../store/atoms";
 import { useApi } from "../hooks/api";
 import { useSetRecoilState } from "recoil";
 import { FormInput, FormComboBox } from "../components/Editors";
 import { LoginAppName, LoginBox, Logo } from "../CommonStyled";
-import { UseGetIp } from "../components/CommonFunction";
+import { UseGetIp, resetLocalStorage } from "../components/CommonFunction";
 import { isLoading } from "../store/atoms";
 import Loading from "../components/Loading";
 import cookie from "react-cookies";
@@ -116,6 +116,10 @@ const Login: React.FC = () => {
       setIfShowCompanyList((prev) => !prev);
     }
   };
+
+  useEffect(() => {
+    resetLocalStorage();
+  }, []);
 
   return (
     <LoginBox>
