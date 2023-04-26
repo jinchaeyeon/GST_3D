@@ -133,6 +133,13 @@ const FacilityProcess = (props: any) => {
   const [detail, setDetail] = useState(0);
   const categories = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul"];
 
+  //각 팝업들 position(지우면안됩니다)
+  const proc = [[4, 5, 6], [-4.5, 5, 6], [-12.5, 5, 6], [-21, 5, 6], [-4.5, 5, -1.5], [-12.5, 5, -1.5], [-21, 5, -1.5]];
+  const detailproc = [[3, 9, 6], [-5.2, 9, 6], [-13.5, 9, 6], [-22, 9, 6], [-5.2, 9, -1.5], [-13.5, 9, -1.5], [-22, 9, -1.5]];
+  const table = [-20, 5, -9.5];
+  const vision = [8, 5, -1.5];
+  const dryer = [1, 5, -9.5];
+
   useEffect(() => {
     if (actions["Animation"]) {
       if (isAnimated) {
@@ -142,7 +149,7 @@ const FacilityProcess = (props: any) => {
       }
     }
   }, [actions, isAnimated]);
-  console.log(detail);
+
   return (
     <group dispose={null}>
       <primitive
