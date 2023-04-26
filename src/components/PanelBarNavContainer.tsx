@@ -375,7 +375,7 @@ const PanelBarNavContainer = (props: any) => {
   }
 
   // Parent 그룹 없는 메뉴 Array
-  const singleMenus = ["/Home", "/PR_M1000W_290"];
+  const singleMenus = ["/Home", "/PR_B1000W_290"];
   console.log("panelBars");
   console.log(panelBars);
 
