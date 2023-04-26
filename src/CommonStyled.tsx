@@ -7,8 +7,8 @@ export const DataContainer = styled.div`
   letter-spacing: -0.5px;
   right: -90px;
   background-color: #0000006b;
-  width: 140px;
-  height: 80px;
+  width: 250px;
+  height: 130px;
   color: #fff;
   border-radius: 5px;
   padding: 5px;

@@ -15,6 +15,17 @@ import { EffectComposer, Bloom } from "@react-three/postprocessing";
 import { DataContainer } from "../CommonStyled";
 import { Button } from "@progress/kendo-react-buttons";
 import { useSetRecoilState } from "recoil";
+import {
+  Chart,
+  ChartCategoryAxis,
+  ChartCategoryAxisItem,
+  ChartLegend,
+  ChartSeries,
+  ChartSeriesItem,
+  ChartSeriesLabels,
+  ChartTooltip,
+  TooltipContext,
+} from "@progress/kendo-react-charts";
 
 const PR_M1000W_290: React.FC = () => {
   return (
@@ -113,11 +124,14 @@ const PR_M1000W_290: React.FC = () => {
 
 const FacilityProcess = (props: any) => {
   const { animations, scene, nodes, materials }: any = useGLTF(
-    "./facility_process/scene.gltf"
+    "./facility_process/secene.gltf"
   );
   // Extract animation actions
   const { ref, actions } = useAnimations(animations);
   const [isAnimated, setIsAnimated] = useState(true);
+  const [active, setActive] = useState(false);
+  const [detail, setDetail] = useState(0);
+  const categories = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul"];
 
   useEffect(() => {
     if (actions["Animation"]) {
@@ -128,19 +142,272 @@ const FacilityProcess = (props: any) => {
       }
     }
   }, [actions, isAnimated]);
-
+  console.log(detail);
   return (
-    <primitive
-      object={scene}
-      ref={ref}
-      onClick={(e: any) => {
-        console.log(e);
-        console.log(e.eventObject);
+    <group dispose={null}>
+      <primitive
+        object={scene}
+        ref={ref}
+        onClick={(e: any) => {
+          console.log(e);
+          console.log(e.eventObject);
 
-        setIsAnimated((prev) => !prev);
-      }}
-      {...props}
-    />
+          setIsAnimated((prev) => !prev);
+          if (!active == false) {
+            setDetail(0);
+          }
+          setActive(!active);
+        }}
+        {...props}
+      />
+      {active == true ? (
+        <>
+          <Marker rotation={[0, 0, 0]} position={[4, 5, 6]}>
+            <DataContainer>
+              <table
+                onClick={() => {
+                  if (detail == 1) {
+                    setDetail(0);
+                  } else {
+                    setDetail(1);
+                  }
+                }}
+                style={{ float: "left", width: "120px", height: "60px" }}
+              >
+                <tr>
+                  <th>품명</th>
+                  <td>1</td>
+                </tr>
+                <tr>
+                  <th>수량</th>
+                  <td>1</td>
+                </tr>
+                <tr>
+                  <th>상태</th>
+                  <td>
+                    <span className="run">
+                      <span className="light"></span>가동
+                    </span>
+                  </td>
+                </tr>
+              </table>
+              <table
+                onClick={() => {
+                  if (detail == 2) {
+                    setDetail(0);
+                  } else {
+                    setDetail(2);
+                  }
+                }}
+                style={{ float: "right", width: "120px", height: "60px" }}
+              >
+                <tr>
+                  <th>품명</th>
+                  <td>2</td>
+                </tr>
+                <tr>
+                  <th>수량</th>
+                  <td>2</td>
+                </tr>
+                <tr>
+                  <th>상태</th>
+                  <td>
+                    <span className="run">
+                      <span className="light"></span>가동
+                    </span>
+                  </td>
+                </tr>
+              </table>
+              <table
+                style={{ float: "left", width: "120px", height: "60px" }}
+              >
+                <tr>
+                  <th>품명</th>
+                  <td>3</td>
+                </tr>
+                <tr>
+                  <th>수량</th>
+                  <td>3</td>
+                </tr>
+                <tr>
+                  <th>상태</th>
+                  <td>
+                    <span className="run">
+                      <span className="light"></span>가동
+                    </span>
+                  </td>
+                </tr>
+              </table>
+              <table
+                style={{ float: "right", width: "120px", height: "60px" }}
+              >
+                <tr>
+                  <th>품명</th>
+                  <td>4</td>
+                </tr>
+                <tr>
+                  <th>수량</th>
+                  <td>4</td>
+                </tr>
+                <tr>
+                  <th>상태</th>
+                  <td>
+                    <span className="run">
+                      <span className="light"></span>가동
+                    </span>
+                  </td>
+                </tr>
+              </table>
+            </DataContainer>
+          </Marker>
+          {detail == 1 ? (
+            <>
+              <group position={[3, 9, 6]} rotation={[0, 0, 0]}>
+                <Marker rotation={[0, 0, 0]}>
+                  <DataContainer style={{ width: "180px", height: "auto" }}>
+                    <Chart style={{ height: "130px" }}>
+                      <ChartCategoryAxis>
+                        <ChartCategoryAxisItem categories={categories} />
+                      </ChartCategoryAxis>
+                      <ChartSeries>
+                        <ChartSeriesItem
+                          type="area"
+                          data={[0, 0, 0, 0, 0, 0, 0]}
+                        />
+                        <ChartSeriesItem
+                          type="area"
+                          data={[165, 210, 287, 144, 190, 167, 212]}
+                        />
+                        <ChartSeriesItem
+                          type="area"
+                          data={[0, 0, 0, 0, 0, 0, 0]}
+                        />
+                      </ChartSeries>
+                    </Chart>
+                  </DataContainer>
+                </Marker>
+              </group>
+            </>
+          ) : detail == 2 ? (
+            <>
+              <group position={[3, 9, 6]} rotation={[0, 0, 0]}>
+                <Marker rotation={[0, 0, 0]}>
+                  <DataContainer style={{ width: "180px", height: "auto" }}>
+                    <Chart style={{ height: "130px" }}>
+                      <ChartCategoryAxis>
+                        <ChartCategoryAxisItem categories={categories} />
+                      </ChartCategoryAxis>
+                      <ChartSeries>
+                        <ChartSeriesItem
+                          type="area"
+                          data={[123, 276, 310, 212, 240, 156, 98]}
+                        />
+                        <ChartSeriesItem
+                          type="area"
+                          data={[165, 210, 287, 144, 190, 167, 212]}
+                        />
+                        <ChartSeriesItem
+                          type="area"
+                          data={[56, 140, 195, 46, 123, 78, 95]}
+                        />
+                      </ChartSeries>
+                    </Chart>
+                  </DataContainer>
+                </Marker>
+              </group>
+            </>
+          ) : (
+            ""
+          )}
+          <Marker rotation={[0, 0, 0]} position={[-4.5, 5, 6]}>
+            <DataContainer>
+              <table
+                style={{ float: "left", width: "120px", height: "60px" }}
+              >
+                <tr>
+                  <th>품명</th>
+                  <td>5</td>
+                </tr>
+                <tr>
+                  <th>수량</th>
+                  <td>5</td>
+                </tr>
+                <tr>
+                  <th>상태</th>
+                  <td>
+                    <span className="run">
+                      <span className="light"></span>가동
+                    </span>
+                  </td>
+                </tr>
+              </table>
+              <table
+                style={{ float: "right", width: "120px", height: "60px" }}
+              >
+                <tr>
+                  <th>품명</th>
+                  <td>6</td>
+                </tr>
+                <tr>
+                  <th>수량</th>
+                  <td>6</td>
+                </tr>
+                <tr>
+                  <th>상태</th>
+                  <td>
+                    <span className="run">
+                      <span className="light"></span>가동
+                    </span>
+                  </td>
+                </tr>
+              </table>
+              <table
+                style={{ float: "left", width: "120px", height: "60px" }}
+              >
+                <tr>
+                  <th>품명</th>
+                  <td>7</td>
+                </tr>
+                <tr>
+                  <th>수량</th>
+                  <td>7</td>
+                </tr>
+                <tr>
+                  <th>상태</th>
+                  <td>
+                    <span className="run">
+                      <span className="light"></span>가동
+                    </span>
+                  </td>
+                </tr>
+              </table>
+              <table
+                style={{ float: "right", width: "120px", height: "60px" }}
+              >
+                <tr>
+                  <th>품명</th>
+                  <td>8</td>
+                </tr>
+                <tr>
+                  <th>수량</th>
+                  <td>8</td>
+                </tr>
+                <tr>
+                  <th>상태</th>
+                  <td>
+                    <span className="run">
+                      <span className="light"></span>가동
+                    </span>
+                  </td>
+                </tr>
+              </table>
+            </DataContainer>
+          </Marker>
+        </>
+      ) : (
+        ""
+      )}
+    </group>
   );
 };
 
