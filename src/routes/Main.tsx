@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { Suspense, useEffect, useMemo, useRef, useState } from "react";
 import { applyProps, Canvas, useFrame } from "@react-three/fiber";
 import {
   useGLTF,
@@ -24,6 +24,7 @@ import {
   ChartTooltip,
   TooltipContext,
 } from "@progress/kendo-react-charts";
+import ThreeDModelLoader from "../components/ThreeDModelLoader";
 
 const Main: React.FC = () => {
   return (
@@ -32,90 +33,92 @@ const Main: React.FC = () => {
       dpr={[1, 1.5]}
       camera={{ position: [5, 5, 15], fov: 50 }}
     >
-      <color attach="background" args={["#15151a"]} />
+      <Suspense fallback={<ThreeDModelLoader />}>
+        <color attach="background" args={["#15151a"]} />
 
-      <Machine position={[-5, -1.5, 0]} />
-      <hemisphereLight intensity={0.5} />
-      <ContactShadows
-        resolution={1024}
-        frames={1}
-        position={[0, -1.16, 0]}
-        scale={15}
-        blur={0.5}
-        opacity={1}
-        far={20}
-      />
+        <Machine position={[-5, -1.5, 0]} />
+        <hemisphereLight intensity={0.5} />
+        <ContactShadows
+          resolution={1024}
+          frames={1}
+          position={[0, -1.16, 0]}
+          scale={15}
+          blur={0.5}
+          opacity={1}
+          far={20}
+        />
 
-      <OrbitControls />
-      <Environment resolution={512}>
-        {/* Ceiling */}
-        <Lightformer
-          intensity={2}
-          rotation-x={Math.PI / 2}
-          position={[0, 4, -9]}
-          scale={[10, 1, 1]}
-        />
-        <Lightformer
-          intensity={2}
-          rotation-x={Math.PI / 2}
-          position={[0, 4, -6]}
-          scale={[10, 1, 1]}
-        />
-        <Lightformer
-          intensity={2}
-          rotation-x={Math.PI / 2}
-          position={[0, 4, -3]}
-          scale={[10, 1, 1]}
-        />
-        <Lightformer
-          intensity={2}
-          rotation-x={Math.PI / 2}
-          position={[0, 4, 0]}
-          scale={[10, 1, 1]}
-        />
-        <Lightformer
-          intensity={2}
-          rotation-x={Math.PI / 2}
-          position={[0, 4, 3]}
-          scale={[10, 1, 1]}
-        />
-        <Lightformer
-          intensity={2}
-          rotation-x={Math.PI / 2}
-          position={[0, 4, 6]}
-          scale={[10, 1, 1]}
-        />
-        <Lightformer
-          intensity={2}
-          rotation-x={Math.PI / 2}
-          position={[0, 4, 9]}
-          scale={[10, 1, 1]}
-        />
-        {/* Sides */}
-        <Lightformer
-          intensity={2}
-          rotation-y={Math.PI / 2}
-          position={[-50, 2, 0]}
-          scale={[100, 2, 1]}
-        />
-        <Lightformer
-          intensity={2}
-          rotation-y={-Math.PI / 2}
-          position={[50, 2, 0]}
-          scale={[100, 2, 1]}
-        />
-        {/* Key */}
-        <Lightformer
-          form="ring"
-          color="red"
-          intensity={10}
-          scale={2}
-          position={[10, 5, 10]}
-          onUpdate={(self) => self.lookAt(0, 0, 0)}
-        />
-      </Environment>
-      <Car></Car>
-      <Effects />
+        <OrbitControls />
+        <Environment resolution={512}>
+          {/* Ceiling */}
+          <Lightformer
+            intensity={2}
+            rotation-x={Math.PI / 2}
+            position={[0, 4, -9]}
+            scale={[10, 1, 1]}
+          />
+          <Lightformer
+            intensity={2}
+            rotation-x={Math.PI / 2}
+            position={[0, 4, -6]}
+            scale={[10, 1, 1]}
+          />
+          <Lightformer
+            intensity={2}
+            rotation-x={Math.PI / 2}
+            position={[0, 4, -3]}
+            scale={[10, 1, 1]}
+          />
+          <Lightformer
+            intensity={2}
+            rotation-x={Math.PI / 2}
+            position={[0, 4, 0]}
+            scale={[10, 1, 1]}
+          />
+          <Lightformer
+            intensity={2}
+            rotation-x={Math.PI / 2}
+            position={[0, 4, 3]}
+            scale={[10, 1, 1]}
+          />
+          <Lightformer
+            intensity={2}
+            rotation-x={Math.PI / 2}
+            position={[0, 4, 6]}
+            scale={[10, 1, 1]}
+          />
+          <Lightformer
+            intensity={2}
+            rotation-x={Math.PI / 2}
+            position={[0, 4, 9]}
+            scale={[10, 1, 1]}
+          />
+          {/* Sides */}
+          <Lightformer
+            intensity={2}
+            rotation-y={Math.PI / 2}
+            position={[-50, 2, 0]}
+            scale={[100, 2, 1]}
+          />
+          <Lightformer
+            intensity={2}
+            rotation-y={-Math.PI / 2}
+            position={[50, 2, 0]}
+            scale={[100, 2, 1]}
+          />
+          {/* Key */}
+          <Lightformer
+            form="ring"
+            color="red"
+            intensity={10}
+            scale={2}
+            position={[10, 5, 10]}
+            onUpdate={(self) => self.lookAt(0, 0, 0)}
+          />
+        </Environment>
+        <Car></Car>
+        <Effects />
+      </Suspense>
     </Canvas>
   );
 };
@@ -169,12 +172,10 @@ const Car = () => {
           <>
             <group position={[5, 1.5, 0]} rotation={[0, 0, 0]}>
               <Marker rotation={[0, 0, 0]}>
-                <DataContainer style={{width: "180px", height: "auto"}}>
-                  <Chart style={{height: "130px"}}>
+                <DataContainer style={{ width: "180px", height: "auto" }}>
+                  <Chart style={{ height: "130px" }}>
                     <ChartCategoryAxis>
-                      <ChartCategoryAxisItem
-                        categories={categories}
-                      />
+                      <ChartCategoryAxisItem categories={categories} />
                     </ChartCategoryAxis>
                     <ChartSeries>
                       <ChartSeriesItem

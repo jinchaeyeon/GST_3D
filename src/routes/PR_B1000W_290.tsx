@@ -1,5 +1,5 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
-import { applyProps, Canvas, useFrame } from "@react-three/fiber";
+import React, { Suspense, useEffect, useRef, useState } from "react";
+import { Canvas, useFrame } from "@react-three/fiber";
 import {
   useGLTF,
   useAnimations,
@@ -7,28 +7,24 @@ import {
   ContactShadows,
   Environment,
   Lightformer,
+  useProgress,
 } from "@react-three/drei";
 import { OrbitControls } from "@react-three/drei";
-import { FaMapMarkerAlt } from "react-icons/fa";
 import * as THREE from "three";
 import { EffectComposer, Bloom } from "@react-three/postprocessing";
 import { DataContainer } from "../CommonStyled";
-import { Button } from "@progress/kendo-react-buttons";
-import { useSetRecoilState } from "recoil";
+import ThreeDModelLoader from "../components/ThreeDModelLoader";
 import { useApi } from "../hooks/api";
-import { Iparameters, TPermissions } from "../store/types";
-import { DataResult, process, State } from "@progress/kendo-data-query";
+import { Iparameters } from "../store/types";
 import {
   Chart,
   ChartCategoryAxis,
   ChartCategoryAxisItem,
-  ChartLegend,
   ChartSeries,
   ChartSeriesItem,
-  ChartSeriesLabels,
-  ChartTooltip,
-  TooltipContext,
 } from "@progress/kendo-react-charts";
+import { useRecoilState } from "recoil";
+import { isLoading } from "../store/atoms";
 
 const PR_B1000W_290: React.FC = () => {
   return (
@@ -37,98 +33,119 @@ const PR_B1000W_290: React.FC = () => {
       dpr={[1, 1.5]}
       camera={{ position: [5, 5, 15], fov: 50 }}
     >
-      <color attach="background" args={["#15151a"]} />
+      <Suspense fallback={<ThreeDModelLoader />}>
+        <color attach="background" args={["#15151a"]} />
 
-      <FacilityProcess position={[-5, -1.5, 0]} scale={[0.01, 0.01, 0.01]} />
-      <hemisphereLight intensity={0.5} />
-      <ContactShadows
-        resolution={1024}
-        frames={1}
-        position={[0, -1.16, 0]}
-        scale={15}
-        blur={0.5}
-        opacity={1}
-        far={20}
-      />
+        <FacilityProcess position={[-5, -1.5, 0]} scale={[0.01, 0.01, 0.01]} />
+        <hemisphereLight intensity={0.5} />
+        <ContactShadows
+          resolution={1024}
+          frames={1}
+          position={[0, -1.16, 0]}
+          scale={15}
+          blur={0.5}
+          opacity={1}
+          far={20}
+        />
 
-      <OrbitControls />
-      <Environment resolution={512}>
-        {/* Ceiling */}
-        <Lightformer
-          intensity={2}
-          rotation-x={Math.PI / 2}
-          position={[0, 4, -9]}
-          scale={[10, 1, 1]}
-        />
-        <Lightformer
-          intensity={2}
-          rotation-x={Math.PI / 2}
-          position={[0, 4, -6]}
-          scale={[10, 1, 1]}
-        />
-        <Lightformer
-          intensity={2}
-          rotation-x={Math.PI / 2}
-          position={[0, 4, -3]}
-          scale={[10, 1, 1]}
-        />
-        <Lightformer
-          intensity={2}
-          rotation-x={Math.PI / 2}
-          position={[0, 4, 0]}
-          scale={[10, 1, 1]}
-        />
-        <Lightformer
-          intensity={2}
-          rotation-x={Math.PI / 2}
-          position={[0, 4, 3]}
-          scale={[10, 1, 1]}
-        />
-        <Lightformer
-          intensity={2}
-          rotation-x={Math.PI / 2}
-          position={[0, 4, 6]}
-          scale={[10, 1, 1]}
-        />
-        <Lightformer
-          intensity={2}
-          rotation-x={Math.PI / 2}
-          position={[0, 4, 9]}
-          scale={[10, 1, 1]}
-        />
-        {/* Sides */}
-        <Lightformer
-          intensity={2}
-          rotation-y={Math.PI / 2}
-          position={[-50, 2, 0]}
-          scale={[100, 2, 1]}
-        />
-        <Lightformer
-          intensity={2}
-          rotation-y={-Math.PI / 2}
-          position={[50, 2, 0]}
-          scale={[100, 2, 1]}
-        />
-        {/* Key */}
-        <Lightformer
-          form="ring"
-          color="red"
-          intensity={10}
-          scale={2}
-          position={[10, 5, 10]}
-          onUpdate={(self) => self.lookAt(0, 0, 0)}
-        />
-      </Environment>
-      {/* <Car></Car> */}
-      <Effects />
+        <OrbitControls />
+        <Environment resolution={512}>
+          {/* Ceiling */}
+          <Lightformer
+            intensity={2}
+            rotation-x={Math.PI / 2}
+            position={[0, 4, -9]}
+            scale={[10, 1, 1]}
+          />
+          <Lightformer
+            intensity={2}
+            rotation-x={Math.PI / 2}
+            position={[0, 4, -6]}
+            scale={[10, 1, 1]}
+          />
+          <Lightformer
+            intensity={2}
+            rotation-x={Math.PI / 2}
+            position={[0, 4, -3]}
+            scale={[10, 1, 1]}
+          />
+          <Lightformer
+            intensity={2}
+            rotation-x={Math.PI / 2}
+            position={[0, 4, 0]}
+            scale={[10, 1, 1]}
+          />
+          <Lightformer
+            intensity={2}
+            rotation-x={Math.PI / 2}
+            position={[0, 4, 3]}
+            scale={[10, 1, 1]}
+          />
+          <Lightformer
+            intensity={2}
+            rotation-x={Math.PI / 2}
+            position={[0, 4, 6]}
+            scale={[10, 1, 1]}
+          />
+          <Lightformer
+            intensity={2}
+            rotation-x={Math.PI / 2}
+            position={[0, 4, 9]}
+            scale={[10, 1, 1]}
+          />
+          {/* Sides */}
+          <Lightformer
+            intensity={2}
+            rotation-y={Math.PI / 2}
+            position={[-50, 2, 0]}
+            scale={[100, 2, 1]}
+          />
+          <Lightformer
+            intensity={2}
+            rotation-y={-Math.PI / 2}
+            position={[50, 2, 0]}
+            scale={[100, 2, 1]}
+          />
+          {/* Key */}
+          <Lightformer
+            form="ring"
+            color="red"
+            intensity={10}
+            scale={2}
+            position={[10, 5, 10]}
+            onUpdate={(self) => self.lookAt(0, 0, 0)}
+          />
+        </Environment>
+        {/* <Car></Car> */}
+        <Effects />
+      </Suspense>
     </Canvas>
   );
 };
-
 const FacilityProcess = (props: any) => {
   const { animations, scene, nodes, materials }: any = useGLTF(
     "./facility_process/scene.gltf"
   );
+
+  const [loading, setLoading] = useRecoilState(isLoading);
+
+  const [modelLoaded, setModelLoaded] = useState(false);
+
+  useEffect(() => {
+    console.log("ttt1");
+    setLoading(true);
+  }, []);
+  useEffect(() => {
+    console.log("ttt2");
+    if (scene) {
+      console.log(false);
+      setLoading(false);
+    } else {
+      console.log(true);
+      setLoading(true);
+    }
+  }, [scene]);
+
   // Extract animation actions
   const { ref, actions } = useAnimations(animations);
   const [isAnimated, setIsAnimated] = useState(true);
@@ -173,7 +190,7 @@ const FacilityProcess = (props: any) => {
     }
   };
 
-  React.useEffect(() => {
+  useEffect(() => {
     fetchMainGrid();
   }, []);
 
@@ -431,15 +448,17 @@ const PanelTable = ({ label, state, onClickDetail }: TPanelTable) => {
       }}
       style={{ width: "120px", height: "60px" }}
     >
-      <tr>
-        <th>{label}</th>
-        <td>
-          <span className="run">
-            <span className="light"></span>
-            {state}
-          </span>
-        </td>
-      </tr>
+      <tbody>
+        <tr>
+          <th>{label}</th>
+          <td>
+            <span className="run">
+              <span className="light"></span>
+              {state}
+            </span>
+          </td>
+        </tr>
+      </tbody>
     </table>
   );
 };
