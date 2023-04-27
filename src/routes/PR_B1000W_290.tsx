@@ -15,6 +15,9 @@ import { EffectComposer, Bloom } from "@react-three/postprocessing";
 import { DataContainer } from "../CommonStyled";
 import { Button } from "@progress/kendo-react-buttons";
 import { useSetRecoilState } from "recoil";
+import { useApi } from "../hooks/api";
+import { Iparameters, TPermissions } from "../store/types";
+import { DataResult, process, State } from "@progress/kendo-data-query";
 import {
   Chart,
   ChartCategoryAxis,
@@ -132,6 +135,53 @@ const FacilityProcess = (props: any) => {
   const [active, setActive] = useState(false);
   const [detail, setDetail] = useState(0);
   const categories = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul"];
+
+  const processApi = useApi();
+
+  const [mainDataState, setMainDataState] = useState<State>({
+    sort: [],
+  });
+  const [mainDataResult, setMainDataResult] = useState<DataResult>(
+    process([], mainDataState)
+  );
+
+  const parameters: Iparameters = {
+    procedureName: "P_PR_B1000W_290_Q",
+    pageNumber: 1,
+    pageSize: 20,
+    parameters: {
+      "@p_work_type": "Q",
+    },
+  };
+
+  const fetchMainGrid = async () => {
+    let data: any;
+    try {
+      data = await processApi<any>("procedure", parameters);
+    } catch (error) {
+      data = null;
+    }
+    console.log(data)
+    if (data.isSuccess === true) {
+      // const totalRowCnt = data.tables[0].RowCount;
+      // const rows = data.tables[0].Rows;
+
+      // if (totalRowCnt > 0)
+      //   setMainDataResult((prev) => {
+      //     return {
+      //       data: rows,
+      //       total: totalRowCnt,
+      //     };
+      //   });
+    } else {
+      console.log("[오류 발생]");
+      console.log(data);
+    }
+  };
+
+  React.useEffect(() => {
+    fetchMainGrid();
+  }, []);
 
   //각 팝업들 position(지우면안됩니다)
   const proc = [
