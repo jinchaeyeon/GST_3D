@@ -138,17 +138,12 @@ const FacilityProcess = (props: any) => {
 
   const processApi = useApi();
 
-  const [mainDataState, setMainDataState] = useState<State>({
-    sort: [],
-  });
-  const [mainDataResult, setMainDataResult] = useState<DataResult>(
-    process([], mainDataState)
-  );
+  const [mainDataResult, setMainDataResult] = useState<any>(null);
 
   const parameters: Iparameters = {
     procedureName: "P_PR_B1000W_290_Q",
-    pageNumber: 1,
-    pageSize: 20,
+    pageNumber: 0,
+    pageSize: 0,
     parameters: {
       "@p_work_type": "Q",
     },
@@ -161,18 +156,11 @@ const FacilityProcess = (props: any) => {
     } catch (error) {
       data = null;
     }
-    console.log(data)
     if (data.isSuccess === true) {
-      // const totalRowCnt = data.tables[0].RowCount;
-      // const rows = data.tables[0].Rows;
+      const totalRowCnt = data.tables[0].RowCount;
+      const row = data.tables[0].Rows[0];
 
-      // if (totalRowCnt > 0)
-      //   setMainDataResult((prev) => {
-      //     return {
-      //       data: rows,
-      //       total: totalRowCnt,
-      //     };
-      //   });
+      if (totalRowCnt > 0) setMainDataResult(row);
     } else {
       console.log("[오류 발생]");
       console.log(data);
@@ -184,37 +172,45 @@ const FacilityProcess = (props: any) => {
   }, []);
 
   //각 팝업들 position(지우면안됩니다)
-  const proc = [
-    [4, 5, 6],
-    [-4.5, 5, 6],
-    [-12.5, 5, 6],
-    [-21, 5, 6],
-    [-4.5, 5, -1.5],
-    [-12.5, 5, -1.5],
-    [-21, 5, -1.5],
-  ];
-  const detailproc = [
-    [3, 9, 6],
-    [-5.2, 9, 6],
-    [-13.5, 9, 6],
-    [-22, 9, 6],
-    [-5.2, 9, -1.5],
-    [-13.5, 9, -1.5],
-    [-22, 9, -1.5],
-  ];
-  const table = [-20, 5, -9.5];
-  const vision = [8, 5, -1.5];
-  const dryer = [1, 5, -9.5];
+  const tcpPosition = {
+    1: [-21, 5, 6],
+    2: [-12.5, 5, 6],
+    3: [-4.5, 5, 6],
+    4: [4, 5, 6],
+    5: [-21, 5, -1.5],
+    6: [-12.5, 5, -1.5],
+    7: [-4.5, 5, -1.5],
+  };
+  const tcpDetailPosition = {
+    1: [-22, 9, 6],
+    2: [-13.5, 9, 6],
+    3: [-5.2, 9, 6],
+    4: [3, 9, 6],
+    5: [-22, 9, -1.5],
+    6: [-13.5, 9, -1.5],
+    7: [-5.2, 9, -1.5],
+  };
+  const outputPosition = [-20, 5, -9.5];
+  const visionPosition = [8, 5, -1.5];
+  const dryerPosition = [1, 5, -9.5];
 
   useEffect(() => {
     if (actions["Animation"]) {
-      if (isAnimated) {
-        actions["Animation"].play();
-      } else {
-        actions["Animation"].stop();
-      }
+      actions["Animation"].play();
     }
-  }, [actions, isAnimated]);
+  }, [actions]);
+
+  // useEffect(() => {
+  //   if (actions["Animation"]) {
+  //     if (isAnimated) {
+  //       actions["Animation"].play();
+  //     } else {
+  //       actions["Animation"].stop();
+  //     }
+  //   }
+  // }, [actions, isAnimated]);
+
+  const onClickTcpPanelDetail = () => {};
 
   return (
     <group dispose={null}>
@@ -222,10 +218,6 @@ const FacilityProcess = (props: any) => {
         object={scene}
         ref={ref}
         onClick={(e: any) => {
-          console.log(e);
-          console.log(e.eventObject);
-
-          setIsAnimated((prev) => !prev);
           if (!active == false) {
             setDetail(0);
           }
@@ -233,100 +225,35 @@ const FacilityProcess = (props: any) => {
         }}
         {...props}
       />
-      {active == true ? (
+      {mainDataResult && active == true ? (
         <>
-          <Marker rotation={[0, 0, 0]} position={[4, 5, 6]}>
+          {[1, 2, 3, 4, 5, 6, 7].map((num: number) => {
+            return (
+              <TcpPanel
+                tcpNumber={num}
+                position={tcpPosition}
+                data={mainDataResult}
+                onClickDetail={onClickTcpPanelDetail}
+              ></TcpPanel>
+            );
+          })}
+
+          <Marker rotation={[0, 0, 0]} position={visionPosition}>
             <DataContainer>
-              <table
-                onClick={() => {
-                  if (detail == 1) {
-                    setDetail(0);
-                  } else {
-                    setDetail(1);
-                  }
-                }}
-                style={{ float: "left", width: "120px", height: "60px" }}
-              >
-                <tr>
-                  <th>품명</th>
-                  <td>1</td>
-                </tr>
-                <tr>
-                  <th>수량</th>
-                  <td>1</td>
-                </tr>
-                <tr>
-                  <th>상태</th>
-                  <td>
-                    <span className="run">
-                      <span className="light"></span>가동
-                    </span>
-                  </td>
-                </tr>
-              </table>
-              <table
-                onClick={() => {
-                  if (detail == 2) {
-                    setDetail(0);
-                  } else {
-                    setDetail(2);
-                  }
-                }}
-                style={{ float: "right", width: "120px", height: "60px" }}
-              >
-                <tr>
-                  <th>품명</th>
-                  <td>2</td>
-                </tr>
-                <tr>
-                  <th>수량</th>
-                  <td>2</td>
-                </tr>
-                <tr>
-                  <th>상태</th>
-                  <td>
-                    <span className="run">
-                      <span className="light"></span>가동
-                    </span>
-                  </td>
-                </tr>
-              </table>
-              <table style={{ float: "left", width: "120px", height: "60px" }}>
-                <tr>
-                  <th>품명</th>
-                  <td>3</td>
-                </tr>
-                <tr>
-                  <th>수량</th>
-                  <td>3</td>
-                </tr>
-                <tr>
-                  <th>상태</th>
-                  <td>
-                    <span className="run">
-                      <span className="light"></span>가동
-                    </span>
-                  </td>
-                </tr>
-              </table>
-              <table style={{ float: "right", width: "120px", height: "60px" }}>
-                <tr>
-                  <th>품명</th>
-                  <td>4</td>
-                </tr>
-                <tr>
-                  <th>수량</th>
-                  <td>4</td>
-                </tr>
-                <tr>
-                  <th>상태</th>
-                  <td>
-                    <span className="run">
-                      <span className="light"></span>가동
-                    </span>
-                  </td>
-                </tr>
-              </table>
+              <PanelTable
+                label={`비젼`}
+                state={mainDataResult[`OP6_배출검사_State`]}
+                onClickDetail={onClickTcpPanelDetail}
+              ></PanelTable>
+            </DataContainer>
+          </Marker>
+          <Marker rotation={[0, 0, 0]} position={dryerPosition}>
+            <DataContainer>
+              <PanelTable
+                label={`건조기`}
+                state={mainDataResult[`AirBlower_State`]}
+                onClickDetail={onClickTcpPanelDetail}
+              ></PanelTable>
             </DataContainer>
           </Marker>
           {detail == 1 ? (
@@ -388,82 +315,6 @@ const FacilityProcess = (props: any) => {
           ) : (
             ""
           )}
-          <Marker rotation={[0, 0, 0]} position={[-4.5, 5, 6]}>
-            <DataContainer>
-              <table style={{ float: "left", width: "120px", height: "60px" }}>
-                <tr>
-                  <th>품명</th>
-                  <td>5</td>
-                </tr>
-                <tr>
-                  <th>수량</th>
-                  <td>5</td>
-                </tr>
-                <tr>
-                  <th>상태</th>
-                  <td>
-                    <span className="run">
-                      <span className="light"></span>가동
-                    </span>
-                  </td>
-                </tr>
-              </table>
-              <table style={{ float: "right", width: "120px", height: "60px" }}>
-                <tr>
-                  <th>품명</th>
-                  <td>6</td>
-                </tr>
-                <tr>
-                  <th>수량</th>
-                  <td>6</td>
-                </tr>
-                <tr>
-                  <th>상태</th>
-                  <td>
-                    <span className="run">
-                      <span className="light"></span>가동
-                    </span>
-                  </td>
-                </tr>
-              </table>
-              <table style={{ float: "left", width: "120px", height: "60px" }}>
-                <tr>
-                  <th>품명</th>
-                  <td>7</td>
-                </tr>
-                <tr>
-                  <th>수량</th>
-                  <td>7</td>
-                </tr>
-                <tr>
-                  <th>상태</th>
-                  <td>
-                    <span className="run">
-                      <span className="light"></span>가동
-                    </span>
-                  </td>
-                </tr>
-              </table>
-              <table style={{ float: "right", width: "120px", height: "60px" }}>
-                <tr>
-                  <th>품명</th>
-                  <td>8</td>
-                </tr>
-                <tr>
-                  <th>수량</th>
-                  <td>8</td>
-                </tr>
-                <tr>
-                  <th>상태</th>
-                  <td>
-                    <span className="run">
-                      <span className="light"></span>가동
-                    </span>
-                  </td>
-                </tr>
-              </table>
-            </DataContainer>
-          </Marker>
         </>
       ) : (
         ""
@@ -517,5 +368,63 @@ export function Effects() {
     </EffectComposer>
   );
 }
+
+type TTcpPanel = {
+  tcpNumber: number;
+  position: { [key: number]: number[] };
+  data: any;
+  onClickDetail: () => void;
+};
+
+const TcpPanel = ({ tcpNumber, position, data, onClickDetail }: TTcpPanel) => {
+  return (
+    <Marker rotation={[0, 0, 0]} position={position[tcpNumber]}>
+      <DataContainer
+        style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(2, 1fr)" /* 2열 */,
+          gridTemplateRows: "repeat(2, 1fr)" /* 2행 */,
+        }}
+      >
+        {[1, 2, 3, 4].map((num: number) => {
+          const tcpNum = Number(String(tcpNumber) + String(num));
+          return (
+            <PanelTable
+              label={`TPC${tcpNum}`}
+              state={data[`TPC${tcpNum}_State`]}
+              onClickDetail={onClickDetail}
+            ></PanelTable>
+          );
+        })}
+      </DataContainer>
+    </Marker>
+  );
+};
+
+type TPanelTable = {
+  label: string;
+  state: number;
+  onClickDetail: () => void;
+};
+const PanelTable = ({ label, state, onClickDetail }: TPanelTable) => {
+  return (
+    <table
+      onClick={() => {
+        onClickDetail();
+      }}
+      style={{ width: "120px", height: "60px" }}
+    >
+      <tr>
+        <th>{label}</th>
+        <td>
+          <span className="run">
+            <span className="light"></span>
+            {state}
+          </span>
+        </td>
+      </tr>
+    </table>
+  );
+};
 
 export default PR_B1000W_290;

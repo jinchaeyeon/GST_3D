@@ -1,17 +1,20 @@
 import styled from "styled-components";
 import { CLOSED_GNV_WIDTH, GNV_WIDTH } from "./components/CommonString";
 import logoSrc from "./img/logo.png";
-
-export const DataContainer = styled.div`
+type TDataContainer = {
+  width?: string;
+  height?: string;
+};
+export const DataContainer = styled.div<TDataContainer>`
   position: absolute;
   letter-spacing: -0.5px;
   right: -90px;
   background-color: #0000006b;
-  width: 250px;
-  height: 130px;
   color: #fff;
   border-radius: 5px;
   padding: 5px;
+  width: ${(props) => props.width ?? "250px"};
+  height: ${(props) => props.height ?? "130px"};
 
   table {
     width: 100%;
