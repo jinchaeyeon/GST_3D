@@ -103,9 +103,6 @@ const PanelBarNavContainer = (props: any) => {
   }, [menus]);
 
   useEffect(() => {
-    console.log("caches" in window);
-    console.log(window.caches);
-
     checkPwExpInfo();
   }, []);
 
@@ -333,10 +330,6 @@ const PanelBarNavContainer = (props: any) => {
     setIsMobileMenuOpend((prev) => !prev);
   };
 
-  const onClickChatbot = () => {
-    window.open("/CHAT_A0001W", "_blank");
-  };
-
   const panelBars: TPath[] = [
     ...paths.filter((path) => path.path === "/Home"),
     ...paths.filter((path) => path.menuCategory === "GROUP"),
@@ -379,8 +372,6 @@ const PanelBarNavContainer = (props: any) => {
 
   // Parent 그룹 없는 메뉴 Array
   const singleMenus = ["/Home", "/PR_B1000W_290"];
-  console.log("panelBars");
-  console.log(panelBars);
 
   return (
     <Wrapper isMobileMenuOpend={isMobileMenuOpend}>
@@ -438,16 +429,6 @@ const PanelBarNavContainer = (props: any) => {
             flexDirection={"column"}
             style={{ marginTop: "10px", gap: "5px" }}
           >
-            {/* <Button
-              onClick={onClickChatbot}
-              icon={"hyperlink-open-sm"}
-              fillMode={"solid"}
-              themeColor={"secondary"}
-              rounded={"full"}
-              size="small"
-            >
-              Chatbot
-            </Button> */}
             {isAdmin && (
               <Button
                 onClick={() => setUserOptionsWindowVisible(true)}
