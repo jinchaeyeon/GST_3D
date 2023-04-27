@@ -900,7 +900,6 @@ export const resetLocalStorage = () => {
   localStorage.removeItem("refreshToken");
   localStorage.removeItem("passwordExpirationInfo");
   localStorage.removeItem("loginResult");
-  localStorage.removeItem("menus");
   localStorage.removeItem("sessionItem");
 };
 
