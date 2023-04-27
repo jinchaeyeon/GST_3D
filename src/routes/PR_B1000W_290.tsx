@@ -157,10 +157,16 @@ const FacilityProcess = (props: any) => {
       data = null;
     }
     if (data.isSuccess === true) {
-      const totalRowCnt = data.tables[0].RowCount;
-      const row = data.tables[0].Rows[0];
-
-      if (totalRowCnt > 0) setMainDataResult(row);
+      const totalRowCnt1 = data.tables[0].RowCount;
+      const totalRowCnt2 = data.tables[1].RowCount;
+      const totalRowCnt3 = data.tables[2].RowCount;
+      const row1 = data.tables[0].Rows[0];
+      const row2 = data.tables[1].Rows[0];
+      const row3 = data.tables[2].Rows[0];
+      const row = { ...row1, ...row2, ...row3 };
+      console.log(row);
+      if (totalRowCnt1 > 0 && totalRowCnt2 > 0 && totalRowCnt3 > 0)
+        setMainDataResult(row);
     } else {
       console.log("[오류 발생]");
       console.log(data);
@@ -248,7 +254,18 @@ const FacilityProcess = (props: any) => {
             </DataContainer>
           </Marker>
           <Marker rotation={[0, 0, 0]} position={dryerPosition}>
-            <DataContainer>
+            <DataContainer
+              style={{
+                display: "grid",
+                gridTemplateColumns: "repeat(1, 1fr)" /* 1열 */,
+                gridTemplateRows: "repeat(2, 1fr)" /* 2행 */,
+              }}
+            >
+              <PanelTable
+                label={`세척기`}
+                state={mainDataResult[`Washing_State`]}
+                onClickDetail={onClickTcpPanelDetail}
+              ></PanelTable>
               <PanelTable
                 label={`건조기`}
                 state={mainDataResult[`AirBlower_State`]}
