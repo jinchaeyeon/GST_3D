@@ -68,8 +68,9 @@ div.k-animation-container {
   justify-content: center; /*공통설정 : 그리드 헤더 텍스트 중앙정렬*/
 }
 
+/* 버그 : 메뉴바가 window 위로 올라오는 현상 수정  */
 .k-window {
-  z-index: 10100 !important; /* 버그 : 메뉴바가 window 위로 올라오는 현상 수정  */
+  z-index: 100000002 !important;
 }
 
 ul.required,
