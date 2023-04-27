@@ -28,6 +28,7 @@ import {
   Logo,
   Modal,
   PageWrap,
+  SmallGnv,
   TopTitle,
   Wrapper,
 } from "../CommonStyled";
@@ -197,6 +198,7 @@ const PanelBarNavContainer = (props: any) => {
     props.history.push(route);
 
     if (route) {
+      setIsMenuOpend(false);
       setIsMobileMenuOpend(false);
       setUserOptionsWindowVisible(false);
       setChangePasswordWindowVisible(false);
@@ -327,6 +329,7 @@ const PanelBarNavContainer = (props: any) => {
   };
 
   const onMenuBtnClick = () => {
+    setIsMenuOpend(true);
     setIsMobileMenuOpend((prev) => !prev);
   };
 
@@ -465,20 +468,14 @@ const PanelBarNavContainer = (props: any) => {
           </ButtonContainer>
         </Gnv>
       ) : (
-        <div
-          style={{
-            paddingTop: "10px",
-            borderRight: "solid 1px #ebebeb",
-            height: "100vh",
-          }}
-        >
+        <SmallGnv>
           <Button
             icon="menu"
             fillMode={"flat"}
             themeColor={"primary"}
             onClick={() => setIsMenuOpend(true)}
           />
-        </div>
+        </SmallGnv>
       )}
       <Content isMenuOpen={isMenuOpend}>
         <TopTitle>

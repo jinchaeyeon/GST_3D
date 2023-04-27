@@ -7,6 +7,14 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  /* ios 모바일 뷰 디바이스 높이 오류 방지 */
+  min-height: 100vh;
+  min-height: -webkit-fill-available;
+  /* ios 모바일 뷰 디바이스 높이 오류 방지 - 크롬 적용*/
+  @supports (-webkit-appearance: none) and (stroke-color: transparent) {
+    min-height: -webkit-fill-available;
+  }
 }
 
 code {
@@ -14,14 +22,10 @@ code {
     monospace;
 }
 
-/*Kendo 버그 해결용 (Window 컴포넌트 z-index 100이라서 100 미만 내부 컴포넌트 안보이는 현상)*/
+/*Kendo 버그 해결용 (Window 컴포넌트 내부 컴포넌트 안보이는 현상)*/
 div.k-animation-container {
-  z-index: 10100 !important;
+  z-index: 100000002 !important;
 }
-
-/* .k-grid tr {
-  height: 36px;
-} */
 
 .k-form-horizontal .k-form-field > .k-label,
 .k-form-horizontal .k-form-field > kendo-label,
@@ -58,6 +62,52 @@ div.k-animation-container {
 }
 .sys-opt-wnd-form-elem .k-form-field-wrap {
   max-width: calc(30% - 10px) !important;
+}
+
+.k-grid .k-grid-header .k-header .k-cell-inner > .k-link {
+  justify-content: center; /*공통설정 : 그리드 헤더 텍스트 중앙정렬*/
+}
+
+.k-window {
+  z-index: 10100 !important; /* 버그 : 메뉴바가 window 위로 올라오는 현상 수정  */
+}
+
+ul.required,
+ul.required:hover,
+ul.required.k-hover,
+span.required,
+span.required:hover,
+span.required.k-hover,
+input.required,
+input.required:hover,
+input.required.k-hover {
+  background-color: #fff0ef;
+}
+ul.readonly,
+span.readonly,
+input.readonly {
+  background-color: #efefef;
+}
+.k-radio-label {
+  font-size: 14px;
+  line-height: 1.4285714286;
+}
+
+/* 그리드 행높이 조절 */
+.k-grid tbody tr,
+.k-grid tbody tr td,
+.k-grid td.k-state-selected,
+.k-grid td.k-selected,
+.k-grid tr.k-state-selected > td,
+.k-grid tr.k-selected > td {
+  height: 34px;
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+.k-tabstrip > .k-content.k-active,
+.k-tabstrip > .k-content.k-active > div.k-animation-container {
+  width: inherit;
 }
 
 /* 모바일 결재문서 숨김 처리 */

@@ -703,12 +703,21 @@ export const Gnv = styled.div<TGnv>`
   =========================================================================*/
   @media (max-width: 768px) {
     display: ${(props) => (props.isMobileMenuOpend ? "block" : "none")};
-    z-index: 10;
+    z-index: 100000000;
     position: absolute;
 
     h1 {
       display: none;
     }
+  }
+`;
+export const SmallGnv = styled.div`
+  padding-top: 10px;
+  border-right: solid 1px #ebebeb;
+  height: 100vh;
+
+  @media (max-width: 768px) {
+    display: none;
   }
 `;
 
@@ -747,6 +756,9 @@ export const AppName = styled.h1`
   background-color: #fff;
   border-right: 1px solid #ebebeb;
   cursor: pointer;
+  @media (max-width: 768px) {
+    border-right: none;
+  }
 `;
 
 export const LoginAppName = styled(AppName)`
