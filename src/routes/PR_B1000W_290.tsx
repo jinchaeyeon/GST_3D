@@ -213,8 +213,8 @@ const FacilityProcess = (props: any) => {
     6: [-13.5, 9, -1.5],
     7: [-5.2, 9, -1.5],
   };
-  const outputPosition = [-20, 5, -9.5];
-  const visionPosition = [8, 5, -1.5];
+  const outputPosition = [-18.5, 3, -9.5];
+  const visionPosition = [6.5, 3, -1.5];
   const dryerPosition = [1, 5, -9.5];
 
   useEffect(() => {
@@ -262,7 +262,7 @@ const FacilityProcess = (props: any) => {
           })}
 
           <Marker rotation={[0, 0, 0]} position={visionPosition}>
-            <DataContainer>
+            <DataContainer style={{width: "140px", height: "60px"}}>
               <PanelTable
                 label={`비젼`}
                 state={mainDataResult[`OP6_배출검사_State`]}
@@ -273,6 +273,7 @@ const FacilityProcess = (props: any) => {
           <Marker rotation={[0, 0, 0]} position={dryerPosition}>
             <DataContainer
               style={{
+                width: "140px", height: "120px",
                 display: "grid",
                 gridTemplateColumns: "repeat(1, 1fr)" /* 1열 */,
                 gridTemplateRows: "repeat(2, 1fr)" /* 2행 */,
@@ -286,6 +287,32 @@ const FacilityProcess = (props: any) => {
               <PanelTable
                 label={`건조기`}
                 state={mainDataResult[`AirBlower_State`]}
+                onClickDetail={onClickTcpPanelDetail}
+              ></PanelTable>
+            </DataContainer>
+          </Marker>
+          <Marker rotation={[0, 0, 0]} position={outputPosition}>
+            <DataContainer
+              style={{
+                width: "360px", height: "60px",
+                display: "grid",
+                gridTemplateColumns: "repeat(3, 1fr)" /* 1열 */,
+                gridTemplateRows: "repeat(1, 1fr)" /* 3행 */,
+              }}
+            >
+              <PanelTable
+                label={`OK`}
+                state={mainDataResult[`out_ok1`]}
+                onClickDetail={onClickTcpPanelDetail}
+              ></PanelTable>
+              <PanelTable
+                label={`OK2`}
+                state={mainDataResult[`out_ok2`]}
+                onClickDetail={onClickTcpPanelDetail}
+              ></PanelTable>
+              <PanelTable
+                label={`회송`}
+                state={mainDataResult[`out_ng`]}
                 onClickDetail={onClickTcpPanelDetail}
               ></PanelTable>
             </DataContainer>
