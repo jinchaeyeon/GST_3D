@@ -20,8 +20,10 @@ import {
   Chart,
   ChartCategoryAxis,
   ChartCategoryAxisItem,
+  ChartLegend,
   ChartSeries,
   ChartSeriesItem,
+  ChartTitle,
 } from "@progress/kendo-react-charts";
 import { useRecoilState } from "recoil";
 import { isLoading } from "../store/atoms";
@@ -122,40 +124,48 @@ const PR_B1000W_290: React.FC = () => {
     </Canvas>
   );
 };
+
+//각 팝업들 position(지우면안됩니다)
+const tcpPosition = {
+  1: [-21, 5, 6],
+  2: [-12.5, 5, 6],
+  3: [-4.5, 5, 6],
+  4: [4, 5, 6],
+  5: [-21, 5, -1.5],
+  6: [-12.5, 5, -1.5],
+  7: [-4.5, 5, -1.5],
+};
+const tcpDetailPosition = {
+  1: [-13, 13, 6],
+  2: [-4.5, 13, 6],
+  3: [4.2, 13, 6],
+  4: [12, 13, 6],
+  5: [-13, 13, -1.5],
+  6: [-4.5, 13, -1.5],
+  7: [4.2, 13, -1.5],
+};
+const outputPosition = [-18.5, 3, -9.5];
+const visionPosition = [6.5, 3, -1.5];
+const visionDetailPosition = [8.5, 11, -1.5];
+const dryerPosition = [1, 5, -9.5];
+
 const FacilityProcess = (props: any) => {
   const { animations, scene, nodes, materials }: any = useGLTF(
     "./facility_process/scene.gltf"
   );
 
-  const [loading, setLoading] = useRecoilState(isLoading);
-
-  const [modelLoaded, setModelLoaded] = useState(false);
-
-  useEffect(() => {
-    console.log("ttt1");
-    setLoading(true);
-  }, []);
-  useEffect(() => {
-    console.log("ttt2");
-    if (scene) {
-      console.log(false);
-      setLoading(false);
-    } else {
-      console.log(true);
-      setLoading(true);
-    }
-  }, [scene]);
-
   // Extract animation actions
   const { ref, actions } = useAnimations(animations);
+  const [isVisionDetailShowed, setIsVisionDetailShowed] = useState(false);
   const [isAnimated, setIsAnimated] = useState(true);
   const [active, setActive] = useState(false);
-  const [detail, setDetail] = useState(0);
+  const [detail, setDetail] = useState<any>(null);
   const categories = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul"];
 
   const processApi = useApi();
 
   const [mainDataResult, setMainDataResult] = useState<any>(null);
+  const [detailDataResult, setDetailDataResult] = useState<any>(null);
 
   const parameters: Iparameters = {
     procedureName: "P_PR_B1000W_290_Q",
@@ -174,16 +184,21 @@ const FacilityProcess = (props: any) => {
       data = null;
     }
     if (data.isSuccess === true) {
-      const totalRowCnt1 = data.tables[0].RowCount;
-      const totalRowCnt2 = data.tables[1].RowCount;
-      const totalRowCnt3 = data.tables[2].RowCount;
-      const row1 = data.tables[0].Rows[0];
-      const row2 = data.tables[1].Rows[0];
-      const row3 = data.tables[2].Rows[0];
-      const row = { ...row1, ...row2, ...row3 };
+      const totalRowCnt0 = data.tables[0].RowCount;
+      const totalRowCnt1 = data.tables[1].RowCount;
+      const totalRowCnt2 = data.tables[2].RowCount;
+      const totalRowCnt3 = data.tables[3].RowCount;
+      const row0 = data.tables[0].Rows[0];
+      const rows1 = data.tables[1].Rows;
+      const row2 = data.tables[2].Rows[0];
+      const row3 = data.tables[3].Rows[0];
 
-      if (totalRowCnt1 > 0 && totalRowCnt2 > 0 && totalRowCnt3 > 0)
+      if (totalRowCnt0 > 0 && totalRowCnt2 > 0 && totalRowCnt3 > 0) {
+        const row = { ...row0, ...row2, ...row3 };
         setMainDataResult(row);
+      }
+
+      if (totalRowCnt1 > 0) setDetailDataResult(rows1);
     } else {
       console.log("[오류 발생]");
       console.log(data);
@@ -193,29 +208,6 @@ const FacilityProcess = (props: any) => {
   useEffect(() => {
     fetchMainGrid();
   }, []);
-
-  //각 팝업들 position(지우면안됩니다)
-  const tcpPosition = {
-    1: [-21, 5, 6],
-    2: [-12.5, 5, 6],
-    3: [-4.5, 5, 6],
-    4: [4, 5, 6],
-    5: [-21, 5, -1.5],
-    6: [-12.5, 5, -1.5],
-    7: [-4.5, 5, -1.5],
-  };
-  const tcpDetailPosition = {
-    1: [-22, 9, 6],
-    2: [-13.5, 9, 6],
-    3: [-5.2, 9, 6],
-    4: [3, 9, 6],
-    5: [-22, 9, -1.5],
-    6: [-13.5, 9, -1.5],
-    7: [-5.2, 9, -1.5],
-  };
-  const outputPosition = [-18.5, 3, -9.5];
-  const visionPosition = [6.5, 3, -1.5];
-  const dryerPosition = [1, 5, -9.5];
 
   useEffect(() => {
     if (actions["Animation"]) {
@@ -233,7 +225,9 @@ const FacilityProcess = (props: any) => {
   //   }
   // }, [actions, isAnimated]);
 
-  const onClickTcpPanelDetail = () => {};
+  const onClickTcpPanelDetail = (tcpNumber: any) => {
+    setDetail(tcpNumber);
+  };
 
   return (
     <group dispose={null}>
@@ -242,7 +236,6 @@ const FacilityProcess = (props: any) => {
         ref={ref}
         onClick={(e: any) => {
           if (!active == false) {
-            setDetail(0);
           }
           setActive(!active);
         }}
@@ -250,30 +243,56 @@ const FacilityProcess = (props: any) => {
       />
       {mainDataResult && active == true ? (
         <>
+          {/* TCP (1~7구역) */}
           {[1, 2, 3, 4, 5, 6, 7].map((num: number) => {
             return (
-              <TcpPanel
-                tcpNumber={num}
-                position={tcpPosition}
-                data={mainDataResult}
-                onClickDetail={onClickTcpPanelDetail}
-              ></TcpPanel>
+              <>
+                {/* 메인 판넬 */}
+                <TcpPanel
+                  tcpNumber={num}
+                  position={tcpPosition}
+                  data={mainDataResult}
+                  onClickDetail={onClickTcpPanelDetail}
+                ></TcpPanel>
+                {/* 상세 판넬 */}
+                {detailDataResult && detail && (
+                  <TcpDetailPanel
+                    tcpNumber={num}
+                    selectedTcpNumber={detail}
+                    position={tcpDetailPosition}
+                    data={detailDataResult}
+                    onClickDetail={onClickTcpPanelDetail}
+                  ></TcpDetailPanel>
+                )}
+              </>
             );
           })}
 
+          {/* 비전 */}
           <Marker rotation={[0, 0, 0]} position={visionPosition}>
-            <DataContainer style={{width: "140px", height: "60px"}}>
+            <DataContainer style={{ width: "140px", height: "60px" }}>
               <PanelTable
                 label={`비젼`}
-                state={mainDataResult[`OP6_배출검사_State`]}
-                onClickDetail={onClickTcpPanelDetail}
+                value={mainDataResult[`OP6_배출검사_State`]}
+                onClickDetail={() => setIsVisionDetailShowed(true)}
               ></PanelTable>
             </DataContainer>
           </Marker>
+          {detailDataResult && isVisionDetailShowed && (
+            <VisionDetailPanel
+              position={visionDetailPosition}
+              data={detailDataResult}
+              isSelected={isVisionDetailShowed}
+              onClickDetail={() => setIsVisionDetailShowed(false)}
+            ></VisionDetailPanel>
+          )}
+
+          {/* 세척 및 건조기 */}
           <Marker rotation={[0, 0, 0]} position={dryerPosition}>
             <DataContainer
               style={{
-                width: "140px", height: "120px",
+                width: "140px",
+                height: "120px",
                 display: "grid",
                 gridTemplateColumns: "repeat(1, 1fr)" /* 1열 */,
                 gridTemplateRows: "repeat(2, 1fr)" /* 2행 */,
@@ -281,20 +300,23 @@ const FacilityProcess = (props: any) => {
             >
               <PanelTable
                 label={`세척기`}
-                state={mainDataResult[`Washing_State`]}
+                value={mainDataResult[`Washing_State`]}
                 onClickDetail={onClickTcpPanelDetail}
               ></PanelTable>
               <PanelTable
                 label={`건조기`}
-                state={mainDataResult[`AirBlower_State`]}
+                value={mainDataResult[`AirBlower_State`]}
                 onClickDetail={onClickTcpPanelDetail}
               ></PanelTable>
             </DataContainer>
           </Marker>
+
+          {/* 생산 */}
           <Marker rotation={[0, 0, 0]} position={outputPosition}>
             <DataContainer
               style={{
-                width: "360px", height: "60px",
+                width: "360px",
+                height: "60px",
                 display: "grid",
                 gridTemplateColumns: "repeat(3, 1fr)" /* 1열 */,
                 gridTemplateRows: "repeat(1, 1fr)" /* 3행 */,
@@ -302,80 +324,24 @@ const FacilityProcess = (props: any) => {
             >
               <PanelTable
                 label={`OK`}
-                state={mainDataResult[`out_ok1`]}
+                value={mainDataResult[`out_ok1`]}
+                valueType="Number"
                 onClickDetail={onClickTcpPanelDetail}
               ></PanelTable>
               <PanelTable
                 label={`OK2`}
-                state={mainDataResult[`out_ok2`]}
+                value={mainDataResult[`out_ok2`]}
+                valueType="Number"
                 onClickDetail={onClickTcpPanelDetail}
               ></PanelTable>
               <PanelTable
                 label={`회송`}
-                state={mainDataResult[`out_ng`]}
+                value={mainDataResult[`out_ng`]}
+                valueType="Number"
                 onClickDetail={onClickTcpPanelDetail}
               ></PanelTable>
             </DataContainer>
           </Marker>
-          {detail == 1 ? (
-            <>
-              <group position={[3, 9, 6]} rotation={[0, 0, 0]}>
-                <Marker rotation={[0, 0, 0]}>
-                  <DataContainer style={{ width: "180px", height: "auto" }}>
-                    <Chart style={{ height: "130px" }}>
-                      <ChartCategoryAxis>
-                        <ChartCategoryAxisItem categories={categories} />
-                      </ChartCategoryAxis>
-                      <ChartSeries>
-                        <ChartSeriesItem
-                          type="area"
-                          data={[0, 0, 0, 0, 0, 0, 0]}
-                        />
-                        <ChartSeriesItem
-                          type="area"
-                          data={[165, 210, 287, 144, 190, 167, 212]}
-                        />
-                        <ChartSeriesItem
-                          type="area"
-                          data={[0, 0, 0, 0, 0, 0, 0]}
-                        />
-                      </ChartSeries>
-                    </Chart>
-                  </DataContainer>
-                </Marker>
-              </group>
-            </>
-          ) : detail == 2 ? (
-            <>
-              <group position={[3, 9, 6]} rotation={[0, 0, 0]}>
-                <Marker rotation={[0, 0, 0]}>
-                  <DataContainer style={{ width: "180px", height: "auto" }}>
-                    <Chart style={{ height: "130px" }}>
-                      <ChartCategoryAxis>
-                        <ChartCategoryAxisItem categories={categories} />
-                      </ChartCategoryAxis>
-                      <ChartSeries>
-                        <ChartSeriesItem
-                          type="area"
-                          data={[123, 276, 310, 212, 240, 156, 98]}
-                        />
-                        <ChartSeriesItem
-                          type="area"
-                          data={[165, 210, 287, 144, 190, 167, 212]}
-                        />
-                        <ChartSeriesItem
-                          type="area"
-                          data={[56, 140, 195, 46, 123, 78, 95]}
-                        />
-                      </ChartSeries>
-                    </Chart>
-                  </DataContainer>
-                </Marker>
-              </group>
-            </>
-          ) : (
-            ""
-          )}
         </>
       ) : (
         ""
@@ -434,7 +400,7 @@ type TTcpPanel = {
   tcpNumber: number;
   position: { [key: number]: number[] };
   data: any;
-  onClickDetail: () => void;
+  onClickDetail: (n: number) => void;
 };
 
 const TcpPanel = ({ tcpNumber, position, data, onClickDetail }: TTcpPanel) => {
@@ -452,8 +418,8 @@ const TcpPanel = ({ tcpNumber, position, data, onClickDetail }: TTcpPanel) => {
           return (
             <PanelTable
               label={`TPC${tcpNum}`}
-              state={data[`TPC${tcpNum}_State`]}
-              onClickDetail={onClickDetail}
+              value={data[`TPC${tcpNum}_State`]}
+              onClickDetail={() => onClickDetail(tcpNum)}
             ></PanelTable>
           );
         })}
@@ -464,14 +430,20 @@ const TcpPanel = ({ tcpNumber, position, data, onClickDetail }: TTcpPanel) => {
 
 type TPanelTable = {
   label: string;
-  state: number;
-  onClickDetail: () => void;
+  value: number;
+  valueType?: "State" | "Number";
+  onClickDetail: (n: any) => void;
 };
-const PanelTable = ({ label, state, onClickDetail }: TPanelTable) => {
+const PanelTable = ({
+  label,
+  value,
+  valueType = "State",
+  onClickDetail,
+}: TPanelTable) => {
   return (
     <table
       onClick={() => {
-        onClickDetail();
+        onClickDetail("");
       }}
       style={{ width: "120px", height: "60px" }}
     >
@@ -479,14 +451,239 @@ const PanelTable = ({ label, state, onClickDetail }: TPanelTable) => {
         <tr>
           <th>{label}</th>
           <td>
-            <span className="run">
+            <span
+              className={valueType === "Number" ? "number" : "sts sts" + value}
+            >
               <span className="light"></span>
-              {state}
+
+              {valueType === "Number"
+                ? value
+                : Number(value) === 1
+                ? "정상"
+                : Number(value) === 2
+                ? "통신 에러"
+                : Number(value) === 3
+                ? "작은 고장"
+                : Number(value) === 4
+                ? "큰 고장"
+                : ""}
             </span>
           </td>
         </tr>
       </tbody>
     </table>
+  );
+};
+type TTcpDetailPanel = {
+  tcpNumber: number;
+  position: any;
+  selectedTcpNumber: number;
+  data: any[];
+  onClickDetail: (n: any) => void;
+};
+const TcpDetailPanel = ({
+  position,
+  tcpNumber,
+  selectedTcpNumber,
+  data,
+  onClickDetail,
+}: TTcpDetailPanel) => {
+  const tpData = data.filter((row: any) => row.Tp_No === selectedTcpNumber);
+
+  const categories = tpData.map((row: any) => row.Tp_InsertTime);
+  const tpJig = tpData.map((row: any) => row.Tp_JIG);
+  const tpJigMax = tpData.map((row: any) => row.Tp_JIG_MAX);
+  const tpJigMin = tpData.map((row: any) => row.Tp_JIG_MIN);
+
+  const tpWjig = tpData.map((row: any) => row.Tp_WJIG);
+  const tpWjigMax = tpData.map((row: any) => row.Tp_WJIG_MAX);
+  const tpWjigMin = tpData.map((row: any) => row.Tp_WJIG_MIN);
+
+  const tpVibration = tpData.map((row: any) => row.Tp_Vibration);
+
+  return selectedTcpNumber &&
+    String(selectedTcpNumber).charAt(0) === String(tcpNumber) ? (
+    <group position={position[tcpNumber]} rotation={[0, 0, 0]}>
+      <Marker rotation={[0, 0, 0]}>
+        <DataContainer
+          onClick={() => onClickDetail(null)}
+          style={{
+            width: "900px",
+            height: "300px",
+            padding: "20px",
+          }}
+        >
+          <p
+            style={{
+              textAlign: "center",
+              marginBottom: "20px",
+            }}
+          >
+            TPC {selectedTcpNumber}호기{" "}
+            {tpData.length > 0 && (
+              <>
+                ({tpData[0].Tp_InsertTime} ~
+                {tpData[tpData.length - 1].Tp_InsertTime})
+              </>
+            )}
+          </p>
+          <div style={{ width: "100%", height: "auto", display: "flex" }}>
+            <Chart style={{ height: "230px" }}>
+              <ChartTitle text="JIG 추이" />
+              <ChartLegend position="bottom" orientation="horizontal" />
+
+              <ChartCategoryAxis>
+                <ChartCategoryAxisItem
+                  categories={categories}
+                  visible={false}
+                />
+              </ChartCategoryAxis>
+              <ChartSeries>
+                <ChartSeriesItem
+                  type="line"
+                  tooltip={{ visible: true }}
+                  data={tpJigMax}
+                  name={"MAX"}
+                />
+                <ChartSeriesItem
+                  type="line"
+                  tooltip={{ visible: true }}
+                  data={tpJig}
+                  name={"JIG"}
+                />
+                <ChartSeriesItem
+                  type="line"
+                  tooltip={{ visible: true }}
+                  data={tpJigMin}
+                  name={"MIN"}
+                />
+              </ChartSeries>
+            </Chart>
+            <Chart style={{ height: "230px" }}>
+              <ChartTitle text="WJIG 추이" />
+              <ChartLegend position="bottom" orientation="horizontal" />
+              <ChartCategoryAxis>
+                <ChartCategoryAxisItem
+                  categories={categories}
+                  visible={false}
+                />
+              </ChartCategoryAxis>
+              <ChartSeries>
+                <ChartSeriesItem
+                  type="line"
+                  tooltip={{ visible: true }}
+                  data={tpWjigMax}
+                  name={"MAX"}
+                />
+                <ChartSeriesItem
+                  type="line"
+                  tooltip={{ visible: true }}
+                  data={tpWjig}
+                  name={"WJIG"}
+                />
+                <ChartSeriesItem
+                  type="line"
+                  tooltip={{ visible: true }}
+                  data={tpWjigMin}
+                  name={"MIN"}
+                />
+              </ChartSeries>
+            </Chart>
+            <Chart style={{ height: "230px" }}>
+              <ChartTitle text="진동 추이" />
+              <ChartLegend position="bottom" orientation="horizontal" />
+              <ChartCategoryAxis>
+                <ChartCategoryAxisItem
+                  categories={categories}
+                  visible={false}
+                />
+              </ChartCategoryAxis>
+              <ChartSeries>
+                <ChartSeriesItem
+                  type="line"
+                  tooltip={{ visible: true }}
+                  data={tpVibration}
+                  name={"진동"}
+                />
+              </ChartSeries>
+            </Chart>
+          </div>
+        </DataContainer>
+      </Marker>
+    </group>
+  ) : (
+    <></>
+  );
+};
+
+type TVisionDetailPanel = {
+  position: any;
+  isSelected: boolean;
+  data: any[];
+  onClickDetail: (n: any) => void;
+};
+const VisionDetailPanel = ({
+  position,
+  isSelected,
+  data,
+  onClickDetail,
+}: TVisionDetailPanel) => {
+  const tpData = data.filter((row: any) => row.Tp_No !== "");
+
+  const categories = tpData.map((row: any) => row.Tp_InsertTime);
+  const tpJig = tpData.map((row: any) => row.Tp_JIG);
+
+  return isSelected ? (
+    <group position={position} rotation={[0, 0, 0]}>
+      <Marker rotation={[0, 0, 0]}>
+        <DataContainer
+          onClick={() => onClickDetail(null)}
+          style={{
+            width: "320px",
+            height: "300px",
+            padding: "20px",
+          }}
+        >
+          <p
+            style={{
+              textAlign: "center",
+              marginBottom: "20px",
+            }}
+          >
+            비젼 불량 추이
+            <br />
+            {data.length > 0 && (
+              <>
+                ({data[0].Tp_InsertTime} ~{data[data.length - 1].Tp_InsertTime})
+              </>
+            )}
+          </p>
+          <div style={{ width: "100%", height: "auto", display: "flex" }}>
+            <Chart style={{ height: "200px" }}>
+              {/* <ChartTitle text="Vision 불량 추이" /> */}
+              <ChartLegend position="bottom" orientation="horizontal" />
+
+              <ChartCategoryAxis>
+                <ChartCategoryAxisItem
+                  categories={categories}
+                  visible={false}
+                />
+              </ChartCategoryAxis>
+              <ChartSeries>
+                <ChartSeriesItem
+                  type="line"
+                  tooltip={{ visible: true }}
+                  data={tpJig}
+                  name={"불량"}
+                />
+              </ChartSeries>
+            </Chart>
+          </div>
+        </DataContainer>
+      </Marker>
+    </group>
+  ) : (
+    <></>
   );
 };
 

@@ -36,19 +36,78 @@ export const DataContainer = styled.div<TDataContainer>`
     font-weight: 100;
     color: #ebebeb;
   }
-  .light {
-    width: 10px;
-    height: 10px;
-    background-color: #51ca00;
-    border-radius: 10px;
-    display: inline-block;
-    margin-right: 5px;
-  }
-  .run {
-    color: #51ca00;
+  .number {
     display: flex;
     justify-content: flex-end;
     align-items: center;
+    color: fff;
+  }
+  .sts {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+  }
+  .sts0 {
+    color: #000000;
+  }
+  .sts0 .light {
+    background-color: #000000;
+  }
+  .sts1 {
+    color: #51ca00;
+  }
+  .sts1 .light {
+    background-color: #51ca00;
+  }
+  .sts2 {
+    color: #2470ff;
+  }
+  .sts2 .light {
+    background-color: #2470ff;
+  }
+  .sts3 {
+    color: #ff9822;
+  }
+  .sts3 .light {
+    background-color: #ff9822;
+  }
+  .sts4 {
+    color: #ff4444;
+  }
+  .sts4 .light {
+    background-color: #ff4444;
+  }
+  .sts5 {
+    color: #000000;
+  }
+  .sts5 .light {
+    background-color: #000000;
+  }
+  .sts6 {
+    color: #cf5300;
+  }
+  .sts6 .light {
+    background-color: #cf5300;
+  }
+  .sts7 {
+    color: #e044ff;
+  }
+  .sts7 .light {
+    background-color: #e044ff;
+  }
+  .sts8 {
+    color: #bdbdbd;
+  }
+  .sts8 .light {
+    background-color: #bdbdbd;
+  }
+
+  .light {
+    width: 10px;
+    height: 10px;
+    border-radius: 10px;
+    display: inline-block;
+    margin-right: 5px;
   }
 `;
 
