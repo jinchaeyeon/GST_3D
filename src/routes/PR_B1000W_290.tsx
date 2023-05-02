@@ -34,7 +34,7 @@ const PR_B1000W_290: React.FC = () => {
     <Canvas
       gl={{ logarithmicDepthBuffer: true, antialias: false }}
       dpr={[1, 1.5]}
-      camera={{ position: [5, 5, 15], fov: 50}}
+      camera={{ position: [5, 5, 15], fov: 50 }}
     >
       <Suspense fallback={<ThreeDModelLoader />}>
         <color attach="background" args={["#15151a"]} />
@@ -301,13 +301,13 @@ const FacilityProcess = (props: any) => {
               }}
             >
               <PanelTable
-                style={{width: "110px"}}
+                style={{ width: "110px" }}
                 label={`세척기`}
                 value={mainDataResult[`Washing_State`]}
                 onClickDetail={onClickTcpPanelDetail}
               ></PanelTable>
               <PanelTable
-                style={{width: "110px"}}
+                style={{ width: "110px" }}
                 label={`건조기`}
                 value={mainDataResult[`AirBlower_State`]}
                 onClickDetail={onClickTcpPanelDetail}
@@ -407,7 +407,7 @@ type TTcpPanel = {
   onClickDetail: (n: number) => void;
 };
 
-const TcpPanel = ({ tcpNumber, position, data, onClickDetail}: TTcpPanel) => {
+const TcpPanel = ({ tcpNumber, position, data, onClickDetail }: TTcpPanel) => {
   return (
     <Marker rotation={[0, 0, 0]} position={position[tcpNumber]}>
       <DataContainer
@@ -443,7 +443,8 @@ const PanelTable = ({
   label,
   value,
   valueType = "State",
-  onClickDetail, style 
+  onClickDetail,
+  style,
 }: TPanelTable) => {
   const [isHovering, setIsHovering] = useState(0);
 
@@ -454,7 +455,12 @@ const PanelTable = ({
       }}
       onMouseOver={() => setIsHovering(1)}
       onMouseOut={() => setIsHovering(0)}
-      style={{ width: style != undefined ? style.width : "90px", height: "35px", backgroundColor: isHovering == 1 ? "#bcbcbc" : "", opacity: 0.9, cursor: "Pointer"}}
+      style={{
+        width: style != undefined ? style.width : "90px",
+        height: "35px",
+        backgroundColor: isHovering == 1 ? "#3e80ed5e" : "",
+        cursor: "Pointer",
+      }}
     >
       <tbody>
         <tr>
