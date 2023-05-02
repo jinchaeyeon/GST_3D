@@ -144,13 +144,13 @@ const tcpPosition = {
   7: [-5, 4, -1.5],
 };
 const tcpDetailPosition = {
-  1: [-13, 13, 6],
-  2: [-4.5, 13, 6],
-  3: [4.2, 13, 6],
-  4: [12, 13, 6],
-  5: [-13, 13, -1.5],
-  6: [-4.5, 13, -1.5],
-  7: [4.2, 13, -1.5],
+  1: [-13, 13.5, 6],
+  2: [-4.5, 13.5, 6],
+  3: [4.2, 13.5, 6],
+  4: [12, 13.5, 6],
+  5: [-13, 13.5, -1.5],
+  6: [-4.5, 13.5, -1.5],
+  7: [4.2, 13.5, -1.5],
 };
 const outputPosition = [-18.5, 3, -9.5];
 const visionPosition = [6.5, 3, -1.5];
@@ -524,16 +524,22 @@ const TcpDetailPanel = ({
   return selectedTcpNumber &&
     String(selectedTcpNumber).charAt(0) === String(tcpNumber) ? (
     <group position={position[tcpNumber]} rotation={[0, 0, 0]}>
-      <Marker rotation={[0, 0, 0]}>
+      <Marker
+        rotation={[0, 0, 0]}
+        style={{
+          opacity: 1,
+        }}
+      >
         <DataContainer
           onClick={() => onClickDetail(null)}
           style={{
             width: "900px",
-            height: "300px",
+            height: "370px",
             padding: "20px",
+            backgroundColor: "rgb(16 16 16)",
           }}
         >
-          <p
+          {/* <p
             style={{
               textAlign: "center",
               marginBottom: "20px",
@@ -546,7 +552,36 @@ const TcpDetailPanel = ({
                 {tpData[tpData.length - 1].Tp_InsertTime})
               </>
             )}
-          </p>
+          </p> */}
+          {tpData.length > 0 && (
+            <table className="tp-detail-tb">
+              {/* <colgroup>
+                <col width={"25%"}></col>
+                <col width={"25%"}></col>
+                <col width={"25%"}></col>
+                <col width={"25%"}></col>
+              </colgroup> */}
+              <tbody>
+                <tr>
+                  <th>탭핑센터 번호</th>
+                  <td>74</td>
+                  <th>품목코드</th>
+                  <td>2110086863A 32E1223</td>
+                </tr>
+                <tr>
+                  <th>일일 생산량 집계</th>
+                  <td>352.00</td>
+                  <th>품목명</th>
+                  <td>COOLING PLATE-LWR_2P12S_TP</td>
+                  {/* <th>차트 기준일시</th>
+                  <td>
+                    {tpData[0].Tp_InsertTime} ~
+                    {tpData[tpData.length - 1].Tp_InsertTime}
+                  </td> */}
+                </tr>
+              </tbody>
+            </table>
+          )}
           <div style={{ width: "100%", height: "auto", display: "flex" }}>
             <Chart style={{ height: "230px" }}>
               <ChartTitle text="JIG 추이" />
@@ -564,18 +599,27 @@ const TcpDetailPanel = ({
                   tooltip={{ visible: true }}
                   data={tpJigMax}
                   name={"MAX"}
+                  markers={{
+                    size: 4,
+                  }}
                 />
                 <ChartSeriesItem
                   type="line"
                   tooltip={{ visible: true }}
                   data={tpJig}
                   name={"JIG"}
+                  markers={{
+                    size: 4,
+                  }}
                 />
                 <ChartSeriesItem
                   type="line"
                   tooltip={{ visible: true }}
                   data={tpJigMin}
                   name={"MIN"}
+                  markers={{
+                    size: 4,
+                  }}
                 />
               </ChartSeries>
             </Chart>
@@ -594,18 +638,27 @@ const TcpDetailPanel = ({
                   tooltip={{ visible: true }}
                   data={tpWjigMax}
                   name={"MAX"}
+                  markers={{
+                    size: 4,
+                  }}
                 />
                 <ChartSeriesItem
                   type="line"
                   tooltip={{ visible: true }}
                   data={tpWjig}
                   name={"WJIG"}
+                  markers={{
+                    size: 4,
+                  }}
                 />
                 <ChartSeriesItem
                   type="line"
                   tooltip={{ visible: true }}
                   data={tpWjigMin}
                   name={"MIN"}
+                  markers={{
+                    size: 4,
+                  }}
                 />
               </ChartSeries>
             </Chart>
@@ -624,10 +677,26 @@ const TcpDetailPanel = ({
                   tooltip={{ visible: true }}
                   data={tpVibration}
                   name={"진동"}
+                  markers={{
+                    size: 4,
+                  }}
                 />
               </ChartSeries>
             </Chart>
           </div>
+          <p
+            style={{
+              textAlign: "right",
+              fontSize: "11px",
+            }}
+          >
+            {tpData.length > 0 && (
+              <>
+                (기준일시 : {tpData[0].Tp_InsertTime} ~{" "}
+                {tpData[tpData.length - 1].Tp_InsertTime})
+              </>
+            )}
+          </p>
         </DataContainer>
       </Marker>
     </group>
@@ -695,6 +764,9 @@ const VisionDetailPanel = ({
                   tooltip={{ visible: true }}
                   data={tpJig}
                   name={"불량"}
+                  markers={{
+                    size: 4,
+                  }}
                 />
               </ChartSeries>
             </Chart>
