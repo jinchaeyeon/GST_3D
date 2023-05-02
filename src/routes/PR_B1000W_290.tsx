@@ -9,6 +9,7 @@ import {
   Lightformer,
   useProgress,
   OrthographicCamera,
+  PerspectiveCamera,
 } from "@react-three/drei";
 import { OrbitControls } from "@react-three/drei";
 import * as THREE from "three";
@@ -36,6 +37,14 @@ const PR_B1000W_290: React.FC = () => {
       dpr={[1, 1.5]}
       camera={{ position: [5, 5, 15], fov: 50 }}
     >
+      <OrbitControls
+        enableZoom={true}
+        minDistance={11} // 카메라 최소 거리
+        maxDistance={50} // 카메라 최대 거리
+        enableDamping={true}
+        dampingFactor={0.5} // 이 값을 조절하여 관성 강도를 변경 (0 ~ 1)
+      />
+
       <Suspense fallback={<ThreeDModelLoader />}>
         <color attach="background" args={["#15151a"]} />
 
@@ -50,9 +59,7 @@ const PR_B1000W_290: React.FC = () => {
           opacity={1}
           far={20}
         />
-        {/* <OrthographicCamera makeDefault zoom={80} position={[5, 5, 15]} /> */}
-        {/* <OrbitControls minZoom={0.1} maxZoom={150}/> */}
-        <OrbitControls />
+
         <Environment resolution={512}>
           {/* Ceiling */}
           <Lightformer
@@ -120,7 +127,6 @@ const PR_B1000W_290: React.FC = () => {
             onUpdate={(self) => self.lookAt(0, 0, 0)}
           />
         </Environment>
-        {/* <Car></Car> */}
         <Effects />
       </Suspense>
     </Canvas>
@@ -162,7 +168,6 @@ const FacilityProcess = (props: any) => {
   const [isAnimated, setIsAnimated] = useState(true);
   const [active, setActive] = useState(false);
   const [detail, setDetail] = useState<any>(null);
-  const categories = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul"];
 
   const processApi = useApi();
 
