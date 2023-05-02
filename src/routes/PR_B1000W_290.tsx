@@ -168,7 +168,7 @@ const FacilityProcess = (props: any) => {
   const [isAnimated, setIsAnimated] = useState(true);
   const [active, setActive] = useState(false);
   const [detail, setDetail] = useState<any>(null);
-
+  const [isClicking, setIsClicking] = useState<string>("");
   const processApi = useApi();
 
   const [mainDataResult, setMainDataResult] = useState<any>(null);
@@ -236,6 +236,10 @@ const FacilityProcess = (props: any) => {
     setDetail(tcpNumber);
   };
 
+  const onClickTcpPanelDetail2 = (tcpNumber: any) => {
+    setIsClicking(tcpNumber);
+  };
+
   return (
     <group dispose={null}>
       <primitive
@@ -260,6 +264,8 @@ const FacilityProcess = (props: any) => {
                   position={tcpPosition}
                   data={mainDataResult}
                   onClickDetail={onClickTcpPanelDetail}
+                  onClickState={onClickTcpPanelDetail2}
+                  isClicking = {isClicking}
                 ></TcpPanel>
                 {/* 상세 판넬 */}
                 {detailDataResult && detail && (
@@ -277,11 +283,13 @@ const FacilityProcess = (props: any) => {
 
           {/* 비전 */}
           <Marker rotation={[0, 0, 0]} position={visionPosition}>
-            <DataContainer style={{ width: "90px", height: "40px" }}>
+            <DataContainer style={{ width: "100px", height: "45px" }}>
               <PanelTable
                 label={`비젼`}
                 value={mainDataResult[`OP6_배출검사_State`]}
                 onClickDetail={() => setIsVisionDetailShowed(true)}
+                onClickState={onClickTcpPanelDetail2}
+                isClicking={isClicking}
               ></PanelTable>
             </DataContainer>
           </Marker>
@@ -298,7 +306,7 @@ const FacilityProcess = (props: any) => {
           <Marker rotation={[0, 0, 0]} position={dryerPosition}>
             <DataContainer
               style={{
-                width: "110px",
+                width: "120px",
                 height: "80px",
                 display: "grid",
                 gridTemplateColumns: "repeat(1, 1fr)" /* 1열 */,
@@ -310,12 +318,16 @@ const FacilityProcess = (props: any) => {
                 label={`세척기`}
                 value={mainDataResult[`Washing_State`]}
                 onClickDetail={onClickTcpPanelDetail}
+                onClickState={onClickTcpPanelDetail2}
+                isClicking={isClicking}
               ></PanelTable>
               <PanelTable
                 style={{ width: "110px" }}
                 label={`건조기`}
                 value={mainDataResult[`AirBlower_State`]}
                 onClickDetail={onClickTcpPanelDetail}
+                onClickState={onClickTcpPanelDetail2}
+                isClicking={isClicking}
               ></PanelTable>
             </DataContainer>
           </Marker>
@@ -324,7 +336,7 @@ const FacilityProcess = (props: any) => {
           <Marker rotation={[0, 0, 0]} position={outputPosition}>
             <DataContainer
               style={{
-                width: "270px",
+                width: "280px",
                 height: "40px",
                 display: "grid",
                 gridTemplateColumns: "repeat(3, 1fr)" /* 1열 */,
@@ -336,18 +348,24 @@ const FacilityProcess = (props: any) => {
                 value={mainDataResult[`out_ok1`]}
                 valueType="Number"
                 onClickDetail={onClickTcpPanelDetail}
+                onClickState={onClickTcpPanelDetail2}
+                isClicking={isClicking}
               ></PanelTable>
               <PanelTable
                 label={`OK2`}
                 value={mainDataResult[`out_ok2`]}
                 valueType="Number"
                 onClickDetail={onClickTcpPanelDetail}
+                onClickState={onClickTcpPanelDetail2}
+                isClicking={isClicking}
               ></PanelTable>
               <PanelTable
                 label={`회송`}
                 value={mainDataResult[`out_ng`]}
                 valueType="Number"
                 onClickDetail={onClickTcpPanelDetail}
+                onClickState={onClickTcpPanelDetail2}
+                isClicking={isClicking}
               ></PanelTable>
             </DataContainer>
           </Marker>
@@ -410,9 +428,11 @@ type TTcpPanel = {
   position: { [key: number]: number[] };
   data: any;
   onClickDetail: (n: number) => void;
+  onClickState: (n: string) => void;
+  isClicking: string;
 };
 
-const TcpPanel = ({ tcpNumber, position, data, onClickDetail }: TTcpPanel) => {
+const TcpPanel = ({ tcpNumber, position, data, onClickDetail, onClickState, isClicking }: TTcpPanel) => {
   return (
     <Marker rotation={[0, 0, 0]} position={position[tcpNumber]}>
       <DataContainer
@@ -429,6 +449,8 @@ const TcpPanel = ({ tcpNumber, position, data, onClickDetail }: TTcpPanel) => {
               label={`TPC${tcpNum}`}
               value={data[`TPC${tcpNum}_State`]}
               onClickDetail={() => onClickDetail(tcpNum)}
+              onClickState={() => onClickState(`TPC${tcpNum}`)}
+              isClicking={isClicking}
             ></PanelTable>
           );
         })}
@@ -442,6 +464,8 @@ type TPanelTable = {
   value: number;
   valueType?: "State" | "Number";
   onClickDetail: (n: any) => void;
+  onClickState: (n: string) => void;
+  isClicking: string;
   style?: any;
 };
 const PanelTable = ({
@@ -449,6 +473,8 @@ const PanelTable = ({
   value,
   valueType = "State",
   onClickDetail,
+  onClickState,
+  isClicking,
   style,
 }: TPanelTable) => {
   const [isHovering, setIsHovering] = useState(0);
@@ -457,13 +483,14 @@ const PanelTable = ({
     <table
       onClick={() => {
         onClickDetail("");
+        onClickState(label);
       }}
       onMouseOver={() => setIsHovering(1)}
       onMouseOut={() => setIsHovering(0)}
       style={{
         width: style != undefined ? style.width : "90px",
         height: "35px",
-        backgroundColor: isHovering == 1 ? "#3e80ed5e" : "",
+        backgroundColor: isHovering == 1 || isClicking == label ? "#3e80ed5e" : "",
         cursor: "Pointer",
       }}
     >
