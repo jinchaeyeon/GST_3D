@@ -13,8 +13,8 @@ export const DataContainer = styled.div<TDataContainer>`
   color: #fff;
   border-radius: 5px;
   padding: 5px;
-  width: ${(props) => props.width ?? "250px"};
-  height: ${(props) => props.height ?? "130px"};
+  width: ${(props) => props.width ?? "180px"};
+  height: ${(props) => props.height ?? "80px"};
 
   table {
     width: 100%;

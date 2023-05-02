@@ -8,6 +8,7 @@ import {
   Environment,
   Lightformer,
   useProgress,
+  OrthographicCamera,
 } from "@react-three/drei";
 import { OrbitControls } from "@react-three/drei";
 import * as THREE from "three";
@@ -33,7 +34,7 @@ const PR_B1000W_290: React.FC = () => {
     <Canvas
       gl={{ logarithmicDepthBuffer: true, antialias: false }}
       dpr={[1, 1.5]}
-      camera={{ position: [5, 5, 15], fov: 50 }}
+      camera={{ position: [5, 5, 15], fov: 50}}
     >
       <Suspense fallback={<ThreeDModelLoader />}>
         <color attach="background" args={["#15151a"]} />
@@ -49,7 +50,8 @@ const PR_B1000W_290: React.FC = () => {
           opacity={1}
           far={20}
         />
-
+        {/* <OrthographicCamera makeDefault zoom={80} position={[5, 5, 15]} /> */}
+        {/* <OrbitControls minZoom={0.1} maxZoom={150}/> */}
         <OrbitControls />
         <Environment resolution={512}>
           {/* Ceiling */}
@@ -127,13 +129,13 @@ const PR_B1000W_290: React.FC = () => {
 
 //각 팝업들 position(지우면안됩니다)
 const tcpPosition = {
-  1: [-21, 5, 6],
-  2: [-12.5, 5, 6],
-  3: [-4.5, 5, 6],
-  4: [4, 5, 6],
-  5: [-21, 5, -1.5],
-  6: [-12.5, 5, -1.5],
-  7: [-4.5, 5, -1.5],
+  1: [-21.5, 4, 6],
+  2: [-13.5, 4, 6],
+  3: [-5, 4, 6],
+  4: [3, 4, 6],
+  5: [-21.5, 4, -1.5],
+  6: [-13.5, 4, -1.5],
+  7: [-5, 4, -1.5],
 };
 const tcpDetailPosition = {
   1: [-13, 13, 6],
@@ -270,7 +272,7 @@ const FacilityProcess = (props: any) => {
 
           {/* 비전 */}
           <Marker rotation={[0, 0, 0]} position={visionPosition}>
-            <DataContainer style={{ width: "140px", height: "60px" }}>
+            <DataContainer style={{ width: "90px", height: "40px" }}>
               <PanelTable
                 label={`비젼`}
                 value={mainDataResult[`OP6_배출검사_State`]}
@@ -291,19 +293,21 @@ const FacilityProcess = (props: any) => {
           <Marker rotation={[0, 0, 0]} position={dryerPosition}>
             <DataContainer
               style={{
-                width: "140px",
-                height: "120px",
+                width: "110px",
+                height: "80px",
                 display: "grid",
                 gridTemplateColumns: "repeat(1, 1fr)" /* 1열 */,
                 gridTemplateRows: "repeat(2, 1fr)" /* 2행 */,
               }}
             >
               <PanelTable
+                style={{width: "110px"}}
                 label={`세척기`}
                 value={mainDataResult[`Washing_State`]}
                 onClickDetail={onClickTcpPanelDetail}
               ></PanelTable>
               <PanelTable
+                style={{width: "110px"}}
                 label={`건조기`}
                 value={mainDataResult[`AirBlower_State`]}
                 onClickDetail={onClickTcpPanelDetail}
@@ -315,8 +319,8 @@ const FacilityProcess = (props: any) => {
           <Marker rotation={[0, 0, 0]} position={outputPosition}>
             <DataContainer
               style={{
-                width: "360px",
-                height: "60px",
+                width: "270px",
+                height: "40px",
                 display: "grid",
                 gridTemplateColumns: "repeat(3, 1fr)" /* 1열 */,
                 gridTemplateRows: "repeat(1, 1fr)" /* 3행 */,
@@ -403,7 +407,7 @@ type TTcpPanel = {
   onClickDetail: (n: number) => void;
 };
 
-const TcpPanel = ({ tcpNumber, position, data, onClickDetail }: TTcpPanel) => {
+const TcpPanel = ({ tcpNumber, position, data, onClickDetail}: TTcpPanel) => {
   return (
     <Marker rotation={[0, 0, 0]} position={position[tcpNumber]}>
       <DataContainer
@@ -433,19 +437,24 @@ type TPanelTable = {
   value: number;
   valueType?: "State" | "Number";
   onClickDetail: (n: any) => void;
+  style?: any;
 };
 const PanelTable = ({
   label,
   value,
   valueType = "State",
-  onClickDetail,
+  onClickDetail, style 
 }: TPanelTable) => {
+  const [isHovering, setIsHovering] = useState(0);
+
   return (
     <table
       onClick={() => {
         onClickDetail("");
       }}
-      style={{ width: "120px", height: "60px" }}
+      onMouseOver={() => setIsHovering(1)}
+      onMouseOut={() => setIsHovering(0)}
+      style={{ width: style != undefined ? style.width : "90px", height: "35px", backgroundColor: isHovering == 1 ? "#bcbcbc" : "", opacity: 0.9, cursor: "Pointer"}}
     >
       <tbody>
         <tr>
