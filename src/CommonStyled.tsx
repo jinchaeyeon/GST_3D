@@ -36,6 +36,25 @@ export const DataContainer = styled.div<TDataContainer>`
     font-weight: 100;
     color: #ebebeb;
   }
+
+  .tp-detail-tb {
+    width: 100%;
+    /* height: 70px;
+    background-color: #141f2a;
+    border: solid 1px #2e3d4c; */
+
+    height: 90px;
+    background-color: #000000;
+    border-radius: 8px;
+  }
+  .tp-detail-tb td,
+  .tp-detail-tb th {
+    font-size: 15px;
+    padding: 0px 20px;
+  }
+  .tp-detail-tb tr:first-child {
+    /* background-color: #0c1218; */
+  }
   .number {
     display: flex;
     justify-content: flex-end;
