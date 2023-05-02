@@ -10,6 +10,7 @@ import {
   useProgress,
   OrthographicCamera,
   PerspectiveCamera,
+  CameraControls,
 } from "@react-three/drei";
 import { OrbitControls } from "@react-three/drei";
 import * as THREE from "three";
@@ -29,107 +30,169 @@ import {
 } from "@progress/kendo-react-charts";
 import { useRecoilState } from "recoil";
 import { isLoading } from "../store/atoms";
+import { Button } from "@progress/kendo-react-buttons";
+
+const DEG45 = Math.PI / 4;
+const DEG90 = Math.PI / 2;
 
 const PR_B1000W_290: React.FC = () => {
+  const cameraControlRef = useRef<CameraControls | null>(null);
+
   return (
-    <Canvas
-      gl={{ logarithmicDepthBuffer: true, antialias: false }}
-      dpr={[1, 1.5]}
-      camera={{ position: [5, 5, 15], fov: 50 }}
-    >
-      <OrbitControls
-        enableZoom={true}
-        minDistance={11} // 카메라 최소 거리
-        maxDistance={50} // 카메라 최대 거리
-        enableDamping={true}
-        dampingFactor={0.5} // 이 값을 조절하여 관성 강도를 변경 (0 ~ 1)
-      />
-
-      <Suspense fallback={<ThreeDModelLoader />}>
-        <color attach="background" args={["#15151a"]} />
-
-        <FacilityProcess position={[-5, -1.5, 0]} scale={[0.01, 0.01, 0.01]} />
-        <hemisphereLight intensity={0.5} />
-        <ContactShadows
-          resolution={1024}
-          frames={1}
-          position={[0, -1.16, 0]}
-          scale={15}
-          blur={0.5}
-          opacity={1}
-          far={20}
+    <>
+      {/* 카메라 컨트롤러 */}
+      <div
+        style={{
+          position: "fixed",
+          bottom: "50px",
+          right: "50px",
+          zIndex: 999999,
+          backgroundColor: "rgba(255,255,255,0.9)",
+          borderRadius: "5px",
+        }}
+      >
+        {/* Reset */}
+        <Button
+          themeColor={"primary"}
+          fillMode={"flat"}
+          icon="arrow-rotate-cw"
+          size={"large"}
+          onClick={() => {
+            cameraControlRef.current?.reset(true);
+            cameraControlRef.current?.setPosition(5, 5, 15);
+          }}
+        ></Button>
+        {/* 좌측 돌리기 */}
+        <Button
+          themeColor={"primary"}
+          fillMode={"flat"}
+          icon="chevron-left"
+          size={"large"}
+          onClick={() => {
+            cameraControlRef.current?.rotate(-DEG45, 0, true);
+          }}
+        ></Button>
+        {/* 위에서 보기 */}
+        <Button
+          themeColor={"primary"}
+          fillMode={"flat"}
+          icon="chevron-up"
+          size={"large"}
+          onClick={() => {
+            cameraControlRef.current?.rotate(0, -DEG90, true);
+          }}
+        ></Button>
+        {/* 우측 돌리기 */}
+        <Button
+          themeColor={"primary"}
+          fillMode={"flat"}
+          icon="chevron-right"
+          size={"large"}
+          onClick={() => {
+            cameraControlRef.current?.rotate(DEG45, 0, true);
+          }}
+        ></Button>
+      </div>
+      <Canvas
+        gl={{ logarithmicDepthBuffer: true, antialias: false }}
+        dpr={[1, 1.5]}
+        camera={{ position: [5, 5, 15], fov: 50 }}
+      >
+        <CameraControls ref={cameraControlRef} />
+        <OrbitControls
+          enableZoom={true}
+          minDistance={11} // 카메라 최소 거리
+          maxDistance={50} // 카메라 최대 거리
+          enableDamping={true}
+          dampingFactor={0.5} // 이 값을 조절하여 관성 강도를 변경 (0 ~ 1)
         />
 
-        <Environment resolution={512}>
-          {/* Ceiling */}
-          <Lightformer
-            intensity={2}
-            rotation-x={Math.PI / 2}
-            position={[0, 4, -9]}
-            scale={[10, 1, 1]}
+        <Suspense fallback={<ThreeDModelLoader />}>
+          <color attach="background" args={["#15151a"]} />
+
+          <FacilityProcess position={[0, -1.5, 0]} scale={[0.01, 0.01, 0.01]} />
+          <hemisphereLight intensity={0.5} />
+          <ContactShadows
+            resolution={1024}
+            frames={1}
+            position={[0, -1.16, 0]}
+            scale={15}
+            blur={0.5}
+            opacity={1}
+            far={20}
           />
-          <Lightformer
-            intensity={2}
-            rotation-x={Math.PI / 2}
-            position={[0, 4, -6]}
-            scale={[10, 1, 1]}
-          />
-          <Lightformer
-            intensity={2}
-            rotation-x={Math.PI / 2}
-            position={[0, 4, -3]}
-            scale={[10, 1, 1]}
-          />
-          <Lightformer
-            intensity={2}
-            rotation-x={Math.PI / 2}
-            position={[0, 4, 0]}
-            scale={[10, 1, 1]}
-          />
-          <Lightformer
-            intensity={2}
-            rotation-x={Math.PI / 2}
-            position={[0, 4, 3]}
-            scale={[10, 1, 1]}
-          />
-          <Lightformer
-            intensity={2}
-            rotation-x={Math.PI / 2}
-            position={[0, 4, 6]}
-            scale={[10, 1, 1]}
-          />
-          <Lightformer
-            intensity={2}
-            rotation-x={Math.PI / 2}
-            position={[0, 4, 9]}
-            scale={[10, 1, 1]}
-          />
-          {/* Sides */}
-          <Lightformer
-            intensity={2}
-            rotation-y={Math.PI / 2}
-            position={[-50, 2, 0]}
-            scale={[100, 2, 1]}
-          />
-          <Lightformer
-            intensity={2}
-            rotation-y={-Math.PI / 2}
-            position={[50, 2, 0]}
-            scale={[100, 2, 1]}
-          />
-          {/* Key */}
-          <Lightformer
-            form="ring"
-            color="red"
-            intensity={10}
-            scale={2}
-            position={[10, 5, 10]}
-            onUpdate={(self) => self.lookAt(0, 0, 0)}
-          />
-        </Environment>
-        <Effects />
-      </Suspense>
-    </Canvas>
+
+          <Environment resolution={512}>
+            {/* Ceiling */}
+            <Lightformer
+              intensity={2}
+              rotation-x={Math.PI / 2}
+              position={[0, 4, -9]}
+              scale={[10, 1, 1]}
+            />
+            <Lightformer
+              intensity={2}
+              rotation-x={Math.PI / 2}
+              position={[0, 4, -6]}
+              scale={[10, 1, 1]}
+            />
+            <Lightformer
+              intensity={2}
+              rotation-x={Math.PI / 2}
+              position={[0, 4, -3]}
+              scale={[10, 1, 1]}
+            />
+            <Lightformer
+              intensity={2}
+              rotation-x={Math.PI / 2}
+              position={[0, 4, 0]}
+              scale={[10, 1, 1]}
+            />
+            <Lightformer
+              intensity={2}
+              rotation-x={Math.PI / 2}
+              position={[0, 4, 3]}
+              scale={[10, 1, 1]}
+            />
+            <Lightformer
+              intensity={2}
+              rotation-x={Math.PI / 2}
+              position={[0, 4, 6]}
+              scale={[10, 1, 1]}
+            />
+            <Lightformer
+              intensity={2}
+              rotation-x={Math.PI / 2}
+              position={[0, 4, 9]}
+              scale={[10, 1, 1]}
+            />
+            {/* Sides */}
+            <Lightformer
+              intensity={2}
+              rotation-y={Math.PI / 2}
+              position={[-50, 2, 0]}
+              scale={[100, 2, 1]}
+            />
+            <Lightformer
+              intensity={2}
+              rotation-y={-Math.PI / 2}
+              position={[50, 2, 0]}
+              scale={[100, 2, 1]}
+            />
+            {/* Key */}
+            <Lightformer
+              form="ring"
+              color="red"
+              intensity={10}
+              scale={2}
+              position={[10, 5, 10]}
+              onUpdate={(self) => self.lookAt(0, 0, 0)}
+            />
+          </Environment>
+          <Effects />
+        </Suspense>
+      </Canvas>
+    </>
   );
 };
 
@@ -265,7 +328,7 @@ const FacilityProcess = (props: any) => {
                   data={mainDataResult}
                   onClickDetail={onClickTcpPanelDetail}
                   onClickState={onClickTcpPanelDetail2}
-                  isClicking = {isClicking}
+                  isClicking={isClicking}
                 ></TcpPanel>
                 {/* 상세 판넬 */}
                 {detailDataResult && detail && (
@@ -432,7 +495,14 @@ type TTcpPanel = {
   isClicking: string;
 };
 
-const TcpPanel = ({ tcpNumber, position, data, onClickDetail, onClickState, isClicking }: TTcpPanel) => {
+const TcpPanel = ({
+  tcpNumber,
+  position,
+  data,
+  onClickDetail,
+  onClickState,
+  isClicking,
+}: TTcpPanel) => {
   return (
     <Marker rotation={[0, 0, 0]} position={position[tcpNumber]}>
       <DataContainer
@@ -490,7 +560,8 @@ const PanelTable = ({
       style={{
         width: style != undefined ? style.width : "90px",
         height: "35px",
-        backgroundColor: isHovering == 1 || isClicking == label ? "#3e80ed5e" : "",
+        backgroundColor:
+          isHovering == 1 || isClicking == label ? "#3e80ed5e" : "",
         cursor: "Pointer",
       }}
     >
