@@ -27,7 +27,7 @@ import {
   ChartTitle,
 } from "@progress/kendo-react-charts";
 import { Button } from "@progress/kendo-react-buttons";
-import { Tooltip, TooltipPosition  } from "@progress/kendo-react-tooltip";
+import { Tooltip, TooltipPosition } from "@progress/kendo-react-tooltip";
 
 const DEG45 = Math.PI / 4;
 const DEG90 = Math.PI / 2;
@@ -39,6 +39,30 @@ const PR_B1000W_290: React.FC = () => {
     "top"
   );
   const [anchor, setAnchor] = React.useState("target");
+
+  // 컨트롤 누른채 화면 이동 (<CameraControls /> 사용시 설정 필요함)
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Control" && cameraControlRef.current) {
+        cameraControlRef.current.mouseButtons.left = THREE.MOUSE.PAN;
+      }
+    };
+
+    const handleKeyUp = (event: KeyboardEvent) => {
+      if (event.key === "Control" && cameraControlRef.current) {
+        cameraControlRef.current.mouseButtons.left = THREE.MOUSE.ROTATE;
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    window.addEventListener("keyup", handleKeyUp);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+      window.removeEventListener("keyup", handleKeyUp);
+    };
+  }, []);
+
   return (
     <>
       {/* 카메라 컨트롤러 */}
@@ -110,7 +134,7 @@ const PR_B1000W_290: React.FC = () => {
               setActive(!active);
             }}
           />
-          </Tooltip>
+        </Tooltip>
       </div>
       <Canvas
         gl={{ logarithmicDepthBuffer: true, antialias: false }}

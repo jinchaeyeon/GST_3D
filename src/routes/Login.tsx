@@ -13,7 +13,7 @@ import { passwordExpirationInfoState, loginResultState } from "../store/atoms";
 import { useApi } from "../hooks/api";
 import { useSetRecoilState } from "recoil";
 import { FormInput, FormComboBox } from "../components/Editors";
-import { LoginAppName, LoginBox, Logo } from "../CommonStyled";
+import { LoginAppName, LoginBox } from "../CommonStyled";
 import { UseGetIp, resetLocalStorage } from "../components/CommonFunction";
 import { isLoading } from "../store/atoms";
 import Loading from "../components/Loading";
@@ -35,8 +35,6 @@ const Login: React.FC = () => {
   const setPwExpInfo = useSetRecoilState(passwordExpirationInfoState);
   const setLoading = useSetRecoilState(isLoading);
   const [ifShowCompanyList, setIfShowCompanyList] = useState(false);
-  const [ip, setIp] = useState("");
-  UseGetIp(setIp);
 
   const handleSubmit = (data: { [name: string]: any }) => {
     processLogin(data);
@@ -60,13 +58,6 @@ const Login: React.FC = () => {
         if (typeof para.companyCode !== "string") {
           para.companyCode = para.companyCode.company_code;
         }
-
-        // const md5 = require("md5");
-        // para.password = sha256(md5(para.password));
-        // const response = await processApi<any>(
-        //   para.companyCode === "2207C612" ? "login-old" : "login",
-        //   para
-        // );
 
         const response = await processApi<any>("login", para);
 
@@ -152,7 +143,7 @@ const Login: React.FC = () => {
           {/* 카메라 컨트롤 */}
           <OrbitControls
             enableZoom={true}
-            minDistance={2} // 카메라 최소 거리
+            minDistance={5} // 카메라 최소 거리
             maxDistance={10} // 카메라 최대 거리
             enableDamping={true}
             dampingFactor={0.5} // 이 값을 조절하여 관성 강도를 변경 (0 ~ 1)
