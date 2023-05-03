@@ -40,9 +40,16 @@ const PR_B1000W_290: React.FC = () => {
   );
   const [anchor, setAnchor] = React.useState("target");
 
+  let defaultLeftMouseButtonActionRef: any = null; // 기본 동작을 저장할 변수
   // 컨트롤 누른채 화면 이동 (<CameraControls /> 사용시 설정 필요함)
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
+      if (!defaultLeftMouseButtonActionRef && cameraControlRef.current) {
+        // 기본 동작을 저장
+        defaultLeftMouseButtonActionRef =
+          cameraControlRef.current.mouseButtons.left;
+      }
+
       if (event.key === "Control" && cameraControlRef.current) {
         cameraControlRef.current.mouseButtons.left = THREE.MOUSE.PAN;
       }
@@ -50,7 +57,9 @@ const PR_B1000W_290: React.FC = () => {
 
     const handleKeyUp = (event: KeyboardEvent) => {
       if (event.key === "Control" && cameraControlRef.current) {
-        cameraControlRef.current.mouseButtons.left = THREE.MOUSE.ROTATE;
+        // 기본 동작으로 되돌립니다.
+        cameraControlRef.current.mouseButtons.left =
+          defaultLeftMouseButtonActionRef;
       }
     };
 
