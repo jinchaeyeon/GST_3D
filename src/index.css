@@ -1,6 +1,7 @@
 /* 예외 처리는 해당 페이지에 작성 */
 
 body {
+  background-color: #151515;
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
     "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
@@ -10,6 +11,8 @@ body {
 
   /* ios 모바일 뷰 디바이스 높이 오류 방지 */
   min-height: 100vh;
+  min-height: -webkit-fill-available;
+
   /* ios 모바일 뷰 디바이스 높이 오류 방지 - 크롬 적용*/
   @supports (-webkit-appearance: none) and (stroke-color: transparent) {
     min-height: -webkit-fill-available;
@@ -70,6 +73,11 @@ div.k-animation-container {
 /* 버그 : 메뉴바가 window 위로 올라오는 현상 수정  */
 .k-window {
   z-index: 100000002 !important;
+}
+
+.k-panelbar > .k-item > .k-link,
+.k-panelbar > .k-panelbar-header > .k-link {
+  color: #fff;
 }
 
 @media (max-width: 768px) {

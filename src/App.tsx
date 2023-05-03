@@ -2,6 +2,7 @@ import { RecoilRoot, useRecoilValue } from "recoil";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import React from "react";
 import "./index.scss";
+import "./index.css";
 import { createGlobalStyle } from "styled-components";
 import PanelBarNavContainer from "./components/PanelBarNavContainer";
 import AuthRoute from "./components/AuthRoute";

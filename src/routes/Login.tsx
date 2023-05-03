@@ -1,6 +1,13 @@
 import { Button } from "@progress/kendo-react-buttons";
 import { Form, Field, FormElement } from "@progress/kendo-react-form";
-import { KeyboardEvent, useCallback, useState, useEffect } from "react";
+import {
+  KeyboardEvent,
+  useCallback,
+  useState,
+  useEffect,
+  Suspense,
+  useRef,
+} from "react";
 import { useHistory } from "react-router-dom";
 import { passwordExpirationInfoState, loginResultState } from "../store/atoms";
 import { useApi } from "../hooks/api";
@@ -11,6 +18,8 @@ import { UseGetIp, resetLocalStorage } from "../components/CommonFunction";
 import { isLoading } from "../store/atoms";
 import Loading from "../components/Loading";
 import cookie from "react-cookies";
+import { Canvas } from "@react-three/fiber";
+import { OrbitControls, useAnimations, useGLTF } from "@react-three/drei";
 
 interface IFormData {
   langCode: string;
@@ -123,79 +132,140 @@ const Login: React.FC = () => {
 
   return (
     <LoginBox>
-      <Form
-        onSubmit={handleSubmit}
-        render={() => (
-          <FormElement horizontal={true}>
-            <LoginAppName>
-              <Logo size="36px" />
-              GST Monitoring
-            </LoginAppName>
-            <fieldset className={"k-form-fieldset"}>
-              {/* <Field
-                name={"langCode"}
-                label={"언어설정"}
-                component={FormInput}                
-              /> */}
-              {ifShowCompanyList ? (
-                <Field
-                  name={"companyCode"}
-                  label={"회사코드"}
-                  component={FormComboBox}
-                  ifGetCompanyCode={true}
-                  valueField="company_code"
-                  textField="name"
-                  onKeyDown={companyCodeKeyDown}
-                  columns={[
-                    {
-                      sortOrder: 0,
-                      fieldName: "company_code",
-                      caption: "회사코드",
-                      columnWidth: 100,
-                      dataAlignment: "center",
-                    },
-                    {
-                      sortOrder: 0,
-                      fieldName: "name",
-                      caption: "업체명",
-                      columnWidth: 100,
-                      dataAlignment: "center",
-                    },
-                    {
-                      sortOrder: 0,
-                      fieldName: "service_name",
-                      caption: "서비스명",
-                      columnWidth: 100,
-                      dataAlignment: "center",
-                    },
-                  ]}
-                />
-              ) : (
-                <Field
-                  name={"companyCode"}
-                  label={"업체코드"}
-                  component={FormInput}
-                  onKeyDown={companyCodeKeyDown}
-                />
-              )}
+      <Canvas
+        gl={{ logarithmicDepthBuffer: true, antialias: true }}
+        dpr={[1, 1.5]}
+        camera={{ position: [5.2, 2.7, 5.2], fov: 30 }}
+      >
+        <Suspense fallback={null}>
+          {/* 전체적인 조명 */}
+          <ambientLight intensity={0.1} />
+          {/* 윗쪽에서 오는 빛 */}
+          <spotLight intensity={1} position={[0, 1000, 0]} />
+          {/* 뒷쪽에서 오는 빛 */}
+          <spotLight intensity={1} position={[0, 0, -1000]} />
 
-              <Field name={"userId"} label={"ID"} component={FormInput} />
-              <Field
-                name={"password"}
-                label={"PASSWORD"}
-                type={"password"}
-                component={FormInput}
-              />
-            </fieldset>
-            <Button className="login-btn" themeColor={"primary"} size="large">
-              LOGIN
-            </Button>
-          </FormElement>
-        )}
-      ></Form>
+          {/* 추가적인 광원 */}
+          <directionalLight intensity={0.5} position={[-1000, 1000, 1000]} />
+          <directionalLight intensity={0.5} position={[1000, 1000, 1000]} />
 
+          {/* 카메라 컨트롤 */}
+          <OrbitControls
+            enableZoom={true}
+            minDistance={2} // 카메라 최소 거리
+            maxDistance={10} // 카메라 최대 거리
+            enableDamping={true}
+            dampingFactor={0.5} // 이 값을 조절하여 관성 강도를 변경 (0 ~ 1)
+          />
+          <RobotArm />
+        </Suspense>
+      </Canvas>
+      <div className="container">
+        <div className="item">
+          <Form
+            onSubmit={handleSubmit}
+            render={() => (
+              <FormElement>
+                <LoginAppName>
+                  <div className="logo"></div>
+                </LoginAppName>
+                <fieldset className={"k-form-fieldset"}>
+                  {ifShowCompanyList ? (
+                    <Field
+                      name={"companyCode"}
+                      label={"회사코드"}
+                      component={FormComboBox}
+                      ifGetCompanyCode={true}
+                      valueField="company_code"
+                      textField="name"
+                      onKeyDown={companyCodeKeyDown}
+                      columns={[
+                        {
+                          sortOrder: 0,
+                          fieldName: "company_code",
+                          caption: "회사코드",
+                          columnWidth: 100,
+                          dataAlignment: "center",
+                        },
+                        {
+                          sortOrder: 0,
+                          fieldName: "name",
+                          caption: "업체명",
+                          columnWidth: 100,
+                          dataAlignment: "center",
+                        },
+                        {
+                          sortOrder: 0,
+                          fieldName: "service_name",
+                          caption: "서비스명",
+                          columnWidth: 100,
+                          dataAlignment: "center",
+                        },
+                      ]}
+                    />
+                  ) : (
+                    <Field
+                      name={"companyCode"}
+                      label={"회사코드"}
+                      component={FormInput}
+                      onKeyDown={companyCodeKeyDown}
+                    />
+                  )}
+
+                  <Field name={"userId"} label={"ID"} component={FormInput} />
+                  <Field
+                    name={"password"}
+                    label={"PW"}
+                    type={"password"}
+                    component={FormInput}
+                  />
+                </fieldset>
+                <Button
+                  className="login-btn"
+                  themeColor={"primary"}
+                  size="large"
+                >
+                  Login
+                </Button>
+              </FormElement>
+            )}
+          ></Form>
+        </div>
+        <div className="copy-right">
+          &copy;GST Co., Ltd. All rights reserved.
+        </div>
+      </div>
       <Loading />
     </LoginBox>
+  );
+};
+
+const RobotArm = () => {
+  const { animations, scene }: any = useGLTF("/robot_arm/scene.gltf");
+
+  const { ref, actions } = useAnimations(animations);
+
+  useEffect(() => {
+    if (actions["Animation"]) {
+      // actions["Animation"].play();
+    }
+  }, [actions]);
+
+  const windowWidth = useRef(window.innerWidth);
+
+  return (
+    <group>
+      <primitive
+        object={scene}
+        ref={ref}
+        scale={windowWidth.current > 768 ? 0.015 : 0.0075}
+        position={windowWidth.current > 768 ? [1, -1, 1] : [1.5, -1, 1]}
+        rotation={
+          windowWidth.current > 768 ? [0, Math.PI / 6, 0] : [0, Math.PI / 7, 0]
+        }
+        physicallyCorrectLights
+      />
+    </group>
   );
 };
 export default Login;

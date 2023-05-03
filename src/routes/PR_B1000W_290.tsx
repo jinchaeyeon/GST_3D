@@ -108,7 +108,7 @@ const PR_B1000W_290: React.FC = () => {
         />
 
         <Suspense fallback={<ThreeDModelLoader />}>
-          <color attach="background" args={["#15151a"]} />
+          <color attach="background" args={["#20202b"]} />
 
           <FacilityProcess position={[0, -1.5, 0]} scale={[0.01, 0.01, 0.01]} />
           <hemisphereLight intensity={0.5} />
@@ -254,7 +254,7 @@ const FacilityProcess = (props: any) => {
     } catch (error) {
       data = null;
     }
-    console.log(data);
+
     if (data.isSuccess === true) {
       const totalRowCnt0 = data.tables[0].RowCount;
       const totalRowCnt1 = data.tables[1].RowCount;

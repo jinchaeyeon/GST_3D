@@ -34,7 +34,7 @@ const Main: React.FC = () => {
       camera={{ position: [5, 5, 15], fov: 50 }}
     >
       <Suspense fallback={<ThreeDModelLoader />}>
-        <color attach="background" args={["#15151a"]} />
+        <color attach="background" args={["#20202b"]} />
 
         <Machine position={[-5, -1.5, 0]} />
         <hemisphereLight intensity={0.5} />

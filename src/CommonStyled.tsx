@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { CLOSED_GNV_WIDTH, GNV_WIDTH } from "./components/CommonString";
-import logoSrc from "./img/logo.png";
+import logoSrc from "./img/gst_monitoring_logo.png";
 type TDataContainer = {
   width?: string;
   height?: string;
@@ -570,30 +570,91 @@ export const FieldWrap = styled.div<TFieldWrap>`
 `;
 
 export const LoginBox = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
   height: 100vh;
-  padding-bottom: 50px;
+  background-image: linear-gradient(to top, #31cfff, #015eea);
 
-  > form {
-    background-color: #f7f7f7;
-    width: 400px;
-    padding: 50px;
-    border-radius: 5px;
+  .container {
+    height: 100%;
+    position: fixed;
+    top: 0;
+    right: 0;
+    background-color: rgba(0, 0, 0, 0.4);
+    width: 600px;
+    padding: 50px 80px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .item {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    height: 100%;
+  }
+  .k-form {
+    width: 100%;
+  }
+  .copy-right {
+    color: rgba(255, 255, 255, 0.3);
+    height: 50px;
+    display: flex;
+    align-items: flex-end;
+  }
+
+  .k-input {
+    background-color: #fff;
+    height: 50px;
+    color: black;
+    margin-top: 10px;
+    border-radius: 0;
+    padding: 15px;
+    font-size: 16px;
+  }
+  .k-label {
+    font-size: 16px;
   }
   .k-button.login-btn {
     width: 100%;
     margin-top: 40px;
+    height: 50px;
+    border-radius: 0;
+    font-size: 16px;
+    font-weight: 900;
   }
-  .k-form-horizontal .k-form-field > .k-label,
-  .k-form-horizontal .k-form-field > kendo-label,
-  .k-form-horizontal .k-form-field > .k-form-label {
-    align-items: flex-start;
-    width: 25% !important;
+
+  .logo {
+    background: url(${logoSrc});
+    background-size: contain;
+    background-repeat: no-repeat;
+    width: 100%;
+    height: 65px;
+    background-position: left;
+    margin-bottom: 60px;
   }
-  .k-form-horizontal .k-form-field-wrap {
-    max-width: calc(75% - 10px) !important;
+
+  @media (max-width: 768px) {
+    .container {
+      width: 100%;
+      padding: 30px;
+    }
+    .item {
+      align-items: flex-start;
+      margin-top: 15%;
+    }
+    .k-input {
+      height: 40px;
+      margin-top: 0;
+    }
+    .logo {
+      height: 45px;
+      background-position: center;
+      margin-bottom: 0;
+    }
+
+    .copy-right {
+      font-size: 12px;
+      justify-content: center;
+    }
   }
 `;
 
@@ -761,17 +822,17 @@ export const Gnv = styled.div<TGnv>`
   text-align: center;
 
   min-height: 100vh;
-  background-color: #fff;
+  background-color: #151515;
 
   .logout span {
-    color: #656565;
+    color: #fff;
   }
   .logout > .k-link {
     justify-content: center;
   }
 
   .k-panelbar-item-icon.k-icon.k-i-gear {
-    color: #2289c3;
+    color: #fff;
   }
 
   /*=========================================================================
@@ -791,7 +852,7 @@ export const Gnv = styled.div<TGnv>`
 `;
 export const SmallGnv = styled.div`
   padding-top: 10px;
-  border-right: solid 1px #ebebeb;
+  border-right: solid 1px #646464;
   height: 100vh;
 
   @media (max-width: 768px) {
@@ -831,12 +892,9 @@ export const AppName = styled.h1`
   justify-content: center;
   align-items: center;
   gap: 3px;
-  background-color: #fff;
-  border-right: 1px solid #ebebeb;
+  padding: 20px;
+  height: 60px;
   cursor: pointer;
-  @media (max-width: 768px) {
-    border-right: none;
-  }
 `;
 
 export const LoginAppName = styled(AppName)`
@@ -888,7 +946,10 @@ export const Logo = styled.div<TLogo>`
   background: url(${logoSrc});
   background-size: contain;
   background-repeat: no-repeat;
-  width: ${(props) => props.size};
+  /* width: ${(props) => props.size};
   height: ${(props) => props.size};
-  background-position: center;
+  background-position: center; */
+  width: 100%;
+  height: 65px;
+  background-position: left;
 `;

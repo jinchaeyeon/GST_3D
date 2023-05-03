@@ -380,7 +380,6 @@ const PanelBarNavContainer = (props: any) => {
         <Gnv isMobileMenuOpend={isMobileMenuOpend}>
           <AppName onClick={() => setIsMenuOpend(false)}>
             <Logo size="32px" />
-            MONITORING
           </AppName>
           {paths.length > 0 && (
             <PanelBar
