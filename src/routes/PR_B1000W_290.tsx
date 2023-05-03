@@ -263,8 +263,8 @@ const FacilityProcess = (props: any) => {
       const row2 = data.tables[2].Rows[0];
       const row3 = data.tables[3].Rows[0];
 
-      if (totalRowCnt0 > 0 && totalRowCnt2 > 0 && totalRowCnt3 > 0) {
-        const row = { ...row0, ...row2, ...row3 };
+      if (totalRowCnt0 > 0 && totalRowCnt2 > 0) {
+        const row = { ...row0, ...row2 };
         setMainDataResult(row);
       }
 
