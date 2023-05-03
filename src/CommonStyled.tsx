@@ -612,6 +612,7 @@ export const LoginBox = styled.div`
   }
   .k-label {
     font-size: 16px;
+    margin-bottom: 5px;
   }
   .k-button.login-btn {
     width: 100%;
@@ -909,6 +910,11 @@ export const LoginAppName = styled(AppName)`
   background-color: transparent;
   font-size: 22px;
   gap: 5px;
+  @media (max-width: 768px) {
+    padding: 0;
+    width: 100%;
+    height: 50px;
+  }
 `;
 
 export const TopTitle = styled.div`
