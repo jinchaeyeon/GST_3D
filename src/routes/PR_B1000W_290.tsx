@@ -236,6 +236,7 @@ const FacilityProcess = (props: any) => {
 
   const [mainDataResult, setMainDataResult] = useState<any>(null);
   const [detailDataResult, setDetailDataResult] = useState<any>(null);
+  const [PanelDataResult, setPanelDataResult] = useState<any>(null);
 
   const parameters: Iparameters = {
     procedureName: "P_PR_B1000W_290_Q",
@@ -253,15 +254,18 @@ const FacilityProcess = (props: any) => {
     } catch (error) {
       data = null;
     }
+    console.log(data);
     if (data.isSuccess === true) {
       const totalRowCnt0 = data.tables[0].RowCount;
       const totalRowCnt1 = data.tables[1].RowCount;
       const totalRowCnt2 = data.tables[2].RowCount;
       const totalRowCnt3 = data.tables[3].RowCount;
+      const totalRowCnt4 = data.tables[4].RowCount;
       const row0 = data.tables[0].Rows[0];
       const rows1 = data.tables[1].Rows;
       const row2 = data.tables[2].Rows[0];
       const row3 = data.tables[3].Rows[0];
+      const rows4 = data.tables[4].Rows;
 
       if (totalRowCnt0 > 0 && totalRowCnt2 > 0) {
         const row = { ...row0, ...row2 };
@@ -269,6 +273,7 @@ const FacilityProcess = (props: any) => {
       }
 
       if (totalRowCnt1 > 0) setDetailDataResult(rows1);
+      if (totalRowCnt4 > 0) setPanelDataResult(rows4);
     } else {
       console.log("[오류 발생]");
       console.log(data);
@@ -337,6 +342,7 @@ const FacilityProcess = (props: any) => {
                     selectedTcpNumber={detail}
                     position={tcpDetailPosition}
                     data={detailDataResult}
+                    PanelData={PanelDataResult}
                     onClickDetail={onClickTcpPanelDetail}
                   ></TcpDetailPanel>
                 )}
@@ -597,6 +603,7 @@ type TTcpDetailPanel = {
   position: any;
   selectedTcpNumber: number;
   data: any[];
+  PanelData: any[];
   onClickDetail: (n: any) => void;
 };
 const TcpDetailPanel = ({
@@ -604,10 +611,13 @@ const TcpDetailPanel = ({
   tcpNumber,
   selectedTcpNumber,
   data,
+  PanelData,
   onClickDetail,
 }: TTcpDetailPanel) => {
   const tpData = data.filter((row: any) => row.Tp_No === selectedTcpNumber);
-
+  const PnData = PanelData.filter(
+    (row: any) => row.Tp_No === selectedTcpNumber
+  );
   const categories = tpData.map((row: any) => row.Tp_InsertTime);
   const tpJig = tpData.map((row: any) => row.Tp_JIG);
   const tpJigMax = tpData.map((row: any) => row.Tp_JIG_MAX);
@@ -651,35 +661,33 @@ const TcpDetailPanel = ({
               </>
             )}
           </p> */}
-          {tpData.length > 0 && (
-            <table className="tp-detail-tb">
-              {/* <colgroup>
+          <table className="tp-detail-tb">
+            {/* <colgroup>
                 <col width={"25%"}></col>
                 <col width={"25%"}></col>
                 <col width={"25%"}></col>
                 <col width={"25%"}></col>
               </colgroup> */}
-              <tbody>
-                <tr>
-                  <th>탭핑센터 번호</th>
-                  <td>74</td>
-                  <th>품목코드</th>
-                  <td>2110086863A 32E1223</td>
-                </tr>
-                <tr>
-                  <th>일일 생산량 집계</th>
-                  <td>352.00</td>
-                  <th>품목명</th>
-                  <td>COOLING PLATE-LWR_2P12S_TP</td>
-                  {/* <th>차트 기준일시</th>
+            <tbody>
+              <tr>
+                <th>탭핑센터 번호</th>
+                <td>{PnData != null ? PnData[0].Tp_No : "-"}</td>
+                <th>품목코드</th>
+                <td>{PnData != null ? PnData[0].ID_No : "-"}</td>
+              </tr>
+              <tr>
+                <th>일일 생산량 집계</th>
+                <td>{PnData != null ? PnData[0].qty : "-"}</td>
+                <th>품목명</th>
+                <td>{PnData != null ? PnData[0].itemnm : "-"}</td>
+                {/* <th>차트 기준일시</th>
                   <td>
                     {tpData[0].Tp_InsertTime} ~
                     {tpData[tpData.length - 1].Tp_InsertTime}
                   </td> */}
-                </tr>
-              </tbody>
-            </table>
-          )}
+              </tr>
+            </tbody>
+          </table>
           <div style={{ width: "100%", height: "auto", display: "flex" }}>
             <Chart style={{ height: "230px" }}>
               <ChartTitle text="JIG 추이" />
