@@ -7,9 +7,6 @@ import {
   ContactShadows,
   Environment,
   Lightformer,
-  useProgress,
-  OrthographicCamera,
-  PerspectiveCamera,
   CameraControls,
 } from "@react-three/drei";
 import { OrbitControls } from "@react-three/drei";
@@ -28,8 +25,6 @@ import {
   ChartSeriesItem,
   ChartTitle,
 } from "@progress/kendo-react-charts";
-import { useRecoilState } from "recoil";
-import { isLoading } from "../store/atoms";
 import { Button } from "@progress/kendo-react-buttons";
 
 const DEG45 = Math.PI / 4;
