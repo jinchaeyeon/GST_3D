@@ -895,6 +895,11 @@ export const AppName = styled.h1`
   padding: 20px;
   height: 60px;
   cursor: pointer;
+  @media (max-width: 768px) {
+    padding: 0;
+    width: 100px;
+    height: 50px;
+  }
 `;
 
 export const LoginAppName = styled(AppName)`
@@ -923,6 +928,9 @@ export const TopTitle = styled.div`
   =========================================================================*/
   @media (max-width: 768px) {
     display: flex;
+    position: fixed;
+    z-index: 1;
+    width: 100%;
   }
 `;
 
@@ -936,6 +944,7 @@ export const Modal = styled.div<TModal>`
   height: 100%;
   display: ${(props) => (props.isMobileMenuOpend ? "block" : "none")};
   background-color: rgba(0, 0, 0, 0.4);
+  z-index: 9999999;
 `;
 /*=========================================================================
 	// PanelBarNavContainer 종료
