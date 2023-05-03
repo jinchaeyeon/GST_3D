@@ -16,6 +16,7 @@ import { DataContainer } from "../CommonStyled";
 import ThreeDModelLoader from "../components/ThreeDModelLoader";
 import { useApi } from "../hooks/api";
 import { Iparameters } from "../store/types";
+import { Switch } from "@progress/kendo-react-inputs";
 import {
   Chart,
   ChartCategoryAxis,
@@ -26,13 +27,18 @@ import {
   ChartTitle,
 } from "@progress/kendo-react-charts";
 import { Button } from "@progress/kendo-react-buttons";
+import { Tooltip, TooltipPosition  } from "@progress/kendo-react-tooltip";
 
 const DEG45 = Math.PI / 4;
 const DEG90 = Math.PI / 2;
 
 const PR_B1000W_290: React.FC = () => {
   const cameraControlRef = useRef<CameraControls | null>(null);
-
+  const [active, setActive] = useState(true);
+  const [position, setPosition] = React.useState<TooltipPosition | undefined>(
+    "top"
+  );
+  const [anchor, setAnchor] = React.useState("target");
   return (
     <>
       {/* 카메라 컨트롤러 */}
@@ -46,47 +52,65 @@ const PR_B1000W_290: React.FC = () => {
           borderRadius: "5px",
         }}
       >
-        {/* Reset */}
-        <Button
-          themeColor={"primary"}
-          fillMode={"flat"}
-          icon="arrow-rotate-cw"
-          size={"large"}
-          onClick={() => {
-            cameraControlRef.current?.reset(true);
-            cameraControlRef.current?.setPosition(5, 5, 15);
-          }}
-        ></Button>
-        {/* 좌측 돌리기 */}
-        <Button
-          themeColor={"primary"}
-          fillMode={"flat"}
-          icon="chevron-left"
-          size={"large"}
-          onClick={() => {
-            cameraControlRef.current?.rotate(-DEG45, 0, true);
-          }}
-        ></Button>
-        {/* 위에서 보기 */}
-        <Button
-          themeColor={"primary"}
-          fillMode={"flat"}
-          icon="chevron-up"
-          size={"large"}
-          onClick={() => {
-            cameraControlRef.current?.rotate(0, -DEG90, true);
-          }}
-        ></Button>
-        {/* 우측 돌리기 */}
-        <Button
-          themeColor={"primary"}
-          fillMode={"flat"}
-          icon="chevron-right"
-          size={"large"}
-          onClick={() => {
-            cameraControlRef.current?.rotate(DEG45, 0, true);
-          }}
-        ></Button>
+        <Tooltip position={position} anchorElement={anchor}>
+          {/* Reset */}
+          <Button
+            themeColor={"primary"}
+            fillMode={"flat"}
+            icon="arrow-rotate-cw"
+            size={"large"}
+            onClick={() => {
+              cameraControlRef.current?.reset(true);
+              cameraControlRef.current?.setPosition(5, 5, 15);
+            }}
+            title="리셋"
+            className="k-button k-button-md k-rounded-md k-button-solid k-button-solid-base"
+          ></Button>
+          {/* 좌측 돌리기 */}
+          <Button
+            themeColor={"primary"}
+            fillMode={"flat"}
+            icon="chevron-left"
+            size={"large"}
+            onClick={() => {
+              cameraControlRef.current?.rotate(-DEG45, 0, true);
+            }}
+            title="좌측 돌리기"
+            className="k-button k-button-md k-rounded-md k-button-solid k-button-solid-base"
+          ></Button>
+          {/* 위에서 보기 */}
+          <Button
+            themeColor={"primary"}
+            fillMode={"flat"}
+            icon="chevron-up"
+            size={"large"}
+            onClick={() => {
+              cameraControlRef.current?.rotate(0, -DEG90, true);
+            }}
+            title="위에서 보기"
+            className="k-button k-button-md k-rounded-md k-button-solid k-button-solid-base"
+          ></Button>
+          {/* 우측 돌리기 */}
+          <Button
+            themeColor={"primary"}
+            fillMode={"flat"}
+            icon="chevron-right"
+            size={"large"}
+            onClick={() => {
+              cameraControlRef.current?.rotate(DEG45, 0, true);
+            }}
+            title="우측 돌리기"
+            className="k-button k-button-md k-rounded-md k-button-solid k-button-solid-base"
+          ></Button>
+          {/* 데이터 On/Off */}
+          <Switch
+            onChange={(e: any) => {
+              if (!active == false) {
+              }
+              setActive(!active);
+            }}
+          />
+          </Tooltip>
       </div>
       <Canvas
         gl={{ logarithmicDepthBuffer: true, antialias: false }}
@@ -96,8 +120,8 @@ const PR_B1000W_290: React.FC = () => {
         <CameraControls ref={cameraControlRef} />
         <OrbitControls
           enableZoom={true}
-          minDistance={11} // 카메라 최소 거리
-          maxDistance={50} // 카메라 최대 거리
+          minDistance={20} // 카메라 최소 거리
+          maxDistance={35} // 카메라 최대 거리
           enableDamping={true}
           dampingFactor={0.5} // 이 값을 조절하여 관성 강도를 변경 (0 ~ 1)
         />
@@ -105,7 +129,11 @@ const PR_B1000W_290: React.FC = () => {
         <Suspense fallback={<ThreeDModelLoader />}>
           <color attach="background" args={["#20202b"]} />
 
-          <FacilityProcess position={[0, -1.5, 0]} scale={[0.01, 0.01, 0.01]} />
+          <FacilityProcess
+            position={[0, -1.5, 0]}
+            scale={[0.01, 0.01, 0.01]}
+            active={active}
+          />
           <hemisphereLight intensity={0.5} />
           <ContactShadows
             resolution={1024}
@@ -193,27 +221,27 @@ const PR_B1000W_290: React.FC = () => {
 
 //각 팝업들 position(지우면안됩니다)
 const tcpPosition = {
-  1: [-21.5, 4, 6],
-  2: [-13.5, 4, 6],
-  3: [-5, 4, 6],
-  4: [3, 4, 6],
-  5: [-21.5, 4, -1.5],
-  6: [-13.5, 4, -1.5],
-  7: [-5, 4, -1.5],
+  1: [-16.5, 4, 6],
+  2: [-8.5, 4, 6],
+  3: [0, 4, 6],
+  4: [8, 4, 6],
+  5: [-16.5, 4, -1.5],
+  6: [-8.5, 4, -1.5],
+  7: [0, 4, -1.5],
 };
 const tcpDetailPosition = {
-  1: [-13, 13.5, 6],
-  2: [-4.5, 13.5, 6],
-  3: [4.2, 13.5, 6],
-  4: [12, 13.5, 6],
-  5: [-13, 13.5, -1.5],
-  6: [-4.5, 13.5, -1.5],
-  7: [4.2, 13.5, -1.5],
+  1: [-8, 13.5, 6],
+  2: [1.5, 13.5, 6],
+  3: [9.2, 13.5, 6],
+  4: [17, 13.5, 6],
+  5: [-8, 13.5, -1.5],
+  6: [1.5, 13.5, -1.5],
+  7: [9.2, 13.5, -1.5],
 };
-const outputPosition = [-18.5, 3, -9.5];
-const visionPosition = [6.5, 3, -1.5];
-const visionDetailPosition = [8.5, 11, -1.5];
-const dryerPosition = [1, 5, -9.5];
+const outputPosition = [-13.5, 3, -9.5];
+const visionPosition = [11.5, 3, -1.5];
+const visionDetailPosition = [14.5, 11, -1.5];
+const dryerPosition = [6, 5, -9.5];
 
 const FacilityProcess = (props: any) => {
   const { animations, scene, nodes, materials }: any = useGLTF(
@@ -224,11 +252,9 @@ const FacilityProcess = (props: any) => {
   const { ref, actions } = useAnimations(animations);
   const [isVisionDetailShowed, setIsVisionDetailShowed] = useState(false);
   const [isAnimated, setIsAnimated] = useState(true);
-  const [active, setActive] = useState(false);
   const [detail, setDetail] = useState<any>(null);
   const [isClicking, setIsClicking] = useState<string>("");
   const processApi = useApi();
-
   const [mainDataResult, setMainDataResult] = useState<any>(null);
   const [detailDataResult, setDetailDataResult] = useState<any>(null);
   const [PanelDataResult, setPanelDataResult] = useState<any>(null);
@@ -313,17 +339,8 @@ const FacilityProcess = (props: any) => {
 
   return (
     <group dispose={null}>
-      <primitive
-        object={scene}
-        ref={ref}
-        onClick={(e: any) => {
-          if (!active == false) {
-          }
-          setActive(!active);
-        }}
-        {...props}
-      />
-      {mainDataResult && active == true ? (
+      <primitive object={scene} ref={ref} {...props} />
+      {mainDataResult && props.active == true ? (
         <>
           {/* TCP (1~7구역) */}
           {[1, 2, 3, 4, 5, 6, 7].map((num: number) => {
