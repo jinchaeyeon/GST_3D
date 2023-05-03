@@ -276,7 +276,15 @@ const FacilityProcess = (props: any) => {
   };
 
   useEffect(() => {
+    // 최초 조회
     fetchMainGrid();
+    // 30초마다 조회
+    const interval = setInterval(() => {
+      fetchMainGrid();
+    }, 30000);
+    return () => {
+      clearInterval(interval);
+    };
   }, []);
 
   useEffect(() => {
