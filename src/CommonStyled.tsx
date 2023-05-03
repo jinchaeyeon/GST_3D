@@ -843,7 +843,7 @@ export const Gnv = styled.div<TGnv>`
   @media (max-width: 768px) {
     display: ${(props) => (props.isMobileMenuOpend ? "block" : "none")};
     z-index: 100000000;
-    position: absolute;
+    position: fixed;
 
     h1 {
       display: none;
