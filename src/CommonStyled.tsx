@@ -903,6 +903,8 @@ export const AppName = styled.h1`
 `;
 
 export const LoginAppName = styled(AppName)`
+  cursor: auto;
+  padding: 0;
   border-right: none;
   background-color: transparent;
   font-size: 22px;
