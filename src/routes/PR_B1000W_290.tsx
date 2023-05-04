@@ -27,7 +27,7 @@ import {
   ChartTitle,
 } from "@progress/kendo-react-charts";
 import { Button } from "@progress/kendo-react-buttons";
-import { Tooltip, TooltipPosition  } from "@progress/kendo-react-tooltip";
+import { Tooltip, TooltipPosition } from "@progress/kendo-react-tooltip";
 
 const DEG45 = Math.PI / 4;
 const DEG90 = Math.PI / 2;
@@ -35,10 +35,7 @@ const DEG90 = Math.PI / 2;
 const PR_B1000W_290: React.FC = () => {
   const cameraControlRef = useRef<CameraControls | null>(null);
   const [active, setActive] = useState(true);
-  const [position, setPosition] = React.useState<TooltipPosition | undefined>(
-    "top"
-  );
-  const [anchor, setAnchor] = React.useState("target");
+  const tooltip = React.useRef<Tooltip>(null);
   return (
     <>
       {/* 카메라 컨트롤러 */}
@@ -50,67 +47,121 @@ const PR_B1000W_290: React.FC = () => {
           zIndex: 999999,
           backgroundColor: "rgba(255,255,255,0.9)",
           borderRadius: "5px",
+          padding: "5px"
         }}
       >
-        <Tooltip position={position} anchorElement={anchor}>
+        <Tooltip
+          ref={tooltip}
+          anchorElement="target"
+          position="top"
+          openDelay={100}
+        >
           {/* Reset */}
-          <Button
-            themeColor={"primary"}
-            fillMode={"flat"}
-            icon="arrow-rotate-cw"
-            size={"large"}
-            onClick={() => {
-              cameraControlRef.current?.reset(true);
-              cameraControlRef.current?.setPosition(5, 5, 15);
-            }}
+          <div
             title="리셋"
-            className="k-button k-button-md k-rounded-md k-button-solid k-button-solid-base"
-          ></Button>
+            onMouseOver={(event) =>
+              tooltip.current && tooltip.current.handleMouseOver(event)
+            }
+            onMouseOut={(event) =>
+              tooltip.current && tooltip.current.handleMouseOut(event)
+            }
+            style={{ display: "inline" }}
+          >
+            <Button
+              themeColor={"primary"}
+              fillMode={"flat"}
+              icon="arrow-rotate-cw"
+              size={"large"}
+              onClick={() => {
+                cameraControlRef.current?.reset(true);
+                cameraControlRef.current?.setPosition(5, 5, 15);
+              }}
+            ></Button>
+          </div>
           {/* 좌측 돌리기 */}
-          <Button
-            themeColor={"primary"}
-            fillMode={"flat"}
-            icon="chevron-left"
-            size={"large"}
-            onClick={() => {
-              cameraControlRef.current?.rotate(-DEG45, 0, true);
-            }}
+          <div
             title="좌측 돌리기"
-            className="k-button k-button-md k-rounded-md k-button-solid k-button-solid-base"
-          ></Button>
-          {/* 위에서 보기 */}
-          <Button
-            themeColor={"primary"}
-            fillMode={"flat"}
-            icon="chevron-up"
-            size={"large"}
-            onClick={() => {
-              cameraControlRef.current?.rotate(0, -DEG90, true);
-            }}
+            onMouseOver={(event) =>
+              tooltip.current && tooltip.current.handleMouseOver(event)
+            }
+            onMouseOut={(event) =>
+              tooltip.current && tooltip.current.handleMouseOut(event)
+            }
+            style={{ display: "inline" }}
+          >
+            <Button
+              themeColor={"primary"}
+              fillMode={"flat"}
+              icon="chevron-left"
+              size={"large"}
+              onClick={() => {
+                cameraControlRef.current?.rotate(-DEG45, 0, true);
+              }}
+            ></Button>
+          </div>
+          <div
             title="위에서 보기"
-            className="k-button k-button-md k-rounded-md k-button-solid k-button-solid-base"
-          ></Button>
+            onMouseOver={(event) =>
+              tooltip.current && tooltip.current.handleMouseOver(event)
+            }
+            onMouseOut={(event) =>
+              tooltip.current && tooltip.current.handleMouseOut(event)
+            }
+            style={{ display: "inline" }}
+          >
+            {/* 위에서 보기 */}
+            <Button
+              themeColor={"primary"}
+              fillMode={"flat"}
+              icon="chevron-up"
+              size={"large"}
+              onClick={() => {
+                cameraControlRef.current?.rotate(0, -DEG90, true);
+              }}
+            ></Button>
+          </div>
           {/* 우측 돌리기 */}
-          <Button
-            themeColor={"primary"}
-            fillMode={"flat"}
-            icon="chevron-right"
-            size={"large"}
-            onClick={() => {
-              cameraControlRef.current?.rotate(DEG45, 0, true);
-            }}
+          <div
             title="우측 돌리기"
-            className="k-button k-button-md k-rounded-md k-button-solid k-button-solid-base"
-          ></Button>
+            onMouseOver={(event) =>
+              tooltip.current && tooltip.current.handleMouseOver(event)
+            }
+            onMouseOut={(event) =>
+              tooltip.current && tooltip.current.handleMouseOut(event)
+            }
+            style={{ display: "inline" }}
+          >
+            <Button
+              themeColor={"primary"}
+              fillMode={"flat"}
+              icon="chevron-right"
+              size={"large"}
+              onClick={() => {
+                cameraControlRef.current?.rotate(DEG45, 0, true);
+              }}
+            ></Button>
+          </div>
           {/* 데이터 On/Off */}
-          <Switch
-            onChange={(e: any) => {
-              if (!active == false) {
-              }
-              setActive(!active);
-            }}
-          />
-          </Tooltip>
+          <div
+            onMouseOver={(event) =>
+              tooltip.current && tooltip.current.handleMouseOver(event)
+            }
+            onMouseOut={(event) =>
+              tooltip.current && tooltip.current.handleMouseOut(event)
+            }
+            title="데이터 On/Off"
+            style={{ display: "inline"}}
+          >
+            <Switch
+              defaultChecked={true}
+              onChange={(e: any) => {
+                if (!active == false) {
+                }
+                setActive(!active);
+              }}
+            />
+          </div>
+        </Tooltip>
       </div>
       <Canvas
         gl={{ logarithmicDepthBuffer: true, antialias: false }}
@@ -254,6 +305,7 @@ const FacilityProcess = (props: any) => {
   const [isAnimated, setIsAnimated] = useState(true);
   const [detail, setDetail] = useState<any>(null);
   const [isClicking, setIsClicking] = useState<string>("");
+  const [isVisionClicking, setIsVisonClicking] = useState<string>("");
   const processApi = useApi();
   const [mainDataResult, setMainDataResult] = useState<any>(null);
   const [detailDataResult, setDetailDataResult] = useState<any>(null);
@@ -330,11 +382,20 @@ const FacilityProcess = (props: any) => {
   // }, [actions, isAnimated]);
 
   const onClickTcpPanelDetail = (tcpNumber: any) => {
-    setDetail(tcpNumber);
+    if(tcpNumber == "") {
+      setIsVisonClicking("");
+    } else {
+      setIsClicking("");
+      setDetail(tcpNumber);
+    }
   };
 
   const onClickTcpPanelDetail2 = (tcpNumber: any) => {
-    setIsClicking(tcpNumber);
+    if(tcpNumber == "비젼") {
+      setIsVisonClicking(tcpNumber);
+    } else {
+      setIsClicking(tcpNumber);
+    }
   };
 
   return (
@@ -378,7 +439,7 @@ const FacilityProcess = (props: any) => {
                 value={mainDataResult[`OP6_배출검사_State`]}
                 onClickDetail={() => setIsVisionDetailShowed(true)}
                 onClickState={onClickTcpPanelDetail2}
-                isClicking={isClicking}
+                isClicking={isVisionClicking}
               ></PanelTable>
             </DataContainer>
           </Marker>
@@ -388,6 +449,7 @@ const FacilityProcess = (props: any) => {
               data={detailDataResult}
               isSelected={isVisionDetailShowed}
               onClickDetail={() => setIsVisionDetailShowed(false)}
+              onClickState={onClickTcpPanelDetail}
             ></VisionDetailPanel>
           )}
 
@@ -836,12 +898,14 @@ type TVisionDetailPanel = {
   isSelected: boolean;
   data: any[];
   onClickDetail: (n: any) => void;
+  onClickState: (n: any) => void;
 };
 const VisionDetailPanel = ({
   position,
   isSelected,
   data,
   onClickDetail,
+  onClickState,
 }: TVisionDetailPanel) => {
   const tpData = data.filter((row: any) => row.Tp_No !== "");
 
@@ -852,7 +916,10 @@ const VisionDetailPanel = ({
     <group position={position} rotation={[0, 0, 0]}>
       <Marker rotation={[0, 0, 0]}>
         <DataContainer
-          onClick={() => onClickDetail(null)}
+          onClick={() => {
+            onClickDetail(null);
+            onClickState("");
+          }}
           style={{
             width: "320px",
             height: "300px",
