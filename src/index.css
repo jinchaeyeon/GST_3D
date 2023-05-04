@@ -726,11 +726,6 @@ body {
   font-weight: 600;
 }
 
-.k-switch-on .k-switch-track{
-  background-color: white;
-  color: #151515;
-}
-
 .k-switch-on .k-switch-thumb {
   background-color: white;
 }
@@ -741,5 +736,6 @@ body {
 
 .k-switch-off .k-switch-track{
   background-color: white;
+  border-color: white;
   color: #151515;
 }
