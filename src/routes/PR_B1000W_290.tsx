@@ -1,4 +1,11 @@
-import React, { Suspense, useEffect, useRef, useState } from "react";
+import React, {
+  MouseEvent,
+  MouseEventHandler,
+  Suspense,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import {
   useGLTF,
@@ -33,45 +40,31 @@ const DEG45 = Math.PI / 4;
 const DEG90 = Math.PI / 2;
 
 const PR_B1000W_290: React.FC = () => {
-  const cameraControlRef = useRef<CameraControls | null>(null);
+  const orbitControlsRef = useRef<any>(null);
   const [active, setActive] = useState(true);
   const [position, setPosition] = React.useState<TooltipPosition | undefined>(
     "top"
   );
   const [anchor, setAnchor] = React.useState("target");
 
-  let defaultLeftMouseButtonActionRef: any = null; // 기본 동작을 저장할 변수
-  // 컨트롤 누른채 화면 이동 (<CameraControls /> 사용시 설정 필요함)
-  useEffect(() => {
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (!defaultLeftMouseButtonActionRef && cameraControlRef.current) {
-        // 기본 동작을 저장
-        defaultLeftMouseButtonActionRef =
-          cameraControlRef.current.mouseButtons.left;
+  const onClickController = (e: MouseEvent<HTMLButtonElement>) => {
+    const { name } = e.currentTarget;
+
+    if (orbitControlsRef.current) {
+      if (name === "reset") {
+        orbitControlsRef.current.reset();
+      } else if (name === "left") {
+        const currentAngle = orbitControlsRef.current.getAzimuthalAngle();
+        orbitControlsRef.current.setAzimuthalAngle(currentAngle - DEG45);
+      } else if (name === "up") {
+        const currentAngle = orbitControlsRef.current.getPolarAngle();
+        orbitControlsRef.current.setPolarAngle(currentAngle - DEG90);
+      } else if (name === "right") {
+        const currentAngle = orbitControlsRef.current.getAzimuthalAngle();
+        orbitControlsRef.current.setAzimuthalAngle(currentAngle + DEG45);
       }
-
-      if (event.key === "Control" && cameraControlRef.current) {
-        cameraControlRef.current.mouseButtons.left = THREE.MOUSE.PAN;
-      }
-    };
-
-    const handleKeyUp = (event: KeyboardEvent) => {
-      if (event.key === "Control" && cameraControlRef.current) {
-        // 기본 동작으로 되돌립니다.
-        cameraControlRef.current.mouseButtons.left =
-          defaultLeftMouseButtonActionRef;
-      }
-    };
-
-    window.addEventListener("keydown", handleKeyDown);
-    window.addEventListener("keyup", handleKeyUp);
-
-    return () => {
-      window.removeEventListener("keydown", handleKeyDown);
-      window.removeEventListener("keyup", handleKeyUp);
-    };
-  }, []);
-
+    }
+  };
   return (
     <>
       {/* 카메라 컨트롤러 */}
@@ -92,11 +85,9 @@ const PR_B1000W_290: React.FC = () => {
             fillMode={"flat"}
             icon="arrow-rotate-cw"
             size={"large"}
-            onClick={() => {
-              cameraControlRef.current?.reset(true);
-              cameraControlRef.current?.setPosition(5, 5, 15);
-            }}
+            onClick={onClickController}
             title="리셋"
+            name="reset"
             className="k-button k-button-md k-rounded-md k-button-solid k-button-solid-base"
           ></Button>
           {/* 좌측 돌리기 */}
@@ -105,10 +96,9 @@ const PR_B1000W_290: React.FC = () => {
             fillMode={"flat"}
             icon="chevron-left"
             size={"large"}
-            onClick={() => {
-              cameraControlRef.current?.rotate(-DEG45, 0, true);
-            }}
+            onClick={onClickController}
             title="좌측 돌리기"
+            name="left"
             className="k-button k-button-md k-rounded-md k-button-solid k-button-solid-base"
           ></Button>
           {/* 위에서 보기 */}
@@ -117,10 +107,9 @@ const PR_B1000W_290: React.FC = () => {
             fillMode={"flat"}
             icon="chevron-up"
             size={"large"}
-            onClick={() => {
-              cameraControlRef.current?.rotate(0, -DEG90, true);
-            }}
+            onClick={onClickController}
             title="위에서 보기"
+            name="up"
             className="k-button k-button-md k-rounded-md k-button-solid k-button-solid-base"
           ></Button>
           {/* 우측 돌리기 */}
@@ -129,10 +118,9 @@ const PR_B1000W_290: React.FC = () => {
             fillMode={"flat"}
             icon="chevron-right"
             size={"large"}
-            onClick={() => {
-              cameraControlRef.current?.rotate(DEG45, 0, true);
-            }}
+            onClick={onClickController}
             title="우측 돌리기"
+            name="right"
             className="k-button k-button-md k-rounded-md k-button-solid k-button-solid-base"
           ></Button>
           {/* 데이터 On/Off */}
@@ -145,13 +133,14 @@ const PR_B1000W_290: React.FC = () => {
           />
         </Tooltip>
       </div>
+
       <Canvas
         gl={{ logarithmicDepthBuffer: true, antialias: false }}
         dpr={[1, 1.5]}
         camera={{ position: [5, 5, 15], fov: 50 }}
       >
-        <CameraControls ref={cameraControlRef} />
         <OrbitControls
+          ref={orbitControlsRef}
           enableZoom={true}
           minDistance={20} // 카메라 최소 거리
           maxDistance={35} // 카메라 최대 거리
