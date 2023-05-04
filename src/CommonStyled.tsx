@@ -944,8 +944,7 @@ export const TopTitle = styled.div`
 
 type TModal = TGnv;
 export const Modal = styled.div<TModal>`
-  position: absolute;
-  z-index: 10;
+  position: fixed;
   top: 0;
   left: 0;
   width: 100%;
