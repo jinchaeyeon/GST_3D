@@ -351,27 +351,27 @@ const PanelBarNavContainer = (props: any) => {
     parentMenuId: "setting",
     menuCategory: "WEB",
   });
-  paths.push({
-    path: "/",
-    menuName: "사용자 옵션",
-    index: "",
-    menuId: "custom-option",
-    parentMenuId: "setting",
-    menuCategory: "WEB",
-  });
-  if (isAdmin) {
-    paths.push({
-      path: "/",
-      menuName: "시스템 옵션",
-      index: "",
-      menuId: "system-option",
-      parentMenuId: "setting",
-      menuCategory: "WEB",
-    });
-  }
+  // paths.push({
+  //   path: "/",
+  //   menuName: "사용자 옵션",
+  //   index: "",
+  //   menuId: "custom-option",
+  //   parentMenuId: "setting",
+  //   menuCategory: "WEB",
+  // });
+  // if (isAdmin) {
+  //   paths.push({
+  //     path: "/",
+  //     menuName: "시스템 옵션",
+  //     index: "",
+  //     menuId: "system-option",
+  //     parentMenuId: "setting",
+  //     menuCategory: "WEB",
+  //   });
+  // }
 
   // Parent 그룹 없는 메뉴 Array
-  const singleMenus = ["/Home", "/PR_B1000W_290"];
+  const singleMenus = ["/Home"];
 
   return (
     <Wrapper isMobileMenuOpend={isMobileMenuOpend}>
@@ -428,7 +428,7 @@ const PanelBarNavContainer = (props: any) => {
             flexDirection={"column"}
             style={{ marginTop: "10px", gap: "5px" }}
           >
-            {isAdmin && (
+            {/* {isAdmin && (
               <Button
                 onClick={() => setUserOptionsWindowVisible(true)}
                 fillMode={"flat"}
@@ -436,7 +436,7 @@ const PanelBarNavContainer = (props: any) => {
               >
                 사용자 옵션
               </Button>
-            )}
+            )} */}
             <Button
               onClick={logout}
               icon={"logout"}
