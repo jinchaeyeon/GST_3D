@@ -86,7 +86,7 @@ div.k-animation-container {
   }
 }
 
-ul.required,
+/* ul.required,
 ul.required:hover,
 ul.required.k-hover,
 span.required,
@@ -101,7 +101,7 @@ ul.readonly,
 span.readonly,
 input.readonly {
   background-color: #efefef;
-}
+} */
 .k-radio-label {
   font-size: 14px;
   line-height: 1.4285714286;
@@ -734,7 +734,7 @@ body {
   background-color: white;
 }
 
-.k-switch-off .k-switch-track{
+.k-switch-off .k-switch-track {
   background-color: white;
   border-color: white;
   color: #151515;

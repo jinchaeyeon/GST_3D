@@ -111,8 +111,6 @@ const PanelBarNavContainer = (props: any) => {
       if (pwExpInfo.status !== "Ok") {
         setChangePasswordWindowVisible(true);
       }
-      // 로그인 후 최초 한번만 팝업 뜨도록
-      setPwExpInfo((prev) => ({ ...prev, useExpiration: false }));
     }
   };
 
@@ -198,8 +196,13 @@ const PanelBarNavContainer = (props: any) => {
       setIsMenuOpend(false);
       setIsMobileMenuOpend(false);
       setUserOptionsWindowVisible(false);
-      setChangePasswordWindowVisible(false);
       setSystemOptionWindowVisible(false);
+      if (
+        pwExpInfo &&
+        (pwExpInfo.status === "Expired" || pwExpInfo.status === "Ok")
+      ) {
+        setChangePasswordWindowVisible(false);
+      }
     }
 
     if (className.includes("custom-option")) {
