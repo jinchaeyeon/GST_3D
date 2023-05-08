@@ -868,6 +868,29 @@ export const Content = styled.div<ContentType>`
   width: calc(
     100% - ${(props) => (props.isMenuOpen ? GNV_WIDTH : CLOSED_GNV_WIDTH)}px
   );
+  position: relative;
+
+  .tel {
+    left: 50px;
+    bottom: 20px;
+    color: rgba(255, 255, 255, 0.3);
+    position: absolute;
+  }
+  .copy-right {
+    right: 50px;
+    bottom: 20px;
+    color: rgba(255, 255, 255, 0.3);
+    position: absolute;
+  }
+  .camera-controller {
+    position: fixed;
+    bottom: 50px;
+    right: 50px;
+    z-index: 999999;
+    background-color: rgba(255, 255, 255, 0.9);
+    border-radius: 5px;
+    padding: 5px;
+  }
   /*=========================================================================
   미디어 쿼리
   ##Device = 모바일
@@ -875,7 +898,16 @@ export const Content = styled.div<ContentType>`
   =========================================================================*/
   @media (max-width: 768px) {
     width: 100%;
-    padding-bottom: 5vh;
+
+    .tel {
+      display: none;
+    }
+    .copy-right {
+      right: 20px;
+    }
+    .camera-controller {
+      right: 20px;
+    }
   }
 `;
 

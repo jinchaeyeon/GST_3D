@@ -1,6 +1,5 @@
 import React, {
   MouseEvent,
-  MouseEventHandler,
   Suspense,
   useEffect,
   useRef,
@@ -14,7 +13,6 @@ import {
   ContactShadows,
   Environment,
   Lightformer,
-  CameraControls,
 } from "@react-three/drei";
 import { OrbitControls } from "@react-three/drei";
 import * as THREE from "three";
@@ -34,7 +32,7 @@ import {
   ChartTitle,
 } from "@progress/kendo-react-charts";
 import { Button } from "@progress/kendo-react-buttons";
-import { Tooltip, TooltipPosition } from "@progress/kendo-react-tooltip";
+import { Tooltip } from "@progress/kendo-react-tooltip";
 
 const DEG45 = Math.PI / 4;
 const DEG90 = Math.PI / 2;
@@ -65,17 +63,7 @@ const PR_B1000W_290: React.FC = () => {
   return (
     <>
       {/* 카메라 컨트롤러 */}
-      <div
-        style={{
-          position: "fixed",
-          bottom: "50px",
-          right: "50px",
-          zIndex: 999999,
-          backgroundColor: "rgba(255,255,255,0.9)",
-          borderRadius: "5px",
-          padding: "5px",
-        }}
-      >
+      <div className="camera-controller">
         <Tooltip
           ref={tooltip}
           anchorElement="target"

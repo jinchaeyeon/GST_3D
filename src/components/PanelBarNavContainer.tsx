@@ -473,7 +473,13 @@ const PanelBarNavContainer = (props: any) => {
             onClick={onMenuBtnClick}
           />
         </TopTitle>
-        <PageWrap>{props.children}</PageWrap>
+        <PageWrap>
+          {props.children}
+          <div className="tel">TEL. 070-7017-7373</div>
+          <div className="copy-right">
+            &copy;GST Co., Ltd. All rights reserved.
+          </div>
+        </PageWrap>
       </Content>
       {userOptionsWindowVisible && (
         <UserOptionsWindow setVisible={setUserOptionsWindowVisible} />
