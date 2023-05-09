@@ -871,17 +871,12 @@ export const Content = styled.div<ContentType>`
   );
   position: relative;
 
-  .tel {
-    left: 50px;
-    bottom: 20px;
-    color: rgba(255, 255, 255, 0.3);
-    position: absolute;
-  }
-  .copy-right {
+  .small-info {
     right: 50px;
     bottom: 20px;
     color: rgba(255, 255, 255, 0.3);
     position: absolute;
+    font-size: 14px;
   }
   .camera-controller {
     position: fixed;
@@ -900,11 +895,9 @@ export const Content = styled.div<ContentType>`
   @media (max-width: 768px) {
     width: 100%;
 
-    .tel {
-      display: none;
-    }
-    .copy-right {
+    .small-info {
       right: 20px;
+      font-size: 12px;
     }
     .camera-controller {
       right: 20px;
