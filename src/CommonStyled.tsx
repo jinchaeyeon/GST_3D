@@ -814,6 +814,7 @@ type TWrapper = {
 export const Wrapper = styled.div<TWrapper>`
   display: flex;
   width: 100%;
+  height: 100%;
   //overflow: ${(props) => (props.isMobileMenuOpend ? "hidden" : "auto")};
 `;
 
@@ -912,7 +913,7 @@ export const Content = styled.div<ContentType>`
 `;
 
 export const PageWrap = styled.div`
-  height: 100vh;
+  height: 100%;
 `;
 
 export const AppName = styled.h1`
