@@ -570,7 +570,7 @@ export const FieldWrap = styled.div<TFieldWrap>`
 `;
 
 export const LoginBox = styled.div`
-  height: 100vh;
+  height: 100%;
   background-image: linear-gradient(to top, #31cfff, #015eea);
 
   .container {
@@ -823,7 +823,7 @@ export const Gnv = styled.div<TGnv>`
   min-width: ${GNV_WIDTH}px;
   text-align: center;
 
-  min-height: 100vh;
+  height: 100%;
   background-color: #151515;
 
   .logout span {
@@ -855,7 +855,7 @@ export const Gnv = styled.div<TGnv>`
 export const SmallGnv = styled.div`
   padding-top: 10px;
   border-right: solid 1px #646464;
-  height: 100vh;
+  height: 100%;
 
   @media (max-width: 768px) {
     display: none;
