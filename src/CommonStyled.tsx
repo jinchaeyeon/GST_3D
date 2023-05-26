@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { CLOSED_GNV_WIDTH, GNV_WIDTH } from "./components/CommonString";
-import logoSrc from "./img/gst_monitoring_logo.png";
+import logoSrc from "./img/gst_monitoring_logo_w.png";
+
 type TDataContainer = {
   width?: string;
   height?: string;
@@ -571,7 +572,6 @@ export const FieldWrap = styled.div<TFieldWrap>`
 
 export const LoginBox = styled.div`
   height: 100%;
-  background-image: linear-gradient(to top, #31cfff, #015eea);
 
   .container {
     height: 100%;
@@ -580,7 +580,7 @@ export const LoginBox = styled.div`
     right: 0;
     background-color: rgba(0, 0, 0, 0.4);
     width: 600px;
-    padding: 50px 80px;
+    padding: 50px 120px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -602,13 +602,15 @@ export const LoginBox = styled.div`
   }
 
   .k-input {
-    background-color: #fff;
-    height: 50px;
+    background-color: rgba(255, 255, 255, 0.25);
+    height: 45px;
     color: black;
-    margin-top: 10px;
-    border-radius: 0;
+    margin-top: 5px;
+    border-radius: 5px;
     padding: 15px;
     font-size: 16px;
+    border: 0;
+    color: #fff;
   }
   .k-label {
     font-size: 16px;
@@ -621,6 +623,12 @@ export const LoginBox = styled.div`
     border-radius: 0;
     font-size: 16px;
     font-weight: 900;
+    border-radius: 5px;
+    background-color: #2db3b7;
+    border: 0;
+  }
+  .k-button.login-btn:hover {
+    background-color: #319092;
   }
 
   .logo {
@@ -628,19 +636,29 @@ export const LoginBox = styled.div`
     background-size: contain;
     background-repeat: no-repeat;
     width: 100%;
-    height: 65px;
+    height: 55px;
     background-position: left;
-    margin-bottom: 60px;
+    margin-bottom: 40px;
   }
 
   @media (max-width: 768px) {
     .container {
       width: 100%;
-      padding: 30px;
+      padding: 20px 40px;
+
+      height: auto;
+      bottom: 0;
+      top: auto;
     }
     .item {
       align-items: flex-start;
       margin-top: 15%;
+
+      margin-top: 0;
+    }
+
+    .k-form .k-label {
+      font-size: 14px;
     }
     .k-input {
       height: 40px;
@@ -655,6 +673,16 @@ export const LoginBox = styled.div`
     .copy-right {
       font-size: 12px;
       justify-content: center;
+
+      height: 30px;
+    }
+
+    .k-form .k-form-fieldset {
+      margin-top: 15px;
+    }
+
+    .k-button.login-btn {
+      margin-top: 35px;
     }
   }
 `;
