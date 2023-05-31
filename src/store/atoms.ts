@@ -69,7 +69,7 @@ export const deletedRowsState = atom<object[]>({
 
 export const isMenuOpendState = atom<boolean>({
   key: "isMenuOpendState",
-  default: false,
+  default: true,
 });
 
 export const isLoading = atom<boolean>({

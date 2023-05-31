@@ -23,6 +23,7 @@ const domain: any = {
     action: "post",
     url: "api/data/password-requirements",
   },
+  "change-password": { action: "post", url: "api/auth/change-password" },
   menus: { action: "get", url: "api/data/:para" },
   "default-list": {
     action: "get",

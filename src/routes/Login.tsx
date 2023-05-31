@@ -14,12 +14,13 @@ import { useApi } from "../hooks/api";
 import { useSetRecoilState } from "recoil";
 import { FormInput, FormComboBox } from "../components/Editors";
 import { LoginAppName, LoginBox } from "../CommonStyled";
-import { UseGetIp, resetLocalStorage } from "../components/CommonFunction";
+import { resetLocalStorage } from "../components/CommonFunction";
 import { isLoading } from "../store/atoms";
 import Loading from "../components/Loading";
 import cookie from "react-cookies";
-import { Canvas } from "@react-three/fiber";
+import { Canvas, useFrame } from "@react-three/fiber";
 import { OrbitControls, useAnimations, useGLTF } from "@react-three/drei";
+import { Vector3 } from "three";
 
 interface IFormData {
   langCode: string;
@@ -121,8 +122,34 @@ const Login: React.FC = () => {
     resetLocalStorage();
   }, []);
 
+  const videoRef: any = useRef(null);
+
+  useEffect(() => {
+    if (videoRef.current) {
+      videoRef.current.playbackRate = 0.7; // 원하는 배속으로 설정
+    }
+  }, []);
+
   return (
     <LoginBox>
+      <video
+        autoPlay
+        muted
+        loop
+        id="myVideo"
+        ref={videoRef}
+        playsInline
+        style={{
+          position: "absolute",
+          width: "100%",
+          height: "100%",
+          objectFit: "cover", // 비디오가 부모 요소를 가득 채우도록 설정
+          // filter: "saturate(50%)",
+        }}
+      >
+        <source src="bg_video_compressed.mp4" type="video/mp4" />
+      </video>
+
       <Canvas
         gl={{ logarithmicDepthBuffer: true, antialias: true }}
         dpr={[1, 1.5]}
@@ -137,20 +164,21 @@ const Login: React.FC = () => {
           <spotLight intensity={1} position={[0, 0, -1000]} />
 
           {/* 추가적인 광원 */}
-          <directionalLight intensity={0.5} position={[-1000, 1000, 1000]} />
-          <directionalLight intensity={0.5} position={[1000, 1000, 1000]} />
-
-          {/* 카메라 컨트롤 */}
-          <OrbitControls
-            enableZoom={true}
-            minDistance={5} // 카메라 최소 거리
-            maxDistance={10} // 카메라 최대 거리
-            enableDamping={true}
-            dampingFactor={0.5} // 이 값을 조절하여 관성 강도를 변경 (0 ~ 1)
+          <directionalLight
+            intensity={0.5}
+            position={[-1000, 1000, 1000]}
+            color={"rgba(0, 47, 255, 0.5)"}
           />
+          <directionalLight
+            intensity={0.5}
+            position={[1000, 1000, 1000]}
+            // color={"rgba(0, 47, 255, 0.1)"}
+          />
+
           <RobotArm />
         </Suspense>
       </Canvas>
+
       <div className="container">
         <div className="item">
           <Form
@@ -238,23 +266,41 @@ const RobotArm = () => {
 
   useEffect(() => {
     if (actions["Animation"]) {
-      // actions["Animation"].play();
+      actions["Animation"].play();
     }
   }, [actions]);
 
+  useFrame((state, delta) => {
+    if (actions["Animation"]) {
+      actions["Animation"].timeScale = 0.5; // Half the speed
+    }
+  });
   const windowWidth = useRef(window.innerWidth);
+  const target =
+    windowWidth.current > 768
+      ? new Vector3(0, 0, 0)
+      : new Vector3(1.5, 1.5, 1.5);
 
   return (
     <group>
       <primitive
         object={scene}
         ref={ref}
-        scale={windowWidth.current > 768 ? 0.015 : 0.0075}
-        position={windowWidth.current > 768 ? [1, -1, 1] : [1.5, -1, 1]}
+        scale={windowWidth.current > 768 ? 0.015 : 0.0035}
+        position={windowWidth.current > 768 ? [1, -1, 1] : [1.5, 2, 1.5]}
         rotation={
           windowWidth.current > 768 ? [0, Math.PI / 6, 0] : [0, Math.PI / 7, 0]
         }
-        physicallyCorrectLights
+      />
+
+      {/* 카메라 컨트롤 */}
+      <OrbitControls
+        enableZoom={true}
+        target={target} // 회전 중심점 설정
+        minDistance={5} // 카메라 최소 거리
+        maxDistance={10} // 카메라 최대 거리
+        enableDamping={true}
+        dampingFactor={0.5} // 이 값을 조절하여 관성 강도를 변경 (0 ~ 1)
       />
     </group>
   );
