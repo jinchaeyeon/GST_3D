@@ -668,7 +668,7 @@ const PanelTable = ({
       onMouseOver={() => setIsHovering(1)}
       onMouseOut={() => setIsHovering(0)}
       style={{
-        width: style != undefined ? style.width : "90px",
+        width: style != undefined ? style.width : "70px",
         height: "35px",
         backgroundColor:
           isHovering == 1 || isClicking == label ? "#3e80ed5e" : "",
