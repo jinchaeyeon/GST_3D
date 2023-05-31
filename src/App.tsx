@@ -11,6 +11,7 @@ import Main from "./routes/Main";
 import PR_B1000W_290 from "./routes/PR_B1000W_290";
 import { isMobileMenuOpendState } from "./store/atoms";
 import Test from "./routes/Test";
+import Model from "./routes/Model";
 
 type TGlobalStyle = {
   isMobileMenuOpend: boolean;
@@ -98,6 +99,7 @@ const AppInner: React.FC = () => {
             {/* 메인 홈 */}
             <AuthRoute path="/Home" component={Main} exact />
             <AuthRoute path="/PR_B1000W_290" component={PR_B1000W_290} exact />
+            <AuthRoute path="/Model" component={Model} exact />
             <AuthRoute path="/Test" component={Test} exact />
           </PanelBarNavContainer>
         </Switch>
