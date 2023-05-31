@@ -313,9 +313,10 @@ const tcpDetailPosition = {
   7: [4.5, 11, 0],
 };
 const outputPosition = [-2.5, 1.5, -6];
-const visionPosition = [3.5, 0.5, -2.5];
+const visionPosition = [3.5, 2.5, -2.5];
 const visionDetailPosition = [6, 8.5, -2.5];
 const dryerPosition = [1.5, 2.5, -6];
+const InfoDetailPosition = [4.5, 10.5, -6];
 
 const FacilityProcess = (props: any) => {
   const { animations, scene, nodes, materials }: any = useGLTF(
@@ -329,6 +330,9 @@ const FacilityProcess = (props: any) => {
   const [detail, setDetail] = useState<any>(null);
   const [isClicking, setIsClicking] = useState<string>("");
   const [isVisionClicking, setIsVisonClicking] = useState<string>("");
+  const [isInfoClicking, setIsInfoClicking] = useState<string>("");
+  const [isInfoDetailShowed, setIsInfonDetailShowed] = useState(false);
+  const [isInfoDetailShowed2, setIsInfonDetailShowed2] = useState(false);
   const processApi = useApi();
   const [mainDataResult, setMainDataResult] = useState<any>(null);
   const [detailDataResult, setDetailDataResult] = useState<any>(null);
@@ -64959,6 +64963,10 @@ const FacilityProcess = (props: any) => {
   const onClickTcpPanelDetail2 = (tcpNumber: any) => {
     if (tcpNumber == "비젼") {
       setIsVisonClicking(tcpNumber);
+    } else if(tcpNumber == "세척기") {
+      setIsInfoClicking(tcpNumber);
+    } else if(tcpNumber == "건조기") {
+      setIsInfoClicking(tcpNumber);
     } else {
       setIsClicking(tcpNumber);
     }
@@ -65034,21 +65042,40 @@ const FacilityProcess = (props: any) => {
                 style={{ width: "110px" }}
                 label={`세척기`}
                 value={mainDataResult[`Washing_State`]}
-                onClickDetail={onClickTcpPanelDetail}
+                onClickDetail={() => {setIsInfonDetailShowed(true); setIsInfonDetailShowed2(false);}}
                 onClickState={onClickTcpPanelDetail2}
-                isClicking={isClicking}
+                isClicking={isInfoClicking}
               ></PanelTable>
               <PanelTable
                 style={{ width: "110px" }}
                 label={`건조기`}
                 value={mainDataResult[`AirBlower_State`]}
-                onClickDetail={onClickTcpPanelDetail}
+                onClickDetail={() => {setIsInfonDetailShowed2(true);
+                  setIsInfonDetailShowed(false)}
+                }
                 onClickState={onClickTcpPanelDetail2}
-                isClicking={isClicking}
+                isClicking={isInfoClicking}
               ></PanelTable>
             </DataContainer>
           </Marker>
-
+          {detailDataResult && isInfoDetailShowed && (
+            <InfoDetailPanel
+              position={InfoDetailPosition}
+              data={detailDataResult}
+              isSelected={isInfoDetailShowed}
+              onClickDetail={() => setIsInfonDetailShowed(false)}
+              onClickState={onClickTcpPanelDetail}
+            ></InfoDetailPanel>
+          )}
+          {detailDataResult && isInfoDetailShowed2 && (
+            <InfoDetailPanel2
+              position={InfoDetailPosition}
+              data={detailDataResult}
+              isSelected={isInfoDetailShowed2}
+              onClickDetail={() => setIsInfonDetailShowed2(false)}
+              onClickState={onClickTcpPanelDetail}
+            ></InfoDetailPanel2>
+          )}
           {/* 생산 */}
           <Marker rotation={[0, 0, 0]} position={outputPosition}>
             <DataContainer
@@ -65530,6 +65557,175 @@ const VisionDetailPanel = ({
               </ChartSeries>
             </Chart>
           </div>
+        </DataContainer>
+      </Marker>
+    </group>
+  ) : (
+    <></>
+  );
+};
+
+
+type TInfoDetailPanel = {
+  position: any;
+  isSelected: boolean;
+  data: any[];
+  onClickDetail: (n: any) => void;
+  onClickState: (n: any) => void;
+};
+const InfoDetailPanel = ({
+  position,
+  isSelected,
+  data,
+  onClickDetail,
+  onClickState,
+}: TInfoDetailPanel) => {
+  const tpData = data.filter((row: any) => row.Tp_No !== "");
+
+  const categories = tpData.map((row: any) => row.Tp_InsertTime);
+  const tpJig = tpData.map((row: any) => row.Tp_WJIG);
+
+  return isSelected ? (
+    <group position={position} rotation={[0, 0, 0]}>
+            <Marker
+        rotation={[0, 0, 0]}
+        style={{
+          opacity: 1,
+        }}
+      >
+        <DataContainer
+          onClick={() => {
+            onClickDetail(null);
+            onClickState("");
+          }}
+          style={{
+            width: "320px",
+            height: "300px",
+            padding: "20px",
+          }}
+        >
+           <p
+            style={{
+              textAlign: "center",
+              marginBottom: "20px",
+            }}
+          >
+            세척 추이
+            <br />
+            {data.length > 0 && (
+              <>
+                ({convertDateToStrWithTime2(new Date())})
+              </>
+            )}
+          </p>
+          <div style={{ width: "100%", height: "auto", display: "flex" }}>
+            <Chart style={{ height: "200px" }}>
+              {/* <ChartTitle text="Vision 불량 추이" /> */}
+              <ChartLegend position="bottom" orientation="horizontal" />
+
+              <ChartCategoryAxis>
+                <ChartCategoryAxisItem
+                  categories={categories}
+                  visible={false}
+                />
+              </ChartCategoryAxis>
+              <ChartSeries>
+                <ChartSeriesItem
+                  type="line"
+                  tooltip={{ visible: true }}
+                  data={tpJig}
+                  name={"세척"}
+                  markers={{
+                    size: 4,
+                  }}
+                />
+              </ChartSeries>
+            </Chart>
+          </div>  
+        </DataContainer>
+      </Marker>
+    </group>
+  ) : (
+    <></>
+  );
+};
+
+type TInfoDetailPanel2 = {
+  position: any;
+  isSelected: boolean;
+  data: any[];
+  onClickDetail: (n: any) => void;
+  onClickState: (n: any) => void;
+};
+const InfoDetailPanel2 = ({
+  position,
+  isSelected,
+  data,
+  onClickDetail,
+  onClickState,
+}: TInfoDetailPanel2) => {
+  const tpData = data.filter((row: any) => row.Tp_No !== "");
+
+  const categories = tpData.map((row: any) => row.Tp_InsertTime);
+  const tpJig = tpData.map((row: any) => row.In_Thickness);
+
+  return isSelected ? (
+    <group position={position} rotation={[0, 0, 0]}>
+            <Marker
+        rotation={[0, 0, 0]}
+        style={{
+          opacity: 1,
+        }}
+      >
+        <DataContainer
+          onClick={() => {
+            onClickDetail(null);
+            onClickState("");
+          }}
+          style={{
+            width: "320px",
+            height: "300px",
+            padding: "20px",
+          }}
+        >
+           <p
+            style={{
+              textAlign: "center",
+              marginBottom: "20px",
+            }}
+          >
+            건조 추이
+            <br />
+            {data.length > 0 && (
+              <>
+                ({convertDateToStrWithTime2(new Date())})
+              </>
+            )}
+          </p>
+          <div style={{ width: "100%", height: "auto", display: "flex" }}>
+            <Chart style={{ height: "200px" }}>
+              {/* <ChartTitle text="Vision 불량 추이" /> */}
+              <ChartLegend position="bottom" orientation="horizontal" />
+
+              <ChartCategoryAxis>
+                <ChartCategoryAxisItem
+                  categories={categories}
+                  visible={false}
+                />
+              </ChartCategoryAxis>
+              <ChartSeries>
+                <ChartSeriesItem
+                  type="line"
+                  tooltip={{ visible: true }}
+                  data={tpJig}
+                  name={"건조"}
+                  markers={{
+                    size: 4,
+                  }}
+                />
+              </ChartSeries>
+            </Chart>
+          </div>  
         </DataContainer>
       </Marker>
     </group>
