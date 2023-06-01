@@ -19,8 +19,15 @@ import { isLoading } from "../store/atoms";
 import Loading from "../components/Loading";
 import cookie from "react-cookies";
 import { Canvas, useFrame } from "@react-three/fiber";
-import { OrbitControls, useAnimations, useGLTF } from "@react-three/drei";
+import {
+  Html,
+  OrbitControls,
+  useAnimations,
+  useGLTF,
+  useProgress,
+} from "@react-three/drei";
 import { Vector3 } from "three";
+import ClipLoader from "react-spinners/ClipLoader";
 
 interface IFormData {
   langCode: string;
@@ -155,7 +162,7 @@ const Login: React.FC = () => {
         dpr={[1, 1.5]}
         camera={{ position: [5.2, 2.7, 5.2], fov: 30 }}
       >
-        <Suspense fallback={null}>
+        <Suspense fallback={<ThreeDModelLoader />}>
           {/* 전체적인 조명 */}
           <ambientLight intensity={0.1} />
           {/* 윗쪽에서 오는 빛 */}
@@ -306,3 +313,18 @@ const RobotArm = () => {
   );
 };
 export default Login;
+
+function ThreeDModelLoader() {
+  return (
+    <Html
+      center
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+      }}
+    >
+      <ClipLoader color="#2db3b7" size={150} loading={true} />;
+    </Html>
+  );
+}
