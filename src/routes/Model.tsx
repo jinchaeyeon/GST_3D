@@ -313,11 +313,12 @@ const tcpDetailPosition = {
   7: [4.5, 11, 0],
 };
 const outputPosition = [-3, 1.5, -6];
+const outputPosition2 = [-3, 3, -6];
 const visionPosition = [3.5, 2.5, -2.5];
 const visionDetailPosition = [6, 10.5, -2.5];
 const dryerPosition = [1.5, 2.5, -6];
 const InfoDetailPosition = [4.5, 10.5, -6];
-const QtyDetailPosition = [-1.5, 8, -6];
+const QtyDetailPosition = [-1.5, 8.5, -6];
 
 const FacilityProcess = (props: any) => {
   const { animations, scene, nodes, materials }: any = useGLTF(
@@ -64972,7 +64973,7 @@ const FacilityProcess = (props: any) => {
       setIsVisonClicking(tcpNumber);
     } else if (tcpNumber == "세척기" || tcpNumber == "건조기") {
       setIsInfoClicking(tcpNumber);
-    } else if (tcpNumber == "OK" || tcpNumber == "OK2" || tcpNumber == "회송") {
+    } else if (tcpNumber == "재고부하율" || tcpNumber == "안전재고미달") {
       setIsQtyClicking(tcpNumber);
     } else {
       setIsClicking(tcpNumber);
@@ -65108,31 +65109,51 @@ const FacilityProcess = (props: any) => {
                 label={`OK`}
                 value={mainDataResult[`out_ok1`]}
                 valueType="Number"
-                onClickDetail={() => {
-                  setIsQtyDetailShowed(true);
-                }}
-                onClickState={onClickTcpPanelDetail2}
-                isClicking={isQtyClicking}
               ></PanelTable>
               <PanelTable
                 label={`OK2`}
                 value={mainDataResult[`out_ok2`]}
                 valueType="Number"
-                onClickDetail={() => {
-                  setIsQtyDetailShowed(true);
-                }}
-                onClickState={onClickTcpPanelDetail2}
-                isClicking={isQtyClicking}
               ></PanelTable>
               <PanelTable
                 label={`회송`}
                 value={mainDataResult[`out_ng`]}
+                valueType="Number"
+              ></PanelTable>
+            </DataContainer>
+          </Marker>
+                    {/* 생산 2*/}
+                    <Marker rotation={[0, 0, 0]} position={outputPosition2}>
+            <DataContainer
+              style={{
+                width: "280px",
+                height: "47px",
+                display: "grid",
+                gridTemplateColumns: "repeat(2, 1fr)" /* 1열 */,
+                gridTemplateRows: "repeat(1, 1fr)" /* 3행 */,
+              }}
+            >
+              <PanelTable
+                label={`재고부하율`}
+                value={70}
                 valueType="Number"
                 onClickDetail={() => {
                   setIsQtyDetailShowed(true);
                 }}
                 onClickState={onClickTcpPanelDetail2}
                 isClicking={isQtyClicking}
+                style={{width: "130px"}}
+              ></PanelTable>
+              <PanelTable
+                label={`안전재고미달`}
+                value={20}
+                valueType="Number"
+                onClickDetail={() => {
+                  setIsQtyDetailShowed(true);
+                }}
+                onClickState={onClickTcpPanelDetail2}
+                isClicking={isQtyClicking}
+                style={{width: "130px"}}
               ></PanelTable>
             </DataContainer>
           </Marker>
@@ -65249,9 +65270,9 @@ type TPanelTable = {
   label: string;
   value: number;
   valueType?: "State" | "Number";
-  onClickDetail: (n: any) => void;
-  onClickState: (n: string) => void;
-  isClicking: string;
+  onClickDetail?: (n: any) => void;
+  onClickState?: (n: string) => void;
+  isClicking?: string;
   style?: any;
 };
 const PanelTable = ({
@@ -65268,8 +65289,10 @@ const PanelTable = ({
   return (
     <table
       onClick={() => {
-        onClickDetail("");
-        onClickState(label);
+        if(onClickDetail != null && onClickState != null){
+          onClickDetail("");
+          onClickState(label);
+        }
       }}
       onMouseOver={() => setIsHovering(1)}
       onMouseOut={() => setIsHovering(0)}
@@ -65291,7 +65314,11 @@ const PanelTable = ({
               <span className="light"></span>
 
               {valueType === "Number"
-                ? value
+                ? label == "재고부하율" 
+                ? value + "%"
+                : label == "안전재고미달" 
+                ? value + "개" 
+                : value
                 : Number(value) === 1
                 ? "정상"
                 : Number(value) === 2
@@ -65787,7 +65814,7 @@ const QtyDetailPanel = ({
           }}
           style={{
             width: "410px",
-            height: "250px",
+            height: "200px",
             padding: "20px",
           }}
         >
@@ -65808,8 +65835,9 @@ const QtyDetailPanel = ({
                   style={{
                     width: "90px",
                     height: "35px",
-                    backgroundColor: "RGB(255,217,102)",
+                    backgroundColor: "#ffc000",
                     border: "2px solid rgb(19 19 25)",
+                    borderRadius: "10px"
                   }}
                 >
                   <tbody>
@@ -65817,7 +65845,7 @@ const QtyDetailPanel = ({
                       <th
                         style={{
                           textAlign: "center",
-                          color: "#282828",
+                          color: "white",
                           fontWeight: "400",
                           fontSize: "10px",
                         }}
@@ -65830,7 +65858,7 @@ const QtyDetailPanel = ({
                         style={{
                           textAlign: "center",
                           fontSize: "13px",
-                          color: "#282828",
+                          color: "white",
                           border: "bold",
                           verticalAlign: "top",
                           fontWeight: "900",
@@ -65845,8 +65873,9 @@ const QtyDetailPanel = ({
                   style={{
                     width: "90px",
                     height: "35px",
-                    backgroundColor: "RGB(244,177,131)",
+                    backgroundColor: "#f94836",
                     border: "2px solid rgb(19 19 25)",
+                    borderRadius: "10px"
                   }}
                 >
                   <tbody>
@@ -65854,7 +65883,7 @@ const QtyDetailPanel = ({
                       <th
                         style={{
                           textAlign: "center",
-                          color: "#282828",
+                          color: "white",
                           fontWeight: "400",
                           fontSize: "10px",
                         }}
@@ -65867,7 +65896,7 @@ const QtyDetailPanel = ({
                         style={{
                           textAlign: "center",
                           fontSize: "13px",
-                          color: "#282828",
+                          color: "white",
                           border: "bold",
                           verticalAlign: "top",
                           fontWeight: "900",
@@ -65884,8 +65913,9 @@ const QtyDetailPanel = ({
                   style={{
                     width: "90px",
                     height: "35px",
-                    backgroundColor: "RGB(169,209,142)",
+                    backgroundColor: "#02c502",
                     border: "2px solid rgb(19 19 25)",
+                    borderRadius: "10px"
                   }}
                 >
                   <tbody>
@@ -65893,7 +65923,7 @@ const QtyDetailPanel = ({
                       <th
                         style={{
                           textAlign: "center",
-                          color: "#282828",
+                          color: "white",
                           fontWeight: "400",
                           fontSize: "10px",
                         }}
@@ -65906,7 +65936,7 @@ const QtyDetailPanel = ({
                         style={{
                           textAlign: "center",
                           fontSize: "13px",
-                          color: "#282828",
+                          color: "white",
                           border: "bold",
                           verticalAlign: "top",
                           fontWeight: "900",
@@ -65921,8 +65951,9 @@ const QtyDetailPanel = ({
                   style={{
                     width: "90px",
                     height: "35px",
-                    backgroundColor: "RGB(169,209,142)",
+                    backgroundColor: "#02c502",
                     border: "2px solid rgb(19 19 25)",
+                    borderRadius: "10px"
                   }}
                 >
                   <tbody>
@@ -65930,7 +65961,7 @@ const QtyDetailPanel = ({
                       <th
                         style={{
                           textAlign: "center",
-                          color: "#282828",
+                          color: "white",
                           fontWeight: "400",
                           fontSize: "10px",
                         }}
@@ -65943,7 +65974,7 @@ const QtyDetailPanel = ({
                         style={{
                           textAlign: "center",
                           fontSize: "13px",
-                          color: "#282828",
+                          color: "white",
                           border: "bold",
                           verticalAlign: "top",
                           fontWeight: "900",
@@ -65960,8 +65991,9 @@ const QtyDetailPanel = ({
                   style={{
                     width: "90px",
                     height: "35px",
-                    backgroundColor: "RGB(169,209,142)",
+                    backgroundColor: "#02c502",
                     border: "2px solid rgb(19 19 25)",
+                    borderRadius: "10px"
                   }}
                 >
                   <tbody>
@@ -65969,7 +66001,7 @@ const QtyDetailPanel = ({
                       <th
                         style={{
                           textAlign: "center",
-                          color: "#282828",
+                          color: "white",
                           fontWeight: "400",
                           fontSize: "10px",
                         }}
@@ -65982,7 +66014,7 @@ const QtyDetailPanel = ({
                         style={{
                           textAlign: "center",
                           fontSize: "13px",
-                          color: "#282828",
+                          color: "white",
                           border: "bold",
                           verticalAlign: "top",
                           fontWeight: "900",
@@ -65997,8 +66029,9 @@ const QtyDetailPanel = ({
                   style={{
                     width: "90px",
                     height: "35px",
-                    backgroundColor: "RGB(244,177,131)",
+                    backgroundColor: "#f94836",
                     border: "2px solid rgb(19 19 25)",
+                    borderRadius: "10px"
                   }}
                 >
                   <tbody>
@@ -66006,7 +66039,7 @@ const QtyDetailPanel = ({
                       <th
                         style={{
                           textAlign: "center",
-                          color: "#282828",
+                          color: "white",
                           fontWeight: "400",
                           fontSize: "10px",
                         }}
@@ -66019,7 +66052,7 @@ const QtyDetailPanel = ({
                         style={{
                           textAlign: "center",
                           fontSize: "13px",
-                          color: "#282828",
+                          color: "white",
                           border: "bold",
                           verticalAlign: "top",
                           fontWeight: "900",
@@ -66038,6 +66071,7 @@ const QtyDetailPanel = ({
                   width: "180px",
                   height: "105px",
                   border: "1px solid #5a5757",
+                  borderRadius: "10px"
                 }}
               >
                 <tbody>
@@ -66142,11 +66176,6 @@ const QtyDetailPanel = ({
                 </tbody>
               </table>
             </div>
-          </div>
-          <div style={{ textAlign: "center", marginTop: "30px" }}>
-            <span style={{ width: "100px", textAlign: "center" }}>
-              재고부하율 70%&nbsp;&nbsp;안전재고미달 20개
-            </span>
           </div>
         </DataContainer>
       </Marker>
