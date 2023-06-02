@@ -65122,8 +65122,8 @@ const FacilityProcess = (props: any) => {
               ></PanelTable>
             </DataContainer>
           </Marker>
-                    {/* 생산 2*/}
-                    <Marker rotation={[0, 0, 0]} position={outputPosition2}>
+          {/* 생산 2*/}
+          <Marker rotation={[0, 0, 0]} position={outputPosition2}>
             <DataContainer
               style={{
                 width: "280px",
@@ -65142,7 +65142,7 @@ const FacilityProcess = (props: any) => {
                 }}
                 onClickState={onClickTcpPanelDetail2}
                 isClicking={isQtyClicking}
-                style={{width: "130px"}}
+                style={{ width: "130px" }}
               ></PanelTable>
               <PanelTable
                 label={`안전재고미달`}
@@ -65153,7 +65153,7 @@ const FacilityProcess = (props: any) => {
                 }}
                 onClickState={onClickTcpPanelDetail2}
                 isClicking={isQtyClicking}
-                style={{width: "130px"}}
+                style={{ width: "130px" }}
               ></PanelTable>
             </DataContainer>
           </Marker>
@@ -65289,7 +65289,7 @@ const PanelTable = ({
   return (
     <table
       onClick={() => {
-        if(onClickDetail != null && onClickState != null){
+        if (onClickDetail != null && onClickState != null) {
           onClickDetail("");
           onClickState(label);
         }
@@ -65314,11 +65314,11 @@ const PanelTable = ({
               <span className="light"></span>
 
               {valueType === "Number"
-                ? label == "재고부하율" 
-                ? value + "%"
-                : label == "안전재고미달" 
-                ? value + "개" 
-                : value
+                ? label == "재고부하율"
+                  ? value + "%"
+                  : label == "안전재고미달"
+                  ? value + "개"
+                  : value
                 : Number(value) === 1
                 ? "정상"
                 : Number(value) === 2
@@ -65821,11 +65821,19 @@ const QtyDetailPanel = ({
           <p
             style={{
               textAlign: "center",
-              marginBottom: "20px",
+              fontWeight: "bold",
             }}
           >
             재고 현황
             <br />
+          </p>
+          <p
+            style={{
+              textAlign: "center",
+              marginBottom: "20px",
+              fontSize: "10px"
+            }}
+          >
             {data.length > 0 && <>({convertDateToStrWithTime2(new Date())})</>}
           </p>
           <div style={{ display: "flex" }}>
@@ -65837,7 +65845,7 @@ const QtyDetailPanel = ({
                     height: "35px",
                     backgroundColor: "#ffc000",
                     border: "2px solid rgb(19 19 25)",
-                    borderRadius: "10px"
+                    borderRadius: "10px",
                   }}
                 >
                   <tbody>
@@ -65875,7 +65883,7 @@ const QtyDetailPanel = ({
                     height: "35px",
                     backgroundColor: "#f94836",
                     border: "2px solid rgb(19 19 25)",
-                    borderRadius: "10px"
+                    borderRadius: "10px",
                   }}
                 >
                   <tbody>
@@ -65915,7 +65923,7 @@ const QtyDetailPanel = ({
                     height: "35px",
                     backgroundColor: "#02c502",
                     border: "2px solid rgb(19 19 25)",
-                    borderRadius: "10px"
+                    borderRadius: "10px",
                   }}
                 >
                   <tbody>
@@ -65953,7 +65961,7 @@ const QtyDetailPanel = ({
                     height: "35px",
                     backgroundColor: "#02c502",
                     border: "2px solid rgb(19 19 25)",
-                    borderRadius: "10px"
+                    borderRadius: "10px",
                   }}
                 >
                   <tbody>
@@ -65993,7 +66001,7 @@ const QtyDetailPanel = ({
                     height: "35px",
                     backgroundColor: "#02c502",
                     border: "2px solid rgb(19 19 25)",
-                    borderRadius: "10px"
+                    borderRadius: "10px",
                   }}
                 >
                   <tbody>
@@ -66031,7 +66039,7 @@ const QtyDetailPanel = ({
                     height: "35px",
                     backgroundColor: "#f94836",
                     border: "2px solid rgb(19 19 25)",
-                    borderRadius: "10px"
+                    borderRadius: "10px",
                   }}
                 >
                   <tbody>
@@ -66071,7 +66079,7 @@ const QtyDetailPanel = ({
                   width: "180px",
                   height: "105px",
                   border: "1px solid #5a5757",
-                  borderRadius: "10px"
+                  borderRadius: "10px",
                 }}
               >
                 <tbody>
